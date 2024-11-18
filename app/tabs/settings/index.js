@@ -1,0 +1,1 @@
+// a placeholder for the Settings tab (we can just make the page static)
