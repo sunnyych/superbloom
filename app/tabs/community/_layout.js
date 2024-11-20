@@ -13,36 +13,30 @@ export default function FeedStackLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen
-      // index.js is the outer garden
+        // index.js is the outer garden
         name="index"
         options={{
           title: "Outer Garden",
-          headerShown: true,
+          headerShown: false,
         }}
       />
+      <Stack.Screen name="add_friend" />
       <Stack.Screen
-        name="add_friend"
-      />
-      <Stack.Screen
-      // index.js is the outer garden
+        // index.js is the outer garden
         name="profile"
       />
       <Stack.Screen
-      // index.js is the outer garden
+        // index.js is the outer garden
         name="garden"
       />
       <Stack.Screen
-      // index.js is the outer garden
+        // index.js is the outer garden
         name="collage"
       />
       <Stack.Screen
-      // index.js is the outer garden
+        // index.js is the outer garden
         name="post"
       />
     </Stack>
   );
 }
-
-
-
-
