@@ -13,7 +13,7 @@ export default function TabLayout() {
         options={{
           tabBarLabel: "Settings",
           tabBarIcon: ({ size, color }) => (
-            <FontAwesome size={size} name="settings" color={color} />
+            <FontAwesome size={size} name="cog" color={color} />
           ),
           headerShown: false, // Disable the header here to avoid duplication
         }}
@@ -29,7 +29,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="community/index"
+        name="community"
         options={{
           title: "Community",
           tabBarLabel: "Community",
@@ -42,12 +42,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="superbloom/index"
+        name="superbloom"
         options={{
           title: "Superbloom",
           tabBarLabel: "Superbloom",
           tabBarIcon: ({ size, color }) => (
-            <FontAwesome size={size} name="flower" color={color} />
+            <FontAwesome size={size} name="star" color={color} />
           ),
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Theme.colors.backgroundPrimary },
