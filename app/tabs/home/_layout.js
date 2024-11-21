@@ -1,24 +1,35 @@
 // there should be 2 pages here, connected through stack navigation: inner garden and outer garden
 
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Stack, useRouter } from "expo-router";
-import { TouchableOpacity, Text, View } from "react-native";
-import Theme from "@/assets/theme";
-import { useState } from "react";
+import { Stack } from "expo-router";
+import { createContext, useContext } from "react";
+import { useSharedValue } from "react-native-reanimated";
+import Background from "@/components/Background";
+
+// Create Context for Shared Values
+const BackgroundContext = createContext();
+
+// Export a hook to access shared values
+export const useBackground = () => useContext(BackgroundContext);
 
 export default function FeedStackLayout() {
-  const router = useRouter();
+  // Shared values for diagonal background movement
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0);
+
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen
-        // index.js is the outer garden
-        name="index"
-        options={{
-          title: "Outer Garden",
-          headerShown: true,
+    <BackgroundContext.Provider value={{ translateX, translateY }}>
+      {/* Shared Background */}
+      <Background translateX={translateX} translateY={translateY} />
+
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: "transparent" },
         }}
-      />
-      <Stack.Screen name="inner" />
-    </Stack>
+      >
+        <Stack.Screen name="index" options={{ title: "Outer Garden" }} />
+        <Stack.Screen name="inner" options={{ title: "Inner Garden" }} />
+      </Stack>
+    </BackgroundContext.Provider>
   );
 }
