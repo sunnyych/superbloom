@@ -114,10 +114,10 @@ const styles = StyleSheet.create({
   },
   creatorBadge: {
     position: "absolute",
-    top: 60,
+    top: 100,
     right: 16,
     backgroundColor: "#ffdab9",
-    paddingHorizontal: 10,
+    paddingHorizontal: 5,
     paddingVertical: 5,
     borderRadius: 8,
   },

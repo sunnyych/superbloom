@@ -23,19 +23,19 @@ const Profile = () => {
       id: "1",
       name: "John White",
       years: "1927-2004",
-      image: "https://via.placeholder.com/100",
+      image: require("../../../assets/john_white.jpg"),
     },
     {
       id: "2",
       name: "Mike Smith",
       years: "1950-2012",
-      image: "https://via.placeholder.com/100",
+      image: require("../../../assets/mike_smith.jpg"),
     },
     {
       id: "3",
       name: "Susan Brown",
       years: "1980-2020",
-      image: "https://via.placeholder.com/100",
+      image: require("../../../assets/susan_brown.jpg"),
     },
   ];
 
@@ -71,14 +71,17 @@ const Profile = () => {
             style={styles.gardenContainer}
             onPress={() => handleGardenClick(item.id)}
           >
-            <Image source={{ uri: item.image }} style={styles.gardenImage} />
+            <Image source={item.image} style={styles.gardenImage} />
             <Text style={styles.gardenName}>{item.name}</Text>
             <Text style={styles.gardenYears}>({item.years})</Text>
           </TouchableOpacity>
         )}
       />
 
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => router.push("/tabs/community/add_friend")}
+      >
         <Text style={styles.backButtonText}>back</Text>
       </TouchableOpacity>
     </View>
@@ -157,6 +160,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#7f7f7f",
+  },
+  gardenImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 8,
   },
 });
 
