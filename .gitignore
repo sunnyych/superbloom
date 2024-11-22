@@ -1,0 +1,16 @@
+# node modules
+node_modules/
+
+# expo specific files
+.expo/
+*.expo.*
+
+# native build outputs
+/android/
+/ios/
+
+# other temporary files
+*.log
+*.lock
+*.tmp
+*.swp
