@@ -8,7 +8,7 @@
 import { useBackground } from "./_layout";
 import { View, Text, Button } from "react-native";
 import { useRouter } from "expo-router";
-// import Background from "@/components/Background"; // Import the Background component
+import Background from "@/components/Background"; // Import the Background component
 
 export default function OuterGarden() {
   const router = useRouter();
@@ -16,13 +16,20 @@ export default function OuterGarden() {
 
   const goToInner = () => {
     router.push("/tabs/home/inner");
-    translateX.value = -430; // move background diagonally
-    translateY.value = 0;
+    translateX.value = -200; // Reset background position
+    translateY.value = -450;
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       {/* <Background translateX={translateX} translateY={translateY} /> */}
+
       <Text>Outer Garden</Text>
 
       <Button title="Go to Inner Garden" onPress={goToInner} />

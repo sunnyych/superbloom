@@ -2,20 +2,50 @@
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 import Theme from "@/assets/theme";
 // import { UserProvider } from "@/components/UserContext";
 
+const CustomAddButton = ({ children, onPress }) => {
+  return (
+    <TouchableOpacity onPress={onPress} style={styles.addButtonContainer}>
+      <View
+        style={{
+          width: 80,
+          height: 80,
+          borderRadius: 100,
+          backgroundColor: "#8B7CEC",
+          zIndex: 10,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {children}
+      </View>
+    </TouchableOpacity>
+  );
+};
+
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: "red", headerShow: false }}>
+    <Tabs
+      screenOptions={{
+        tabBarActiveTintColor: "white",
+        tabBarInactiveTintColor: "#8B7CEC",
+        tabBarShowLabel: false,
+        headerShow: false,
+        tabBarStyle: styles.navBar,
+        tabBarPosition: "bottom",
+      }}
+    >
       <Tabs.Screen
         name="settings"
         options={{
           tabBarLabel: "Settings",
           tabBarIcon: ({ size, color }) => (
-            <FontAwesome size={size} name="cog" color={color} />
+            <FontAwesome size={32} name="cog" color={color} />
           ),
-          headerShown: false, // Disable the header here to avoid duplication
+          // headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -23,9 +53,23 @@ export default function TabLayout() {
         options={{
           tabBarLabel: "Home",
           tabBarIcon: ({ size, color }) => (
-            <FontAwesome size={size} name="home" color={color} />
+            <FontAwesome size={32} name="home" color={color} />
           ),
-          headerShown: false, // Disable the header here to avoid duplication
+          headerShown: false,
+          contentStyle: { backgroundColor: "transparent" },
+          tabBarInactiveTintColor: "white",
+          tabBarActiveTintColor: "#8B7CEC",
+        }}
+      />
+      <Tabs.Screen
+        name="add"
+        options={{
+          // headerShown: false,
+          tabBarLabel: "Add",
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome size={32} name="plus" color={color} />
+          ),
+          // tabBarButton: (props) => <CustomAddButton {...props} />,
         }}
       />
       <Tabs.Screen
@@ -34,7 +78,7 @@ export default function TabLayout() {
           title: "Community",
           tabBarLabel: "Community",
           tabBarIcon: ({ size, color }) => (
-            <FontAwesome size={size} name="user" color={color} />
+            <FontAwesome size={32} name="user" color={color} />
           ),
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Theme.colors.backgroundPrimary },
@@ -47,7 +91,7 @@ export default function TabLayout() {
           title: "Superbloom",
           tabBarLabel: "Superbloom",
           tabBarIcon: ({ size, color }) => (
-            <FontAwesome size={size} name="star" color={color} />
+            <FontAwesome size={32} name="star" color={color} />
           ),
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Theme.colors.backgroundPrimary },
@@ -57,3 +101,18 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  navBar: {
+    borderRadius: 30,
+    backgroundColor: "#0E0835",
+    height: 90,
+    overflow: "hidden",
+    paddingTop: 10,
+  },
+  addButtonContainer: {
+    position: "absolute",
+
+    // zIndex: 10,
+  },
+});

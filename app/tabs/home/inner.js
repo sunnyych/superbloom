@@ -9,21 +9,28 @@
 import { useBackground } from "./_layout";
 import { View, Text, Button } from "react-native";
 import { useRouter } from "expo-router";
-// import Background from "@/components/Background"; // Import the Background component
+import Background from "@/components/Background"; // Import the Background component
 
 export default function InnerGarden() {
   const router = useRouter();
   const { translateX, translateY } = useBackground();
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       {/* <Background translateX={translateX} translateY={translateY} /> */}
+
       <Text>Inner Garden</Text>
       <Button
         title="Go Back"
         onPress={() => {
-          translateX.value = -200; // Reset background position
-          translateY.value = -450;
+          translateX.value = -400; // move background diagonally
+          translateY.value = 0;
           router.back();
         }}
       />
