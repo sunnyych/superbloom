@@ -12,6 +12,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { useRouter } from "expo-router";
+import db from "@/database/db";
 
 const AddFriend = () => {
   const router = useRouter();
@@ -40,9 +41,9 @@ const AddFriend = () => {
     setAddedFriends((prev) => ({ ...prev, [userId]: true }));
   };
 
-  const handleViewProfile = (userId) => {
-    // Navigate to the profile.js page
-    router.push(`/tabs/community/profile?userId=${userId}`);
+  const handleViewProfile = (username) => {
+    // Navigate to the profile.js page using the username as a query parameter
+    router.push(`/tabs/community/profile?username=${username}`);
   };
 
   return (
@@ -55,7 +56,6 @@ const AddFriend = () => {
       </TouchableOpacity>
       <Text style={styles.title}>add a friend</Text>
       <Text style={styles.subtitle}>search for a user</Text>
-
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -67,7 +67,6 @@ const AddFriend = () => {
           <Text style={styles.searchButtonText}>🔍</Text>
         </TouchableOpacity>
       </View>
-
       {searchResults.length > 0 && (
         <FlatList
           data={searchResults}
@@ -82,7 +81,7 @@ const AddFriend = () => {
               {addedFriends[item.id] ? (
                 <TouchableOpacity
                   style={styles.viewProfileButton}
-                  onPress={() => handleViewProfile(item.id)}
+                  onPress={() => handleViewProfile(item.username)}
                 >
                   <Text style={styles.viewProfileText}>view profile</Text>
                 </TouchableOpacity>
@@ -99,7 +98,6 @@ const AddFriend = () => {
           contentContainerStyle={styles.resultsList}
         />
       )}
-
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Text style={styles.backButtonText}>back</Text>
       </TouchableOpacity>
