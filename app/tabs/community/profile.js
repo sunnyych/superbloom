@@ -183,7 +183,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import db from "@/database/db";
 
 const localImages = {
@@ -198,24 +198,36 @@ const Profile = () => {
   const [user, setUser] = useState(null);
   const [gardens, setGardens] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  // const { username } = useSearchParams();
+  const { username } = useLocalSearchParams();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
+        // Query the `user` table in Supabase
         const { data, error } = await db
-          .from("user") // Replace with your table name
-          .select("username, real_username, gardens")
-          .eq("username", username)
-          .single();
-        // console.log("username", username);
+          .from("user") // Replace with your actual table name
+          .select("*") // Specify the columns to retrieve; "*" means all columns
+          .eq("username", username); // Filter where `username` matches the provided value
 
-        if (error) throw error;
-        setUser({
-          username: data.username,
-          realUsername: data.read_username,
-        });
-        setGardens(data.gardens || []); // Parse gardens JSON
+        // Log the response for debugging
+        console.log("Supabase Response:", { data, error });
+
+        // Handle errors
+        if (error) {
+          console.error("Supabase error:", error.message);
+          return;
+        }
+
+        // If data is found, set the user and gardens
+        if (data && data.length > 0) {
+          setUser({
+            username: data[0].username,
+            realUsername: data[0].real_username,
+          });
+          setGardens(data[0].gardens || []); // Parse the gardens array
+        } else {
+          console.error("User not found");
+        }
       } catch (err) {
         console.error("Error fetching user profile:", err);
       } finally {
@@ -224,7 +236,7 @@ const Profile = () => {
     };
 
     fetchUserProfile();
-  }, []);
+  }, [username]); // Add `username` as a dependency if it changes dynamically
 
   const handleGardenClick = (gardenId) => {
     router.push(`/tabs/community/garden?gardenId=${gardenId}`);
@@ -246,7 +258,7 @@ const Profile = () => {
       >
         <Text style={styles.closeButtonText}>×</Text>
       </TouchableOpacity>
-      <Text style={styles.title}>{user.realUsername}</Text>
+      <Text style={styles.title}>{user.username}</Text>
       <Text style={styles.subtitle}>@{user.username}</Text>
 
       <FlatList
@@ -260,7 +272,10 @@ const Profile = () => {
             onPress={() => handleGardenClick(item.garden_id)}
           >
             <Image
-              source={localImages[item.image]}
+              source={
+                localImages[item.image] ||
+                require("../../../assets/john_white.jpg")
+              }
               style={styles.gardenImage}
             />
             <Text style={styles.gardenName}>{item.garden_name}</Text>
