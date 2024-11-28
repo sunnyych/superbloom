@@ -2,7 +2,7 @@
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
-import { StyleSheet, View, TouchableOpacity } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Image } from "react-native";
 import Theme from "@/assets/theme";
 // import { UserProvider } from "@/components/UserContext";
 
@@ -93,9 +93,18 @@ export default function TabLayout() {
           tabBarIcon: ({ size, color }) => (
             <FontAwesome size={32} name="star" color={color} />
           ),
-          headerTitleAlign: "center",
-          headerStyle: { backgroundColor: Theme.colors.backgroundPrimary },
-          headerTintColor: Theme.colors.textPrimary,
+          // this not working for some rzn,, it's v late for me rn so i leave for later -myan
+          // tabBarIcon: ({ size }) => {
+          //   return (
+          //     <Image
+          //       style={{ width: size, height: size }}
+          //       source={{
+          //         uri: require("@/assets/icon-superblooms.png"),
+          //       }}
+          //     />
+          //   );
+          // },
+          headerShown: false,
         }}
       />
     </Tabs>

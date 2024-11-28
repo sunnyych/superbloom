@@ -35,9 +35,6 @@ const FriendsPage = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.closeButton}>
-        <Text style={styles.closeButtonText}>×</Text>
-      </TouchableOpacity>
       <Text style={styles.title}>friends</Text>
       <Text style={styles.subtitle}>visit a friend’s gardens</Text>
       <FlatList

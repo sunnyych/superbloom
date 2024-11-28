@@ -48,12 +48,6 @@ const AddFriend = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.closeButton}
-        onPress={() => router.back()}
-      >
-        <Text style={styles.closeButtonText}>×</Text>
-      </TouchableOpacity>
       <Text style={styles.title}>add a friend</Text>
       <Text style={styles.subtitle}>search for a user</Text>
       <View style={styles.searchContainer}>
