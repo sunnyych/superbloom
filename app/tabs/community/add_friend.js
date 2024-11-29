@@ -13,8 +13,32 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import db from "@/database/db";
+// font import source: https://www.npmjs.com/package/@expo-google-fonts/source-serif-pro
+// if it doesn't work, run dis in terminal "npx expo install @expo-google-fonts/source-serif-pro expo-font expo-app-loading"
+import {
+  useFonts,
+  SourceSerifPro_400Regular,
+  SourceSerifPro_400Regular_Italic,
+  SourceSerifPro_600SemiBold,
+  SourceSerifPro_600SemiBold_Italic,
+  SourceSerifPro_700Bold,
+  SourceSerifPro_700Bold_Italic,
+  SourceSerifPro_900Black,
+  SourceSerifPro_900Black_Italic,
+} from "@expo-google-fonts/source-serif-pro";
 
 const AddFriend = () => {
+  let [fontsLoaded] = useFonts({
+    SourceSerifPro_400Regular,
+    SourceSerifPro_400Regular_Italic,
+    SourceSerifPro_600SemiBold,
+    SourceSerifPro_600SemiBold_Italic,
+    SourceSerifPro_700Bold,
+    SourceSerifPro_700Bold_Italic,
+    SourceSerifPro_900Black,
+    SourceSerifPro_900Black_Italic,
+  });
+
   const router = useRouter();
 
   // Hardcoded database with more detailed data
@@ -46,57 +70,64 @@ const AddFriend = () => {
     router.push(`/tabs/community/profile?username=${username}`);
   };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>add a friend</Text>
-      <Text style={styles.subtitle}>search for a user</Text>
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Enter a username..."
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
-        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-          <Text style={styles.searchButtonText}>🔍</Text>
+  if (fontsLoaded) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>add a friend</Text>
+        <Text style={styles.subtitle}>search for a user</Text>
+        <View style={styles.searchContainer}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Enter a username..."
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+          <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+            <Text style={styles.searchButtonText}>🔍</Text>
+          </TouchableOpacity>
+        </View>
+        {searchResults.length > 0 && (
+          <FlatList
+            data={searchResults}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <View style={styles.resultContainer}>
+                <View style={styles.avatar} />
+                <View style={styles.resultInfo}>
+                  <Text style={styles.resultName}>{item.name}</Text>
+                  <Text style={styles.resultUsername}>@{item.username}</Text>
+                </View>
+                {addedFriends[item.id] ? (
+                  <TouchableOpacity
+                    style={styles.viewProfileButton}
+                    onPress={() => handleViewProfile(item.username)}
+                  >
+                    <Text style={styles.viewProfileText}>view profile</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.addFriendButton}
+                    onPress={() => handleAddFriend(item.id)}
+                  >
+                    <Text style={styles.addFriendText}>add friend</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            )}
+            contentContainerStyle={styles.resultsList}
+          />
+        )}
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Text style={styles.backButtonText}>back</Text>
         </TouchableOpacity>
       </View>
-      {searchResults.length > 0 && (
-        <FlatList
-          data={searchResults}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.resultContainer}>
-              <View style={styles.avatar} />
-              <View style={styles.resultInfo}>
-                <Text style={styles.resultName}>{item.name}</Text>
-                <Text style={styles.resultUsername}>@{item.username}</Text>
-              </View>
-              {addedFriends[item.id] ? (
-                <TouchableOpacity
-                  style={styles.viewProfileButton}
-                  onPress={() => handleViewProfile(item.username)}
-                >
-                  <Text style={styles.viewProfileText}>view profile</Text>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  style={styles.addFriendButton}
-                  onPress={() => handleAddFriend(item.id)}
-                >
-                  <Text style={styles.addFriendText}>add friend</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          )}
-          contentContainerStyle={styles.resultsList}
-        />
-      )}
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Text style={styles.backButtonText}>back</Text>
-      </TouchableOpacity>
-    </View>
-  );
+    );
+  } else {
+    return <Text>Loading...</Text>;
+  }
 };
 
 const styles = StyleSheet.create({
@@ -105,34 +136,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#f8f4ff",
     padding: 16,
   },
-  closeButton: {
-    position: "absolute",
-    top: 16,
-    left: 16,
-    backgroundColor: "#9d82ff",
-    borderRadius: 16,
-    width: 32,
-    height: 32,
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 10,
-  },
-  closeButtonText: {
-    fontSize: 24,
-    color: "#fff",
-    fontWeight: "bold",
-  },
   title: {
     fontSize: 28,
     fontWeight: "bold",
     textAlign: "center",
-    marginTop: 40,
+    marginTop: 70,
+    fontFamily: "SourceSerifPro_700Bold",
   },
   subtitle: {
     fontSize: 16,
     textAlign: "center",
     color: "#7f7f7f",
     marginBottom: 20,
+    fontFamily: "SourceSerifPro_700Bold_Italic",
   },
   searchContainer: {
     flexDirection: "row",
