@@ -1,5 +1,13 @@
 import { useBackground } from "./_layout";
-import { View, Text, Button, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  Pressable,
+  Image,
+  Switch,
+} from "react-native";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { globalState } from "@/components/Global";
@@ -8,7 +16,10 @@ export default function OuterGarden() {
   const router = useRouter();
   const { translateX, translateY } = useBackground();
 
-  const [selectedGardenId, setSelectedGardenId] = useState(globalState.selectedGardenId);
+  const [selectedGardenId, setSelectedGardenId] = useState(
+    globalState.selectedGardenId
+  );
+  const [isGarden, setIsGarden] = useState(true); // Toggle for garden/collage view
 
   const goToInner = () => {
     router.push("/tabs/home/inner");
@@ -34,10 +45,35 @@ export default function OuterGarden() {
         Garden ID: {selectedGardenId || "None"}
       </Text>
 
+      {/* Buttons in lower right for toggling */}
       <View style={styles.content}>
-        <Text style={styles.title}>Public</Text>
         <View style={styles.buttonContainer}>
-          <Button title="switch" onPress={goToInner} color="#fff" />
+          <Pressable onPress={goToInner}>
+            <Image
+              style={styles.signIcon}
+              source={require("@/assets/icons/public-sign.png")}
+            />
+          </Pressable>
+          <View style={styles.toggleContainer}>
+            <Switch
+              value={isGarden}
+              onValueChange={setIsGarden}
+              thumbColor={isGarden ? "#9d82ff" : "#ccc"}
+              trackColor={{ false: "#ccc", true: "#e6e0ff" }}
+            />
+          </View>
+        </View>
+      </View>
+
+      {/* Garden profile pic and switching between gardens in upper right */}
+      <View style={styles.switchGardensContainer}>
+        <Text style={styles.subtextRemembering}>remembering</Text>
+        <Text style={styles.subtextName}>Mary</Text>
+        <View style={styles.profileContainer}>
+          <Image
+            style={styles.profilePic}
+            source={require("@/assets/matcha.jpg")}
+          ></Image>
         </View>
       </View>
     </View>
@@ -60,7 +96,7 @@ const styles = StyleSheet.create({
   content: {
     position: "absolute",
     bottom: 20,
-    left: 20,
+    right: 20,
   },
   title: {
     fontSize: 24,
@@ -69,8 +105,43 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   buttonContainer: {
-    backgroundColor: "#9d82ff", 
-    borderRadius: 8, 
-    overflow: "hidden", 
+    // backgroundColor: "#9d82ff",
+    borderRadius: 8,
+    overflow: "hidden",
+    alignItems: "center",
+    gap: 10,
+  },
+  profileContainer: {
+    shadowColor: "#202020",
+    shadowOffset: { width: 1, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 1,
+  },
+  profilePic: {
+    height: 80,
+    width: 80,
+    borderRadius: 1000,
+    borderColor: "#FFFFFF",
+    borderWidth: 4,
+    resizeMode: "cover",
+    backgroundColor: "#FFFFFF",
+  },
+  switchGardensContainer: {
+    alignItems: "center",
+    padding: 15,
+    marginTop: 50,
+    position: "absolute",
+    alignSelf: "flex-end",
+  },
+  subtextRemembering: {
+    fontFamily: "SourceSerifPro_700Bold",
+    color: "#3C3661",
+  },
+  subtextName: {
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 16,
+    color: "#8B7CEC",
+    paddingBottom: 10,
   },
 });

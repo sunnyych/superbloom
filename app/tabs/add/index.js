@@ -1,12 +1,20 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert, Switch } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import db from "@/databse/db"; // Supabase client
+import { useRouter } from "expo-router";
 
-export default function NewPost() {
+export default function ChoosePrompt() {
   // States for user input
-  const [text, setText] = useState("");
-  const [media, setMedia] = useState("");
-  const [isPublic, setIsPublic] = useState(true); // Toggle for public or private post
+  const [selectedPrompt, setSelectedPrompt] = useState("");
+  const router = useRouter();
 
   // Hardcoded values
   const hardcodedUsername = "helen-smith";
@@ -14,124 +22,168 @@ export default function NewPost() {
   const hardcodedGardenId = 1;
   const hardcodedMemoryPerson = "John Doe"; // Hardcoded person
 
-  const addMemory = async () => {
-    if (!text) {
-      Alert.alert("Error", "Please fill in the memory text.");
-      return;
-    }
+  const prompts = [
+    "What is your favorite memory of Mary?",
+    "What did Mary like to do?",
+    "Do you have any favorite stories of times you spent with Mary at school?",
+    "What is your earliest memory of Mary?",
+    "How would you describe Mary's personality?",
+  ];
 
-    try {
-      const { error } = await db.from("post").insert([
-        {
-          username: hardcodedUsername,
-          user_id: hardcodedUserId,
-          garden_id: hardcodedGardenId,
-          memory_person: hardcodedMemoryPerson,
-          text: text,
-          media: media || null, // Optional media
-          public: isPublic, // True or false based on the toggle
-          time_stamp: new Date().toISOString(), // Current timestamp
-          flower_color: "pink", // Hardcoded or dynamic
-          flower_type: 1, // Hardcoded for now
-        },
-      ]);
-
-      if (error) {
-        console.error("Error adding memory:", error);
-        Alert.alert("Error", "Failed to add memory.");
-      } else {
-        Alert.alert("Success", "Memory added successfully!");
-        // Clear the form after success
-        setText("");
-        setMedia("");
-        setIsPublic(true);
-      }
-    } catch (err) {
-      console.error("Unexpected error:", err);
-      Alert.alert("Error", "An unexpected error occurred.");
-    }
+  const goToMakePost = () => {
+    router.push("/tabs/add/makepost");
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Add a New Memory</Text>
-
-      {/* Display Memory Person */}
-      <View style={styles.memoryPersonContainer}>
-        <Text style={styles.memoryPersonLabel}>Memory Person:</Text>
-        <Text style={styles.memoryPersonValue}>{hardcodedMemoryPerson}</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.closeButton}
+          onPress={() => router.back()}
+        >
+          <Text style={styles.closeButtonText}>✕</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.skipButton} onPress={goToMakePost}>
+          <Text style={styles.skipButtonText}>skip</Text>
+        </TouchableOpacity>
       </View>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Describe the memory"
-        value={text}
-        onChangeText={setText}
-        multiline
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Media URL (optional)"
-        value={media}
-        onChangeText={setMedia}
-      />
-
-      <View style={styles.toggleContainer}>
-        <Text style={styles.toggleLabel}>Public:</Text>
-        <Switch
-          value={isPublic}
-          onValueChange={setIsPublic}
-          thumbColor={isPublic ? "#9d82ff" : "#ccc"}
-          trackColor={{ false: "#ccc", true: "#e6e0ff" }}
-        />
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>plant a memory</Text>
+        <Text style={styles.subtitle}>choose a prompt</Text>
       </View>
 
-      <Button title="Add Memory" onPress={addMemory} color="#007AFF" />
-    </View>
+      <ScrollView
+        style={styles.promptsContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        {prompts.map((prompt, index) => (
+          <Pressable
+            key={index}
+            style={[
+              styles.promptCard,
+              selectedPrompt === index && styles.selectedPromptCard,
+            ]}
+            onPress={() => setSelectedPrompt(index)}
+          >
+            <Text
+              style={[
+                styles.promptText,
+                selectedPrompt === index && styles.selectedPromptText,
+              ]}
+            >
+              {prompt}
+            </Text>
+          </Pressable>
+        ))}
+      </ScrollView>
+
+      <TouchableOpacity
+        style={[
+          styles.confirmButton,
+          selectedPrompt === null && styles.confirmButtonDisabled,
+        ]}
+        disabled={selectedPrompt === null}
+        onPress={goToMakePost}
+      >
+        <Text style={styles.confirmButtonText}>confirm</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: "#fff",
+    backgroundColor: "#F8F9FF",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  closeButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#A393EB",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  closeButtonText: {
+    color: "white",
+    fontSize: 20,
+  },
+  skipButton: {
+    backgroundColor: "#F0EDFF",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+  },
+  skipButtonText: {
+    color: "#A393EB",
+    fontSize: 16,
+  },
+  titleContainer: {
+    alignItems: "center",
+    marginTop: 40,
+    marginBottom: 30,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
+    color: "#000",
+    marginBottom: 8,
+    fontFamily: "SourceSerifPro_700Bold",
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "#666",
+    fontFamily: "SourceSerifPro_700Bold_Italic",
+  },
+  promptsContainer: {
+    paddingHorizontal: 20,
+  },
+  promptCard: {
+    backgroundColor: "white",
+    borderRadius: 15,
+    padding: 20,
+    marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  selectedPromptCard: {
+    backgroundColor: "#A393EB",
+  },
+  promptText: {
+    fontSize: 16,
+    color: "#000",
     textAlign: "center",
-    marginBottom: 16,
   },
-  memoryPersonContainer: {
-    flexDirection: "row",
+  selectedPromptText: {
+    color: "white",
+  },
+  confirmButton: {
+    backgroundColor: "#8B7CEC",
+    margin: 20,
+    padding: 15,
+    borderRadius: 25,
     alignItems: "center",
-    marginBottom: 16,
   },
-  memoryPersonLabel: {
+  confirmButtonDisabled: {
+    opacity: 0.5,
+  },
+  confirmButtonText: {
+    color: "white",
     fontSize: 18,
-    fontWeight: "bold",
-    marginRight: 8,
-  },
-  memoryPersonValue: {
-    fontSize: 18,
-    color: "#555",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 12,
-  },
-  toggleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  toggleLabel: {
-    fontSize: 18,
-    marginRight: 8,
+    fontWeight: "600",
   },
 });

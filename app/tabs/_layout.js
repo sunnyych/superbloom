@@ -68,6 +68,7 @@ export default function TabLayout() {
             <FontAwesome size={32} name="plus" color={color} />
           ),
           // tabBarButton: (props) => <CustomAddButton {...props} />,
+          headerShown: false,
         }}
       />
       <Tabs.Screen
