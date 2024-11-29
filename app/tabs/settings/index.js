@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet, Image, ActivityIndicator, TouchableOpacity } from "react-native";
 import db from "@/databse/db"; // Supabase client
+import { globalState } from "@/components/Global";
 
 const fallbackImage = require("../../../assets/logo.png"); // Use logo.png as the fallback image
 
 const Profile = () => {
   const [gardens, setGardens] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedGardenId, setSelectedGardenId] = useState(null); // Track selected garden ID
 
-  const hardcodedUsername = "helen-smith"; // Hardcoded username
+  const hardcodedUsername = globalState.hardcodedUsername; // Get the hardcoded username from globalState
 
   useEffect(() => {
     const fetchGardens = async () => {
@@ -31,10 +31,18 @@ const Profile = () => {
     };
 
     fetchGardens();
-  }, []);
+  }, [hardcodedUsername]);
 
   const handleSelectGarden = (gardenId) => {
-    setSelectedGardenId(gardenId); // Update selected garden ID
+    globalState.selectedGardenId = gardenId; // Update the global state
+    console.log(`Selected Garden ID updated to: ${globalState.selectedGardenId}`);
+    setGardens((prevGardens) =>
+      prevGardens.map((garden) =>
+        garden.garden_id === gardenId
+          ? { ...garden, isSelected: true }
+          : { ...garden, isSelected: false }
+      )
+    );
   };
 
   if (isLoading) {
@@ -57,7 +65,7 @@ const Profile = () => {
             <TouchableOpacity
               style={[
                 styles.gardenContainer,
-                selectedGardenId === item.garden_id && styles.selectedGarden, // Highlight if selected
+                item.isSelected && styles.selectedGarden, // Highlight if selected
               ]}
               onPress={() => handleSelectGarden(item.garden_id)} // Select garden
             >

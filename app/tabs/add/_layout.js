@@ -1,15 +1,12 @@
-import { Stack, useRouter } from "expo-router";
+import { Stack } from "expo-router";
 
 export default function FeedStackLayout() {
-  const router = useRouter();
   return (
-    <Stack screenOptions={{ headerShown: false }}>
+    <Stack screenOptions={{ headerShown: true }}>
       <Stack.Screen
-        // index.js is the outer garden
         name="index"
         options={{
-          title: "Outer Garden",
-          headerShown: false,
+          title: "Add New Post",
         }}
       />
     </Stack>
