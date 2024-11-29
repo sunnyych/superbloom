@@ -1,14 +1,6 @@
-// this should display the outer garden
-
-// on click gate, navigate to outer.js
-
-// on click add button, navigate to newpost.js
-
-// on click the toggle, navigate to collage.js
 import { useBackground } from "./_layout";
-import { View, Text, Button } from "react-native";
+import { View, Text, Button, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
-import Background from "@/components/Background"; // Import the Background component
 
 export default function OuterGarden() {
   const router = useRouter();
@@ -21,39 +13,36 @@ export default function OuterGarden() {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      {/* <Background translateX={translateX} translateY={translateY} /> */}
-
-      <Text>Outer Garden</Text>
-
-      <Button title="Go to Inner Garden" onPress={goToInner} />
+    <View style={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.title}>Public</Text>
+        <View style={styles.buttonContainer}>
+          <Button title="switch" onPress={goToInner} color="#fff" />
+        </View>
+      </View>
     </View>
   );
 }
 
-// export default function HomeGarden() {
-//   return (
-//     <ImageBackground
-//       source={require("../../../assets/backgrounds/background garden.png")}
-//       style={styles.backgroundImage}
-//       imageStyle={styles.publicBackgroundImage}
-//     >
-//       <View style={styles.container}></View>
-//     </ImageBackground>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   backgroundImage: {
-//     flex: 1,
-//   },
-//   container: {
-//     flex: 1,
-//   },
-// });
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "transparent",
+  },
+  content: {
+    position: "absolute",
+    bottom: 20,
+    left: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 8,
+  },
+  buttonContainer: {
+    backgroundColor: "#9d82ff", // Add custom button background color
+    borderRadius: 8, // Rounded corners
+    overflow: "hidden", // Ensures the button fits the rounded shape
+  },
+});

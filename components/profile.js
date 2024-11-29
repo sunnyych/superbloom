@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useRouter, useSearchParams } from "expo-router";
-import db from "@/database/db";
+import db from "@/databse/db";
 
 
 

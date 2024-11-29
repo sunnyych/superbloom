@@ -70,7 +70,6 @@ export default function TabLayout() {
             <FontAwesome size={32} name="plus" color={color} />
           ),
           // tabBarButton: (props) => <CustomAddButton {...props} />,
-          headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -81,7 +80,9 @@ export default function TabLayout() {
           tabBarIcon: ({ size, color }) => (
             <FontAwesome size={32} name="user" color={color} />
           ),
-          headerShown: false,
+          headerTitleAlign: "center",
+          headerStyle: { backgroundColor: Theme.colors.backgroundPrimary },
+          headerTintColor: Theme.colors.textPrimary,
         }}
       />
       <Tabs.Screen
@@ -112,7 +113,7 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   navBar: {
-    // commenting out bc background looks weird ;-; borderRadius: 30,
+    borderRadius: 30,
     backgroundColor: "#0E0835",
     height: 90,
     overflow: "hidden",
