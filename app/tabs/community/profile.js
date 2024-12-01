@@ -74,8 +74,8 @@ const Profile = () => {
     fetchUserProfile();
   }, []);
 
-  const handleGardenClick = (gardenId) => {
-    router.push(`/tabs/community/garden?gardenId=${gardenId}`);
+  const handleGardenClick = (gardenName) => {
+    router.push(`/tabs/community/garden?gardenName=${gardenName}`);
   };
 
   if (isLoading) {
@@ -105,7 +105,7 @@ const Profile = () => {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.gardenContainer}
-            onPress={() => handleGardenClick(item.garden_id)}
+            onPress={() => handleGardenClick(item.garden_name)}
           >
             <Image
               source={

@@ -26,7 +26,8 @@ const Garden = () => {
   const [name, setName] = useState([]);
   const [user, setUser] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { garden_id } = useLocalSearchParams();
+  const { gardenName } = useLocalSearchParams();
+  console.log("garden_name", gardenName);
 
   const flowerImages = {
     0: require("../../../assets/flower0.jpg"),
@@ -42,7 +43,7 @@ const Garden = () => {
         const { data, error } = await db
           .from("post")
           .select("id, username, memory_person, text, flower_type, media") // Fetch post info
-          .eq("garden_id", garden_id); // Filter by garden_id
+          .eq("memory_person", gardenName); // Filter by garden_id
 
         if (error) {
           console.error("Supabase error:", error.message);
@@ -59,7 +60,7 @@ const Garden = () => {
     };
 
     fetchPosts();
-  }, [garden_id]);
+  }, []);
 
   const handleToggle = () => {
     setIsToggled(!isToggled);
@@ -99,7 +100,7 @@ const Garden = () => {
 
       {/* Creator Badge */}
       <View style={styles.creatorBadge}>
-        <Text style={styles.creatorText}>made by @username</Text>
+        <Text style={styles.creatorText}>made by @{userName}</Text>
       </View>
 
       {/* Placeholder Avatar */}
