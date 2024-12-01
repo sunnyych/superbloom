@@ -57,8 +57,6 @@ export default function TabLayout() {
           ),
           headerShown: false,
           contentStyle: { backgroundColor: "transparent" },
-          tabBarInactiveTintColor: "white",
-          tabBarActiveTintColor: "#8B7CEC",
         }}
       />
       <Tabs.Screen
@@ -66,10 +64,14 @@ export default function TabLayout() {
         options={{
           // headerShown: false,
           tabBarLabel: "Add",
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome size={32} name="plus" color={color} />
+          tabBarIcon: () => (
+            // <FontAwesome size={32} name="plus" color={color} />
+            <Image
+              style={{ width: 80, height: 80 }}
+              source={require("@/assets/icons/plus-button.png")}
+            />
           ),
-          // tabBarButton: (props) => <CustomAddButton {...props} />,
+          //tabBarButton: (props) => <CustomAddButton {...props} />,
           headerShown: false,
         }}
       />
@@ -89,20 +91,19 @@ export default function TabLayout() {
         options={{
           title: "Superbloom",
           tabBarLabel: "Superbloom",
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome size={32} name="star" color={color} />
-          ),
-          // this not working for some rzn,, it's v late for me rn so i leave for later -myan
-          // tabBarIcon: ({ size }) => {
-          //   return (
-          //     <Image
-          //       style={{ width: size, height: size }}
-          //       source={{
-          //         uri: require("@/assets/icon-superblooms.png"),
-          //       }}
-          //     />
-          //   );
-          // },
+          tabBarIcon: ({ focused }) => {
+            return (
+              <Image
+                style={{ width: 32, height: 32 }}
+                // ty https://youtu.be/gPaBicMaib4
+                source={
+                  focused
+                    ? require("@/assets/icons/active-icon-superblooms.png") // Active icon
+                    : require("@/assets/icons/icon-superblooms.png") // Inactive icon
+                }
+              />
+            );
+          },
           headerShown: false,
         }}
       />
@@ -120,6 +121,7 @@ const styles = StyleSheet.create({
   },
   addButtonContainer: {
     position: "absolute",
+    top: -30,
 
     // zIndex: 10,
   },
