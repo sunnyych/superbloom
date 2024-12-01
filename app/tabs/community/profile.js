@@ -34,7 +34,7 @@ const Profile = () => {
   const [gardens, setGardens] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { username } = useLocalSearchParams();
-  console.log("username", username);
+  // console.log("username", username);
 
   useEffect(() => {
     const fetchUserProfile = async () => {

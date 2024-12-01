@@ -42,7 +42,9 @@ const Garden = () => {
         // Fetch posts for a specific garden_id from Supabase
         const { data, error } = await db
           .from("post")
-          .select("id, username, memory_person, text, flower_type, media") // Fetch post info
+          .select(
+            "id, username, memory_person, text, flower_type, media, time_stamp"
+          ) // Fetch post info
           .eq("memory_person", gardenName); // Filter by garden_id
 
         if (error) {
@@ -71,10 +73,10 @@ const Garden = () => {
     }
   };
 
-  const handleFlowerPress = (image, text, flowerType) => {
+  const handleFlowerPress = (text, media, time_stamp) => {
     // Navigate to the post page, passing post data
     router.push(
-      `/tabs/community/post?text=${text}&image=${image}&flower_type=${flowerType}`
+      `/tabs/community/post?text=${text}&media=${media}&time_stamp=${time_stamp}`
     );
   };
 
@@ -90,20 +92,16 @@ const Garden = () => {
 
   return (
     <View style={styles.container}>
-      {/* Back Button */}
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back}>
+      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Text style={styles.backButtonText}>back</Text>
       </TouchableOpacity>
 
-      {/* Title */}
       <Text style={styles.title}>{name}</Text>
 
-      {/* Creator Badge */}
       <View style={styles.creatorBadge}>
-        <Text style={styles.creatorText}>made by @{userName}</Text>
+        <Text style={styles.creatorText}>made by @{user}</Text>
       </View>
 
-      {/* Placeholder Avatar */}
       <View style={styles.avatarContainer}>
         <Image
           source={require("../../../assets/john_white.jpg")}
@@ -111,25 +109,24 @@ const Garden = () => {
         />
       </View>
 
-      {/* Garden Area - Dynamically render flowers */}
       <View style={styles.gardenArea}>
         {posts.map((post) => (
           <TouchableOpacity
             key={post.id}
             style={styles.flower}
             onPress={() =>
-              handleFlowerPress(post.id, post.text, post.flower_type)
+              handleFlowerPress(post.text, post.media, post.time_stamp)
             }
           >
             <Image
-              source={flowerImages[post.flower_type] || flowerImages[0]} // Default to flower0 if flower_type is undefined
+              source={flowerImages[post.flower_type] || flowerImages[0]}
               style={styles.flowerImage}
+              resizeMode="cover"
             />
           </TouchableOpacity>
         ))}
       </View>
 
-      {/* Toggle at Bottom Right */}
       <View style={styles.toggleContainer}>
         <Switch
           trackColor={{ false: "#dcd6ff", true: "#9d82ff" }}
@@ -174,15 +171,18 @@ const styles = StyleSheet.create({
   },
   gardenArea: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start", // Align the flowers to the top
     alignItems: "center",
     flexDirection: "row",
     flexWrap: "wrap",
+    paddingHorizontal: 20, // Added some padding to the garden area
   },
   flower: {
-    width: 100,
-    height: 100,
+    width: 80, // Reduced flower size
+    height: 80, // Reduced flower size
     margin: 10,
+    borderRadius: 12, // Optional: rounded corners for a smoother look
+    overflow: "hidden", // Ensure the images don't overflow the container
   },
   flowerImage: {
     width: "100%",
@@ -207,6 +207,25 @@ const styles = StyleSheet.create({
   toggleIconText: {
     fontSize: 18,
     color: "#ffffff",
+  },
+  avatarContainer: {
+    alignItems: "center", // Center the avatar horizontally
+    marginTop: 20, // Add some margin to position it nicely below the creator badge
+  },
+  avatar: {
+    width: 60, // Reduced the width to 60px
+    height: 60, // Reduced the height to 60px
+    borderRadius: 30, // Ensures the avatar stays circular (half of width/height)
+    borderWidth: 2, // Optional: Add border to make the avatar more prominent
+    borderColor: "#9d82ff", // Optional: Add a color to the border
+  },
+  creatorBadge: {
+    backgroundColor: "#dcd6ff",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 16,
+    alignSelf: "center",
+    marginTop: 8,
   },
 });
 
