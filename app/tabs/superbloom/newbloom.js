@@ -17,16 +17,8 @@ import {
 
 export default function NewSuperbloom() {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView>
       <Text>hi hehehehehe</Text>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f8f4ff",
-    padding: 16,
-  },
-});

@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     textAlign: "center",
-    marginTop: 30,
+    marginTop: 40,
     fontFamily: "SourceSerifPro_700Bold",
   },
   subtitle: {

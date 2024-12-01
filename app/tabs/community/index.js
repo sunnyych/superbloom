@@ -9,30 +9,8 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import Theme from "@/assets/theme";
-import {
-  useFonts,
-  SourceSerifPro_400Regular,
-  SourceSerifPro_400Regular_Italic,
-  SourceSerifPro_600SemiBold,
-  SourceSerifPro_600SemiBold_Italic,
-  SourceSerifPro_700Bold,
-  SourceSerifPro_700Bold_Italic,
-  SourceSerifPro_900Black,
-  SourceSerifPro_900Black_Italic,
-} from "@expo-google-fonts/source-serif-pro";
 
 const FriendsPage = () => {
-  let [fontsLoaded] = useFonts({
-    SourceSerifPro_400Regular,
-    SourceSerifPro_400Regular_Italic,
-    SourceSerifPro_600SemiBold,
-    SourceSerifPro_600SemiBold_Italic,
-    SourceSerifPro_700Bold,
-    SourceSerifPro_700Bold_Italic,
-    SourceSerifPro_900Black,
-    SourceSerifPro_900Black_Italic,
-  });
-
   const router = useRouter();
 
   const friends = [
@@ -49,37 +27,40 @@ const FriendsPage = () => {
         <Text style={styles.name}>{item.name}</Text>
         <Text style={styles.username}>{item.username}</Text>
       </View>
-      <TouchableOpacity style={styles.viewProfileButton}>
+      <TouchableOpacity
+        style={styles.viewProfileButton}
+        onPress={() =>
+          router.push(
+            `/tabs/community/profile?username=${item.username.replace("@", "")}`
+          )
+        } // Navigate to profile page
+      >
         <Text style={styles.viewProfileText}>view profile</Text>
       </TouchableOpacity>
     </View>
   );
 
-  if (fontsLoaded) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>friends</Text>
-        <Text style={styles.subtitle}>visit a friend’s gardens</Text>
-        <FlatList
-          data={friends}
-          renderItem={renderFriend}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={styles.list}
-        />
-        <TouchableOpacity
-          style={styles.addFriendButton}
-          onPress={() => router.push("/tabs/community/add_friend")}
-        >
-          <View style={styles.addFriendIcon}>
-            <Text style={styles.addFriendIconText}>+</Text>
-          </View>
-          <Text style={styles.addFriendText}>add friend</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  } else {
-    return <Text>Loading...</Text>;
-  }
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>friends</Text>
+      <Text style={styles.subtitle}>visit a friend’s gardens</Text>
+      <FlatList
+        data={friends}
+        renderItem={renderFriend}
+        keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={styles.list}
+      />
+      <TouchableOpacity
+        style={styles.addFriendButton}
+        onPress={() => router.push("/tabs/community/add_friend")}
+      >
+        <View style={styles.addFriendIcon}>
+          <Text style={styles.addFriendIconText}>+</Text>
+        </View>
+        <Text style={styles.addFriendText}>add friend</Text>
+      </TouchableOpacity>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -87,6 +68,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f8f4ff",
     padding: 16,
+    marginTop: -60,
   },
   closeButton: {
     position: "absolute",
@@ -109,15 +91,14 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     textAlign: "center",
-    marginTop: 70,
-    fontFamily: "SourceSerifPro_700Bold",
+    marginTop: 40,
+    padding: 10,
   },
   subtitle: {
     fontSize: 16,
     textAlign: "center",
     color: "#7f7f7f",
     marginBottom: 20,
-    fontFamily: "SourceSerifPro_700Bold_Italic",
   },
   list: {
     paddingBottom: 100,
@@ -171,7 +152,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#dcd6ff",
     borderRadius: 24,
-    padding: 16,
+    padding: 10,
   },
   addFriendIcon: {
     backgroundColor: "#9d82ff",

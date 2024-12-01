@@ -2,12 +2,28 @@
 
 // on click back, navigate back to garden.js
 
-import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-import { useRouter } from "expo-router";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import { useRouter, useLocalSearchParams } from "expo-router";
 
 const Post = () => {
   const router = useRouter();
+  const { text, media, time_stamp } = useLocalSearchParams(); // Extract passed params
+  const [isLoading, setIsLoading] = useState(true);
+  const postImages = {
+    "star.jpg": require("../../../assets/star.jpg"),
+    "game.jpg": require("../../../assets/game.jpg"),
+    "cube.jpg": require("../../../assets/cube.jpg"),
+    "coffee.jpg": require("../../../assets/coffee.jpg"),
+  };
+  console.log("media", media);
 
   return (
     <View style={styles.container}>
@@ -24,20 +40,13 @@ const Post = () => {
         </View>
 
         {/* Post Text */}
-        <Text style={styles.postText}>
-          I still remember the time John drove me to In-N-Out after our CS
-          midterm in college, and John got his favorite double double and
-          strawberry shake.
-        </Text>
+        <Text style={styles.postText}>{text}</Text>
 
         {/* Date */}
-        <Text style={styles.date}>06.01.18</Text>
+        <Text style={styles.date}>{time_stamp}</Text>
 
         {/* Image */}
-        <Image
-          source={require("../../../assets/burger.jpg")}
-          style={styles.image}
-        />
+        <Image source={postImages[media]} style={styles.image} />
       </View>
     </View>
   );

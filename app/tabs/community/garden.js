@@ -6,7 +6,7 @@
 
 // on click flower, navigate to post.js
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -14,43 +14,94 @@ import {
   StyleSheet,
   Image,
   Switch,
+  ActivityIndicator,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import db from "@/databse/db";
 
 const Garden = () => {
   const router = useRouter();
   const [isToggled, setIsToggled] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [name, setName] = useState([]);
+  const [user, setUser] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { gardenName } = useLocalSearchParams();
+  console.log("garden_name", gardenName);
+
+  const flowerImages = {
+    0: require("../../../assets/flower0.jpg"),
+    1: require("../../../assets/flower1.jpg"),
+    2: require("../../../assets/flower2.jpg"),
+    3: require("../../../assets/flower3.jpg"),
+  };
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        // Fetch posts for a specific garden_id from Supabase
+        const { data, error } = await db
+          .from("post")
+          .select(
+            "id, username, memory_person, text, flower_type, media, time_stamp"
+          ) // Fetch post info
+          .eq("memory_person", gardenName); // Filter by garden_id
+
+        if (error) {
+          console.error("Supabase error:", error.message);
+          return;
+        }
+        setName(data[0].memory_person);
+        setUser(data[0].username);
+        setPosts(data || []); // Set posts to the state
+      } catch (err) {
+        console.error("Error fetching posts:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   const handleToggle = () => {
     setIsToggled(!isToggled);
     if (!isToggled) {
-      router.push("/tabs/community/collage");
+      router.push(
+        "/tabs/community/collage?post_id=${postId}&text=${text}&flower_type=${flowerType}"
+      );
     }
   };
 
-  const handleFlowerPress = () => {
-    router.push("/tabs/community/post");
+  const handleFlowerPress = (text, media, time_stamp) => {
+    // Navigate to the post page, passing post data
+    router.push(
+      `/tabs/community/post?text=${text}&media=${media}&time_stamp=${time_stamp}`
+    );
   };
+
+  if (isLoading) {
+    return (
+      <ActivityIndicator
+        size="large"
+        color="#9d82ff"
+        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      />
+    );
+  }
 
   return (
     <View style={styles.container}>
-      {/* Back Button */}
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => router.push("/tabs/community/profile")}
-      >
+      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Text style={styles.backButtonText}>back</Text>
       </TouchableOpacity>
 
-      {/* Title */}
-      <Text style={styles.title}>John White</Text>
+      <Text style={styles.title}>{name}</Text>
 
-      {/* Creator Badge */}
       <View style={styles.creatorBadge}>
-        <Text style={styles.creatorText}>made by @helen-smith</Text>
+        <Text style={styles.creatorText}>made by @{user}</Text>
       </View>
 
-      {/* Placeholder Avatar */}
       <View style={styles.avatarContainer}>
         <Image
           source={require("../../../assets/john_white.jpg")}
@@ -58,18 +109,24 @@ const Garden = () => {
         />
       </View>
 
-      {/* Placeholder Garden Area */}
       <View style={styles.gardenArea}>
-        {/* Pressable Flower */}
-        <TouchableOpacity style={styles.flower} onPress={handleFlowerPress}>
-          <Image
-            source={require("../../../assets/flower.jpg")}
-            style={styles.flowerImage}
-          />
-        </TouchableOpacity>
+        {posts.map((post) => (
+          <TouchableOpacity
+            key={post.id}
+            style={styles.flower}
+            onPress={() =>
+              handleFlowerPress(post.text, post.media, post.time_stamp)
+            }
+          >
+            <Image
+              source={flowerImages[post.flower_type] || flowerImages[0]}
+              style={styles.flowerImage}
+              resizeMode="cover"
+            />
+          </TouchableOpacity>
+        ))}
       </View>
 
-      {/* Toggle at Bottom Right */}
       <View style={styles.toggleContainer}>
         <Switch
           trackColor={{ false: "#dcd6ff", true: "#9d82ff" }}
@@ -112,28 +169,24 @@ const styles = StyleSheet.create({
     marginTop: 60,
     color: "#9d82ff",
   },
-  creatorBadge: {
-    position: "absolute",
-    top: 100,
-    right: 16,
-    backgroundColor: "#ffdab9",
-    paddingHorizontal: 5,
-    paddingVertical: 5,
-    borderRadius: 8,
-  },
-  creatorText: {
-    fontSize: 14,
-    color: "#7f7f7f",
-    fontWeight: "bold",
-  },
-  avatarContainer: {
+  gardenArea: {
+    flex: 1,
+    justifyContent: "flex-start", // Align the flowers to the top
     alignItems: "center",
-    marginTop: 20,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    paddingHorizontal: 20, // Added some padding to the garden area
   },
-  avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+  flower: {
+    width: 80, // Reduced flower size
+    height: 80, // Reduced flower size
+    margin: 10,
+    borderRadius: 12, // Optional: rounded corners for a smoother look
+    overflow: "hidden", // Ensure the images don't overflow the container
+  },
+  flowerImage: {
+    width: "100%",
+    height: "100%",
   },
   toggleContainer: {
     position: "absolute",
@@ -155,18 +208,24 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#ffffff",
   },
-  gardenArea: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  avatarContainer: {
+    alignItems: "center", // Center the avatar horizontally
+    marginTop: 20, // Add some margin to position it nicely below the creator badge
   },
-  flower: {
-    width: 100,
-    height: 100,
+  avatar: {
+    width: 60, // Reduced the width to 60px
+    height: 60, // Reduced the height to 60px
+    borderRadius: 30, // Ensures the avatar stays circular (half of width/height)
+    borderWidth: 2, // Optional: Add border to make the avatar more prominent
+    borderColor: "#9d82ff", // Optional: Add a color to the border
   },
-  flowerImage: {
-    width: "100%",
-    height: "100%",
+  creatorBadge: {
+    backgroundColor: "#dcd6ff",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 16,
+    alignSelf: "center",
+    marginTop: 8,
   },
 });
 
