@@ -30,15 +30,15 @@ const Garden = () => {
   };
 
   const localImages = {
-    "john-white.jpg": require("../../../assets/profiles/john-white.jpg"),
-    "mike-smith.jpg": require("../../../assets/profiles/mike-smith.jpg"),
-    "susan-brown.jpg": require("../../../assets/profiles/susan-brown.jpg"),
-    "jack-fan.jpg": require("../../../assets/profiles/jack-fan.jpg"),
-    "mr-whistler.jpg": require("../../../assets/profiles/mr-whistler.jpg"),
-    "isa-bella.jpg": require("../../../assets/profiles/isa-bella.jpg"),
-    "jimmy-d.jpg": require("../../../assets/profiles/jimmy-d.jpg"),
-    "peter-snake.jpg": require("../../../assets/profiles/peter-snake.jpg"),
-    "caroline-meyer.jpg": require("../../../assets/profiles/caroline-meyer.jpg"),
+    "john-white": require("../../../assets/profiles/john-white.jpg"),
+    "mike-smith": require("../../../assets/profiles/mike-smith.jpg"),
+    "susan-brown": require("../../../assets/profiles/susan-brown.jpg"),
+    "jack-fan": require("../../../assets/profiles/jack-fan.jpg"),
+    "mr-whistler": require("../../../assets/profiles/mr-whistler.jpg"),
+    "isa-bella": require("../../../assets/profiles/isa-bella.jpg"),
+    "jimmy-d": require("../../../assets/profiles/jimmy-d.jpg"),
+    "peter-snake": require("../../../assets/profiles/peter-snake.jpg"),
+    "caroline-meyer": require("../../../assets/profiles/caroline-meyer.jpg"),
   };
 
   // Function to get a random position
@@ -123,10 +123,7 @@ const Garden = () => {
       </View>
 
       <View style={styles.avatarContainer}>
-        <Image
-          source={require("../../../assets/profiles/john-white.jpg")}
-          style={styles.avatar}
-        />
+        <Image source={localImages[gardenName]} style={styles.avatar} />
       </View>
 
       {/* Garden Area with random flower positions */}
