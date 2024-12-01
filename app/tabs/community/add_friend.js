@@ -12,7 +12,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { useRouter } from "expo-router";
-import db from "@/database/db";
+import db from "@/databse/db";
 
 const AddFriend = () => {
   const router = useRouter();

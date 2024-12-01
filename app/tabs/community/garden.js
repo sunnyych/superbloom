@@ -6,7 +6,7 @@
 
 // on click flower, navigate to post.js
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -14,40 +14,92 @@ import {
   StyleSheet,
   Image,
   Switch,
+  ActivityIndicator,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import db from "@/databse/db";
 
 const Garden = () => {
   const router = useRouter();
   const [isToggled, setIsToggled] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [name, setName] = useState([]);
+  const [user, setUser] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { garden_id } = useLocalSearchParams();
+
+  const flowerImages = {
+    0: require("../../../assets/flower0.jpg"),
+    1: require("../../../assets/flower1.jpg"),
+    2: require("../../../assets/flower2.jpg"),
+    3: require("../../../assets/flower3.jpg"),
+  };
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        // Fetch posts for a specific garden_id from Supabase
+        const { data, error } = await db
+          .from("post")
+          .select("id, username, memory_person, text, flower_type, media") // Fetch post info
+          .eq("garden_id", garden_id); // Filter by garden_id
+
+        if (error) {
+          console.error("Supabase error:", error.message);
+          return;
+        }
+        setName(data[0].memory_person);
+        setUser(data[0].username);
+        setPosts(data || []); // Set posts to the state
+      } catch (err) {
+        console.error("Error fetching posts:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, [garden_id]);
 
   const handleToggle = () => {
     setIsToggled(!isToggled);
     if (!isToggled) {
-      router.push("/tabs/community/collage");
+      router.push(
+        "/tabs/community/collage?post_id=${postId}&text=${text}&flower_type=${flowerType}"
+      );
     }
   };
 
-  const handleFlowerPress = () => {
-    router.push("/tabs/community/post");
+  const handleFlowerPress = (image, text, flowerType) => {
+    // Navigate to the post page, passing post data
+    router.push(
+      `/tabs/community/post?text=${text}&image=${image}&flower_type=${flowerType}`
+    );
   };
+
+  if (isLoading) {
+    return (
+      <ActivityIndicator
+        size="large"
+        color="#9d82ff"
+        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      />
+    );
+  }
 
   return (
     <View style={styles.container}>
       {/* Back Button */}
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => router.push("/tabs/community/profile")}
-      >
+      <TouchableOpacity style={styles.backButton} onPress={() => router.back}>
         <Text style={styles.backButtonText}>back</Text>
       </TouchableOpacity>
 
       {/* Title */}
-      <Text style={styles.title}>John White</Text>
+      <Text style={styles.title}>{name}</Text>
 
       {/* Creator Badge */}
       <View style={styles.creatorBadge}>
-        <Text style={styles.creatorText}>made by @helen-smith</Text>
+        <Text style={styles.creatorText}>made by @username</Text>
       </View>
 
       {/* Placeholder Avatar */}
@@ -58,15 +110,22 @@ const Garden = () => {
         />
       </View>
 
-      {/* Placeholder Garden Area */}
+      {/* Garden Area - Dynamically render flowers */}
       <View style={styles.gardenArea}>
-        {/* Pressable Flower */}
-        <TouchableOpacity style={styles.flower} onPress={handleFlowerPress}>
-          <Image
-            source={require("../../../assets/flower.jpg")}
-            style={styles.flowerImage}
-          />
-        </TouchableOpacity>
+        {posts.map((post) => (
+          <TouchableOpacity
+            key={post.id}
+            style={styles.flower}
+            onPress={() =>
+              handleFlowerPress(post.id, post.text, post.flower_type)
+            }
+          >
+            <Image
+              source={flowerImages[post.flower_type] || flowerImages[0]} // Default to flower0 if flower_type is undefined
+              style={styles.flowerImage}
+            />
+          </TouchableOpacity>
+        ))}
       </View>
 
       {/* Toggle at Bottom Right */}
@@ -112,28 +171,21 @@ const styles = StyleSheet.create({
     marginTop: 60,
     color: "#9d82ff",
   },
-  creatorBadge: {
-    position: "absolute",
-    top: 100,
-    right: 16,
-    backgroundColor: "#ffdab9",
-    paddingHorizontal: 5,
-    paddingVertical: 5,
-    borderRadius: 8,
-  },
-  creatorText: {
-    fontSize: 14,
-    color: "#7f7f7f",
-    fontWeight: "bold",
-  },
-  avatarContainer: {
+  gardenArea: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    marginTop: 20,
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
-  avatar: {
+  flower: {
     width: 100,
     height: 100,
-    borderRadius: 50,
+    margin: 10,
+  },
+  flowerImage: {
+    width: "100%",
+    height: "100%",
   },
   toggleContainer: {
     position: "absolute",
@@ -154,19 +206,6 @@ const styles = StyleSheet.create({
   toggleIconText: {
     fontSize: 18,
     color: "#ffffff",
-  },
-  gardenArea: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  flower: {
-    width: 100,
-    height: 100,
-  },
-  flowerImage: {
-    width: "100%",
-    height: "100%",
   },
 });
 

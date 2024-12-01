@@ -27,7 +27,14 @@ const FriendsPage = () => {
         <Text style={styles.name}>{item.name}</Text>
         <Text style={styles.username}>{item.username}</Text>
       </View>
-      <TouchableOpacity style={styles.viewProfileButton}>
+      <TouchableOpacity
+        style={styles.viewProfileButton}
+        onPress={() =>
+          router.push(
+            `/tabs/community/profile?username=${item.username.replace("@", "")}`
+          )
+        } // Navigate to profile page
+      >
         <Text style={styles.viewProfileText}>view profile</Text>
       </TouchableOpacity>
     </View>
@@ -61,6 +68,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f8f4ff",
     padding: 16,
+    marginTop: -60,
   },
   closeButton: {
     position: "absolute",
@@ -84,6 +92,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginTop: 40,
+    padding: 10,
   },
   subtitle: {
     fontSize: 16,
@@ -143,7 +152,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#dcd6ff",
     borderRadius: 24,
-    padding: 16,
+    padding: 10,
   },
   addFriendIcon: {
     backgroundColor: "#9d82ff",
