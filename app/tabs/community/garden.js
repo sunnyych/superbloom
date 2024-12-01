@@ -1,11 +1,3 @@
-// this is the garden page for the given user profile
-
-// on click back, navigate to profile.js
-
-// on click toggle, navigate to collage.js
-
-// on click flower, navigate to post.js
-
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -15,6 +7,7 @@ import {
   Image,
   Switch,
   ActivityIndicator,
+  ImageBackground,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import db from "@/databse/db";
@@ -30,10 +23,27 @@ const Garden = () => {
   console.log("garden_name", gardenName);
 
   const flowerImages = {
-    0: require("../../../assets/flower0.jpg"),
-    1: require("../../../assets/flower1.jpg"),
-    2: require("../../../assets/flower2.jpg"),
-    3: require("../../../assets/flower3.jpg"),
+    0: require("../../../assets/flowers/flower0.jpg"),
+    1: require("../../../assets/flowers/flower1.jpg"),
+    2: require("../../../assets/flowers/flower2.jpg"),
+    3: require("../../../assets/flowers/flower3.jpg"),
+  };
+
+  const localImages = {
+    "john-white.jpg": require("../../../assets/profiles/john-white.jpg"),
+    "mike-smith.jpg": require("../../../assets/profiles/mike-smith.jpg"),
+    "susan-brown.jpg": require("../../../assets/profiles/susan-brown.jpg"),
+    "jack-fan.jpg": require("../../../assets/profiles/jack-fan.jpg"),
+    "mr-whistler.jpg": require("../../../assets/profiles/mr-whistler.jpg"),
+    "isa-bella.jpg": require("../../../assets/profiles/isa-bella.jpg"),
+    "jimmy-d.jpg": require("../../../assets/profiles/jimmy-d.jpg"),
+    "peter-snake.jpg": require("../../../assets/profiles/peter-snake.jpg"),
+    "caroline-meyer.jpg": require("../../../assets/profiles/caroline-meyer.jpg"),
+  };
+
+  // Function to get a random position
+  const getRandomPosition = (max) => {
+    return Math.floor(Math.random() * max);
   };
 
   useEffect(() => {
@@ -62,14 +72,20 @@ const Garden = () => {
     };
 
     fetchPosts();
-  }, []);
+  }, [gardenName]);
 
+  // const handleToggle = () => {
+  //   setIsToggled(!isToggled);
+  //   if (!isToggled) {
+  //     router.push(`/tabs/community/collage`);
+  //   }
+  // };
   const handleToggle = () => {
     setIsToggled(!isToggled);
     if (!isToggled) {
-      router.push(
-        "/tabs/community/collage?post_id=${postId}&text=${text}&flower_type=${flowerType}"
-      );
+      // Pass only necessary data, such as post IDs
+      const postIds = posts.map((post) => post.id).join(",");
+      router.push(`/tabs/community/collage?postIds=${postIds}`);
     }
   };
 
@@ -91,7 +107,11 @@ const Garden = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={require("../../../assets/backgrounds/background-garden.png")} // Set background image
+      style={styles.container} // Apply styles to make the background fill the screen
+      resizeMode="cover" // Ensure the background image covers the entire screen
+    >
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Text style={styles.backButtonText}>back</Text>
       </TouchableOpacity>
@@ -104,27 +124,34 @@ const Garden = () => {
 
       <View style={styles.avatarContainer}>
         <Image
-          source={require("../../../assets/john_white.jpg")}
+          source={require("../../../assets/profiles/john-white.jpg")}
           style={styles.avatar}
         />
       </View>
 
+      {/* Garden Area with random flower positions */}
       <View style={styles.gardenArea}>
-        {posts.map((post) => (
-          <TouchableOpacity
-            key={post.id}
-            style={styles.flower}
-            onPress={() =>
-              handleFlowerPress(post.text, post.media, post.time_stamp)
-            }
-          >
-            <Image
-              source={flowerImages[post.flower_type] || flowerImages[0]}
-              style={styles.flowerImage}
-              resizeMode="cover"
-            />
-          </TouchableOpacity>
-        ))}
+        {posts.map((post) => {
+          // Generate random positions for the flowers
+          const randomTop = getRandomPosition(250); // Adjust the max to control range of vertical positions
+          const randomLeft = getRandomPosition(250); // Adjust the max to control range of horizontal positions
+
+          return (
+            <TouchableOpacity
+              key={post.id}
+              style={[styles.flower, { top: randomTop, left: randomLeft }]}
+              onPress={() =>
+                handleFlowerPress(post.text, post.media, post.time_stamp)
+              }
+            >
+              <Image
+                source={flowerImages[post.flower_type] || flowerImages[0]}
+                style={styles.flowerImage}
+                resizeMode="cover"
+              />
+            </TouchableOpacity>
+          );
+        })}
       </View>
 
       <View style={styles.toggleContainer}>
@@ -139,7 +166,7 @@ const Garden = () => {
           <Text style={styles.toggleIconText}>📰</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -171,15 +198,17 @@ const styles = StyleSheet.create({
   },
   gardenArea: {
     flex: 1,
-    justifyContent: "flex-start", // Align the flowers to the top
+    position: "relative", // Make sure this is relative to position absolute flowers inside it
+    justifyContent: "flex-start",
     alignItems: "center",
     flexDirection: "row",
     flexWrap: "wrap",
-    paddingHorizontal: 20, // Added some padding to the garden area
+    paddingHorizontal: 20, // Optional: Add some padding if needed
   },
   flower: {
-    width: 80, // Reduced flower size
-    height: 80, // Reduced flower size
+    position: "absolute", // Position flowers absolutely
+    width: 40, // Reduced flower size
+    height: 70, // Reduced flower size
     margin: 10,
     borderRadius: 12, // Optional: rounded corners for a smoother look
     overflow: "hidden", // Ensure the images don't overflow the container

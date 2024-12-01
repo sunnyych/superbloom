@@ -16,15 +16,15 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import db from "@/databse/db";
 
 const localImages = {
-  "john_white.jpg": require("../../../assets/john_white.jpg"),
-  "mike_smith.jpg": require("../../../assets/mike_smith.jpg"),
-  "susan_brown.jpg": require("../../../assets/susan_brown.jpg"),
-  "jack_fan.jpg": require("../../../assets/jack_fan.jpg"),
-  "mr_whistler.jpg": require("../../../assets/mr_whistler.jpg"),
-  "isa_bella.jpg": require("../../../assets/isa_bella.jpg"),
-  "jimmy_d.jpg": require("../../../assets/jimmy_d.jpg"),
-  "peter-snake.jpg": require("../../../assets/peter-snake.jpg"),
-  "caroline-meyer.jpg": require("../../../assets/caroline-meyer.jpg"),
+  "john-white.jpg": require("../../../assets/profiles/john-white.jpg"),
+  "mike-smith.jpg": require("../../../assets/profiles/mike-smith.jpg"),
+  "susan-brown.jpg": require("../../../assets/profiles/susan-brown.jpg"),
+  "jack-fan.jpg": require("../../../assets/profiles/jack-fan.jpg"),
+  "mr-whistler.jpg": require("../../../assets/profiles/mr-whistler.jpg"),
+  "isa-bella.jpg": require("../../../assets/profiles/isa-bella.jpg"),
+  "jimmy-d.jpg": require("../../../assets/profiles/jimmy-d.jpg"),
+  "peter-snake.jpg": require("../../../assets/profiles/peter-snake.jpg"),
+  "caroline-meyer.jpg": require("../../../assets/profiles/caroline-meyer.jpg"),
 };
 
 const Profile = () => {
@@ -110,7 +110,7 @@ const Profile = () => {
             <Image
               source={
                 localImages[item.image] ||
-                require("../../../assets/john_white.jpg")
+                require("../../../assets/profiles/john-white.jpg")
               }
               style={styles.gardenImage}
             />

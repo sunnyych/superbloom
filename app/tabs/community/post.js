@@ -18,10 +18,29 @@ const Post = () => {
   const { text, media, time_stamp } = useLocalSearchParams(); // Extract passed params
   const [isLoading, setIsLoading] = useState(true);
   const postImages = {
-    "star.jpg": require("../../../assets/star.jpg"),
-    "game.jpg": require("../../../assets/game.jpg"),
-    "cube.jpg": require("../../../assets/cube.jpg"),
-    "coffee.jpg": require("../../../assets/coffee.jpg"),
+    "star.jpg": require("../../../assets/posts/star.jpg"),
+    "game.jpg": require("../../../assets/posts/game.jpg"),
+    "cube.jpg": require("../../../assets/posts/cube.jpg"),
+    "walks.jpg": require("../../../assets/posts/walks.jpg"),
+    "cat2.jpg": require("../../../assets/posts/cat2.jpg"),
+    "pancake.jpg": require("../../../assets/posts/pancake.jpg"),
+    "jimmy2.jpg": require("../../../assets/posts/jimmy2.jpg"),
+    "tea.jpg": require("../../../assets/posts/tea.jpg"),
+    "stories.jpg": require("../../../assets/posts/stories.jpg"),
+    "jimmy1.jpg": require("../../../assets/posts/jimmy1.jpg"),
+    "baking.jpg": require("../../../assets/posts/baking.jpg"),
+    "cat1.jpg": require("../../../assets/posts/cat1.jpg"),
+    "santa_monica.jpg": require("../../../assets/posts/santa_monica.jpg"),
+    "whiteboard.jpg": require("../../../assets/posts/whiteboard.jpg"),
+    "book.jpg": require("../../../assets/posts/book.jpg"),
+    "knitting.jpg": require("../../../assets/posts/knitting.jpg"),
+    "coffee.jpg": require("../../../assets/posts/coffee.jpg"),
+    "burger.jpg": require("../../../assets/posts/burger.jpg"),
+    "soccer.jpg": require("../../../assets/posts/soccer.jpg"),
+    "sunset.jpg": require("../../../assets/posts/sunset.jpg"),
+    "matcha.jpg": require("../../../assets/posts/matcha.jpg"),
+    "hike.jpg": require("../../../assets/posts/hike.jpg"),
+    "song.jpg": require("../../../assets/posts/song.jpg"),
   };
   console.log("media", media);
 
