@@ -1,6 +1,16 @@
 import { useBackground } from "./_layout";
-import { View, Text, Button, StyleSheet, Pressable, Image } from "react-native";
-import { useRouter } from "expo-router";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  Pressable,
+  Image,
+  Switch,
+} from "react-native";
+import { useRouter, Link } from "expo-router";
 import { useEffect, useState } from "react";
 import { globalState } from "@/components/Global";
 
@@ -10,6 +20,7 @@ export default function InnerGarden() {
   const [selectedGardenId, setSelectedGardenId] = useState(
     globalState.selectedGardenId
   );
+  const [isGarden, setIsGarden] = useState(true); // Toggle for garden/collage view
 
   const handleGoBack = () => {
     translateX.value = -400; // Reset background position
@@ -29,7 +40,7 @@ export default function InnerGarden() {
         Garden ID: {selectedGardenId || "None"}
       </Text>
 
-      <View style={styles.content}>
+      {/* <View style={styles.content}>
         <View style={styles.buttonContainer}>
           <Pressable onPress={handleGoBack}>
             <Image
@@ -38,7 +49,46 @@ export default function InnerGarden() {
             />
           </Pressable>
         </View>
+      </View> */}
+
+      {/* Buttons in lower right for toggling */}
+      <View style={styles.content}>
+        <View style={styles.buttonContainer}>
+          <Pressable onPress={handleGoBack}>
+            <Image
+              style={styles.signIcon}
+              source={require("@/assets/icons/private-sign.png")}
+            />
+          </Pressable>
+          <View style={styles.toggleContainer}>
+            <Switch
+              value={isGarden}
+              onValueChange={setIsGarden}
+              thumbColor={isGarden ? "#9d82ff" : "#ccc"}
+              trackColor={{ false: "#ccc", true: "#e6e0ff" }}
+            />
+          </View>
+        </View>
       </View>
+
+      {/* Garden profile pic and switching between gardens in upper right */}
+      <View style={styles.switchGardensContainer}>
+        <Text style={styles.subtextRemembering}>remembering</Text>
+        <Text style={styles.subtextName}>Mary</Text>
+        <View style={styles.profileContainer}>
+          <Image
+            style={styles.profilePic}
+            source={require("@/assets/matcha.jpg")}
+          ></Image>
+        </View>
+      </View>
+
+      {/* Add button to add a flower */}
+      <Link href="/add" style={styles.postButtonContainer}>
+        <View style={styles.postButton}>
+          <FontAwesome size={40} name="plus" color="white" />
+        </View>
+      </Link>
     </View>
   );
 }
@@ -59,7 +109,7 @@ const styles = StyleSheet.create({
   content: {
     position: "absolute",
     bottom: 20,
-    right: 20,
+    left: 20,
   },
   title: {
     fontSize: 24,
@@ -71,8 +121,55 @@ const styles = StyleSheet.create({
     // backgroundColor: "#9d82ff",
     borderRadius: 8,
     overflow: "hidden",
+    alignItems: "center",
+    gap: 10,
   },
-  signIcon: {
-    resizeMode: "contain",
+  profileContainer: {
+    shadowColor: "#202020",
+    shadowOffset: { width: 1, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 1,
+  },
+  profilePic: {
+    height: 80,
+    width: 80,
+    borderRadius: 1000,
+    borderColor: "#FFFFFF",
+    borderWidth: 4,
+    resizeMode: "cover",
+    backgroundColor: "#FFFFFF",
+  },
+  switchGardensContainer: {
+    alignItems: "center",
+    padding: 15,
+    marginTop: 50,
+    position: "absolute",
+    alignSelf: "flex-end",
+  },
+  subtextRemembering: {
+    fontFamily: "SourceSerifPro_700Bold",
+    color: "#3C3661",
+  },
+  subtextName: {
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 16,
+    color: "#8B7CEC",
+    paddingBottom: 10,
+  },
+  postButtonContainer: {
+    position: "absolute",
+    right: 15,
+    bottom: 15,
+  },
+  postButton: {
+    backgroundColor: "#8B7CEC",
+    height: 70,
+    width: 70,
+    borderRadius: 200,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 2,
+    paddingLeft: 1,
   },
 });

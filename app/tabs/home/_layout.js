@@ -23,6 +23,7 @@ export default function FeedStackLayout() {
         screenOptions={{
           headerShown: false,
           contentStyle: { backgroundColor: "transparent" },
+          animation: "none",
         }}
       >
         <Stack.Screen

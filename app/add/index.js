@@ -95,7 +95,7 @@ export default function ChoosePrompt() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F9FF",
+    backgroundColor: "#f8f4ff",
   },
   header: {
     flexDirection: "row",

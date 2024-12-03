@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 export default function AddPostLayout() {
   const router = useRouter();
   return (
-    <Stack screenOptions={{ headerShown: false, presentation: "modal" }}>
+    <Stack screenOptions={{ headerShown: true, presentation: "modal" }}>
       <Stack.Screen
         name="index"
         options={{
@@ -16,23 +16,33 @@ export default function AddPostLayout() {
         name="makepost"
         options={{
           title: "make new post",
-          // headerLeft: () => (
-          //   <Pressable onPress={() => router.back()}>
-          //     <Text style={styles.backText}>back</Text>
-          //   </Pressable>
-          // ),
+          headerLeft: () => (
+            <Pressable onPress={() => router.back()}>
+              <Text style={styles.backText}>back</Text>
+            </Pressable>
+          ),
         }}
       />
       <Stack.Screen
         name="pickflower"
         options={{
           title: "customize flower",
+          headerLeft: () => (
+            <Pressable onPress={() => router.back()}>
+              <Text style={styles.backText}>back</Text>
+            </Pressable>
+          ),
         }}
       />
       <Stack.Screen
         name="preview"
         options={{
           title: "preview post",
+          headerLeft: () => (
+            <Pressable onPress={() => router.back()}>
+              <Text style={styles.backText}>back</Text>
+            </Pressable>
+          ),
         }}
       />
     </Stack>
