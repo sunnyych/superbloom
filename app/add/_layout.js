@@ -2,10 +2,10 @@ import { Stack } from "expo-router";
 import { Text, Pressable, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 
-export default function FeedStackLayout() {
+export default function AddPostLayout() {
   const router = useRouter();
   return (
-    <Stack screenOptions={{ headerShown: true, modal: true }}>
+    <Stack screenOptions={{ headerShown: false, presentation: "modal" }}>
       <Stack.Screen
         name="index"
         options={{
@@ -27,6 +27,12 @@ export default function FeedStackLayout() {
         name="pickflower"
         options={{
           title: "customize flower",
+        }}
+      />
+      <Stack.Screen
+        name="preview"
+        options={{
+          title: "preview post",
         }}
       />
     </Stack>

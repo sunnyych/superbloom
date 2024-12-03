@@ -1,30 +1,33 @@
 // there should be 4 tabs: settings, home, community, and superbloom
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
 import { StyleSheet, View, TouchableOpacity, Image } from "react-native";
 import Theme from "@/assets/theme";
 // import { UserProvider } from "@/components/UserContext";
 
-const CustomAddButton = ({ children, onPress }) => {
-  return (
-    <TouchableOpacity onPress={onPress} style={styles.addButtonContainer}>
-      <View
-        style={{
-          width: 80,
-          height: 80,
-          borderRadius: 100,
-          backgroundColor: "#8B7CEC",
-          zIndex: 10,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {children}
-      </View>
-    </TouchableOpacity>
-  );
-};
+// const CustomAddButton = ({ children, onPress }) => {
+//   return (
+//     <TouchableOpacity
+//       onPress={() => router.push("/tabs/add")}
+//       style={styles.addButtonContainer}
+//     >
+//       <View
+//         style={{
+//           width: 80,
+//           height: 80,
+//           borderRadius: 100,
+//           backgroundColor: "#8B7CEC",
+//           zIndex: 10,
+//           alignItems: "center",
+//           justifyContent: "center",
+//         }}
+//       >
+//         {children}
+//       </View>
+//     </TouchableOpacity>
+//   );
+// };
 
 export default function TabLayout() {
   return (
@@ -59,7 +62,7 @@ export default function TabLayout() {
           contentStyle: { backgroundColor: "transparent" },
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="add"
         options={{
           // headerShown: false,
@@ -71,10 +74,11 @@ export default function TabLayout() {
               source={require("@/assets/icons/plus-button.png")}
             />
           ),
-          //tabBarButton: (props) => <CustomAddButton {...props} />,
+          tabBarButton: (props) => <CustomAddButton {...props} />,
+          tabBarInactiveTintColor: "white",
           headerShown: false,
         }}
-      />
+      /> */}
       <Tabs.Screen
         name="community"
         options={{
@@ -115,16 +119,14 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   navBar: {
-    borderRadius: 30,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
     backgroundColor: "#0E0835",
-    height: 90,
+    height: 100,
     overflow: "hidden",
     paddingTop: 10,
   },
   addButtonContainer: {
     position: "absolute",
-    top: -30,
-
-    // zIndex: 10,
   },
 });

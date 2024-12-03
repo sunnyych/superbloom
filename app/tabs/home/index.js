@@ -1,4 +1,7 @@
 import { useBackground } from "./_layout";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+// import { useFocusEffect } from "@react-navigation/native";
+
 import {
   View,
   Text,
@@ -8,8 +11,8 @@ import {
   Image,
   Switch,
 } from "react-native";
-import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useRouter, Link, useFocusEffect } from "expo-router";
+import { useEffect, useState, useCallback } from "react";
 import { globalState } from "@/components/Global";
 
 export default function OuterGarden() {
@@ -37,6 +40,13 @@ export default function OuterGarden() {
 
     return () => clearInterval(interval); // Cleanup interval on unmount
   }, [selectedGardenId]);
+
+  useFocusEffect(
+    useCallback(() => {
+      translateX.value = -400; // Reset background position
+      translateY.value = 0;
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -76,6 +86,13 @@ export default function OuterGarden() {
           ></Image>
         </View>
       </View>
+
+      {/* Add button to add a flower */}
+      <Link href="/add" style={styles.postButtonContainer}>
+        <View style={styles.postButton}>
+          <FontAwesome size={40} name="plus" color="white" />
+        </View>
+      </Link>
     </View>
   );
 }
@@ -96,7 +113,7 @@ const styles = StyleSheet.create({
   content: {
     position: "absolute",
     bottom: 20,
-    right: 20,
+    left: 20,
   },
   title: {
     fontSize: 24,
@@ -143,5 +160,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#8B7CEC",
     paddingBottom: 10,
+  },
+  postButtonContainer: {
+    position: "absolute",
+    right: 15,
+    bottom: 15,
+  },
+  postButton: {
+    backgroundColor: "#8B7CEC",
+    height: 70,
+    width: 70,
+    borderRadius: 200,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 2,
+    paddingLeft: 1,
   },
 });

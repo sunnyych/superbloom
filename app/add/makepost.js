@@ -69,39 +69,41 @@ export default function NewPost() {
       <Text style={styles.title}>plant a memory</Text>
       <Text style={styles.subtitle}>write and reflect</Text>
       {/* Display Memory Person */}
-      <View style={styles.memoryPersonContainer}>
-        <Text style={styles.memoryPersonLabel}>Memory Person:</Text>
-        <Text style={styles.memoryPersonValue}>{hardcodedMemoryPerson}</Text>
-      </View>
-      <TextInput
-        style={[styles.input, { height: 200 }]}
-        placeholder="Describe the memory"
-        value={text}
-        onChangeText={setText}
-        multiline={true}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Media URL (optional)"
-        value={media}
-        onChangeText={setMedia}
-      />
-      <View style={styles.toggleContainer}>
-        <Text style={styles.toggleLabel}>Public:</Text>
-        <Switch
-          value={isPublic}
-          onValueChange={setIsPublic}
-          thumbColor={isPublic ? "#9d82ff" : "#ccc"}
-          trackColor={{ false: "#ccc", true: "#e6e0ff" }}
+      <View style={styles.mainContainer}>
+        <View style={styles.memoryPersonContainer}>
+          <Text style={styles.memoryPersonLabel}>Memory Person:</Text>
+          <Text style={styles.memoryPersonValue}>{hardcodedMemoryPerson}</Text>
+        </View>
+        <TextInput
+          style={[styles.input, { height: 200 }]}
+          placeholder="Describe the memory"
+          value={text}
+          onChangeText={setText}
+          multiline={true}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Media URL (optional)"
+          value={media}
+          onChangeText={setMedia}
+        />
+        <View style={styles.toggleContainer}>
+          <Text style={styles.toggleLabel}>Public:</Text>
+          <Switch
+            value={isPublic}
+            onValueChange={setIsPublic}
+            thumbColor={isPublic ? "#9d82ff" : "#ccc"}
+            trackColor={{ false: "#ccc", true: "#e6e0ff" }}
+          />
+        </View>
+        {/* <Button title="next" onPress={addMemory} color="#007AFF" /> */}
+        {/* button commented out for now so i dont keep on posting random stuff to the database */}
+        <Button
+          title="next"
+          onPress={() => router.push("/add/preview")}
+          color="#007AFF"
         />
       </View>
-      {/* <Button title="next" onPress={addMemory} color="#007AFF" /> */}
-      {/* button commented out for now so i dont keep on posting random stuff to the database */}
-      <Button
-        title="next"
-        onPress={() => router.push("/tabs/add/pickflower")}
-        color="#007AFF"
-      />
     </SafeAreaView>
   );
 }
@@ -155,5 +157,8 @@ const styles = StyleSheet.create({
   toggleLabel: {
     fontSize: 18,
     marginRight: 8,
+  },
+  mainContainer: {
+    padding: 30,
   },
 });

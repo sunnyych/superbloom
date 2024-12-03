@@ -31,7 +31,7 @@ export default function ChoosePrompt() {
   ];
 
   const goToMakePost = () => {
-    router.push("/tabs/add/makepost");
+    router.push("/add/makepost");
   };
 
   return (

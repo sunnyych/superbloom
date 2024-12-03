@@ -5,120 +5,116 @@ import {
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
+  ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
 import Svg, { Path } from "react-native-svg";
 // if not working, run npm install react-native-svg
 
-// flower svgs
-const flowerTypes = [
-  {
-    id: "tulip",
-    path: "M10 30 C10 10 90 10 90 30 L50 90 Z", // Simplified example path
-  },
-  {
-    id: "rose",
-    path: "M10 30 C10 10 90 10 90 30 C90 50 10 50 10 30", // Simplified example path
-  },
-  {
-    id: "daisy",
-    path: "M50 50 L90 50 M50 50 L10 50 M50 50 L50 10 M50 50 L50 90", // Simplified example path
-  },
-  {
-    id: "lily",
-    path: "M10 90 Q50 10 90 90", // Simplified example path
-  },
-];
-
-const colorPalette = [
-  // row 1
-  "#FF8B8B", // coral
-  "#FFB981", // peach
-  "#FFE281", // yellow
-  "#A8F4D6", // mint
-  "#81DEFF", // light blue
-  // row 1
-  "#C4CFFF", // periwinkle
-  "#8B9FFF", // blue
-  "#B893FF", // lavender
-  "#D593FF", // purple
-  "#FF93D8", // pink
-];
+import {
+  flowerTypes,
+  colorPalette,
+  renderFlower,
+  stemColor,
+} from "@/utils/flowerUtils";
+// if not working, run npm install --save-dev react-native-svg-transformer
 
 export default function CustomizeFlowerScreen({ navigation }) {
   const [selectedType, setSelectedType] = useState(0);
   const [selectedColor, setSelectedColor] = useState(colorPalette[0]);
+  const selectedFlower = flowerTypes[selectedType];
+
   const router = useRouter();
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.closeButton}>
-          <Text style={styles.closeButtonText}>✕</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>plant a memory</Text>
-        <Text style={styles.subtitle}>customize your flower</Text>
-      </View>
-
-      <View style={styles.previewContainer}>
-        <Svg width={150} height={150} viewBox="0 0 100 100">
-          <Path
-            d={flowerTypes[selectedType].path}
-            fill={selectedColor}
-            stroke="#000"
-            strokeWidth="1"
-          />
-        </Svg>
-      </View>
-
-      <View style={styles.optionsContainer}>
-        <Text style={styles.optionLabel}>types</Text>
-        <View style={styles.typeOptions}>
-          {flowerTypes.map((type, index) => (
-            <TouchableOpacity
-              key={type.id}
-              style={[
-                styles.typeButton,
-                selectedType === index && styles.selectedTypeButton,
-              ]}
-              onPress={() => setSelectedType(index)}
-            >
-              <Svg width={30} height={30} viewBox="0 0 100 100">
-                <Path d={type.path} fill="#000" />
-              </Svg>
-            </TouchableOpacity>
-          ))}
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.closeButton}
+            accessibilityLabel="Close"
+          >
+            <Text style={styles.closeButtonText}>✕</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.clipButton}
+            accessibilityLabel="Attach"
+          >
+            <Text style={styles.clipButtonText}>📎</Text>
+          </TouchableOpacity>
         </View>
 
-        <Text style={styles.optionLabel}>colors</Text>
-        <View style={styles.colorGrid}>
-          {colorPalette.map((color, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.colorButton,
-                { backgroundColor: color },
-                selectedColor === color && styles.selectedColorButton,
-              ]}
-              onPress={() => setSelectedColor(color)}
-            />
-          ))}
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>plant a memory</Text>
+          <Text style={styles.subtitle}>customize your flower</Text>
         </View>
-      </View>
+
+        <View style={styles.previewContainer}>
+          {renderFlower(
+            selectedFlower.BloomComponent,
+            selectedFlower.StemComponent,
+            selectedColor,
+            200
+          )}
+        </View>
+
+        <View style={styles.optionsContainer}>
+          <Text style={styles.optionLabel}>types</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.typeOptions}
+          >
+            {flowerTypes.map((type, index) => (
+              <TouchableOpacity
+                key={type.id}
+                style={[
+                  styles.typeButton,
+                  selectedType === index && styles.selectedTypeButton,
+                ]}
+                onPress={() => setSelectedType(index)}
+                accessibilityLabel={`Select ${type.id} flower type`}
+              >
+                {renderFlower(
+                  type.BloomComponent,
+                  type.StemComponent,
+                  selectedType === index ? selectedColor : "#000000",
+                  50
+                )}
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+
+          <Text style={styles.optionLabel}>colors</Text>
+          <View style={styles.colorGrid}>
+            {colorPalette.map((color, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.colorButton,
+                  { backgroundColor: color },
+                  selectedColor === color && styles.selectedColorButton,
+                ]}
+                onPress={() => setSelectedColor(color)}
+                accessibilityLabel={`Select color ${index + 1}`}
+              />
+            ))}
+          </View>
+        </View>
+      </ScrollView>
 
       <View style={styles.navigationButtons}>
         <TouchableOpacity
           style={[styles.navButton, styles.backButton]}
-          onPress={() => router.back()}
+          onPress={() => navigation.goBack()}
+          accessibilityLabel="Go back"
         >
           <Text style={styles.backButtonText}>back</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.navButton, styles.nextButton]}
-          onPress={() => router.push("/tabs/home")}
+          onPress={() => navigation.navigate("NextScreen")}
+          accessibilityLabel="Go to next screen"
         >
           <Text style={styles.nextButtonText}>next</Text>
         </TouchableOpacity>
@@ -137,7 +133,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 10,
   },
   closeButton: {
     width: 40,
@@ -151,21 +147,10 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 20,
   },
-  clipButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#F0EDFF",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  clipButtonText: {
-    fontSize: 20,
-  },
   titleContainer: {
     alignItems: "center",
-    marginTop: 40,
-    marginBottom: 30,
+    marginTop: 20,
+    marginBottom: 20,
   },
   title: {
     fontSize: 28,
@@ -183,8 +168,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
-    width: "75%",
-    height: 150,
+    width: 175,
+    height: 175,
     backgroundColor: "white",
     marginBottom: 20,
     borderRadius: 10,
@@ -199,7 +184,7 @@ const styles = StyleSheet.create({
   },
   optionsContainer: {
     paddingHorizontal: 20,
-    marginHorizontal: 30,
+    marginHorizontal: 40,
   },
   optionLabel: {
     fontSize: 16,
@@ -228,7 +213,9 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   selectedTypeButton: {
-    backgroundColor: "#A393EB",
+    backgroundColor: "#EEE7FF",
+    borderWidth: 3,
+    borderColor: "#8B7CEC",
   },
   colorGrid: {
     flexDirection: "row",
@@ -244,7 +231,7 @@ const styles = StyleSheet.create({
   },
   selectedColorButton: {
     borderWidth: 3,
-    borderColor: "#A393EB",
+    borderColor: "#8B7CEC",
   },
   navigationButtons: {
     flexDirection: "row",

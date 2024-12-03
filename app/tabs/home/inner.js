@@ -14,7 +14,7 @@ export default function InnerGarden() {
   const handleGoBack = () => {
     translateX.value = -400; // Reset background position
     translateY.value = 0;
-    router.back();
+    router.push("/tabs/home");
   };
 
   useEffect(() => {
