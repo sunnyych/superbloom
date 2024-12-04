@@ -10,11 +10,12 @@ import {
 } from "react-native";
 import db from "@/databse/db"; // Supabase client
 import { useRouter } from "expo-router";
+import { usePrompt } from "@/utils/PromptContext";
 
 export default function ChoosePrompt() {
   // States for user input
-  const [selectedPrompt, setSelectedPrompt] = useState("");
   const router = useRouter();
+  const { selectedPrompt, setSelectedPrompt } = usePrompt();
 
   // Hardcoded values
   const hardcodedUsername = "helen-smith";
@@ -159,9 +160,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 3,
+    borderWidth: 1,
+    borderColor: "#BEBEBE",
   },
   selectedPromptCard: {
-    backgroundColor: "#A393EB",
+    backgroundColor: "#F4EFFF",
+    borderWidth: 3,
+    borderColor: "#8B7CEC",
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 10,
+      height: 5,
+    },
   },
   promptText: {
     fontSize: 16,
@@ -169,7 +179,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   selectedPromptText: {
-    color: "white",
+    color: "#8B7CEC",
+    fontWeight: "bold",
   },
   confirmButton: {
     backgroundColor: "#8B7CEC",

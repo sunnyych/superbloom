@@ -8,9 +8,11 @@ import {
   Alert,
   Switch,
   SafeAreaView,
+  Image,
 } from "react-native";
 import db from "@/databse/db"; // Supabase client
 import { useRouter } from "expo-router";
+import { usePrompt } from "@/utils/PromptContext";
 
 export default function NewPost() {
   // States for user input
@@ -19,12 +21,21 @@ export default function NewPost() {
   const [isPublic, setIsPublic] = useState(true); // Toggle for public or private post
 
   const router = useRouter();
+  const { selectedPrompt, setSelectedPrompt } = usePrompt();
 
   // Hardcoded values
   const hardcodedUsername = "helen-smith";
   const hardcodedUserId = 1;
   const hardcodedGardenId = 1;
-  const hardcodedMemoryPerson = "John Doe"; // Hardcoded person
+  const hardcodedMemoryPerson = "Mary Chen"; // Hardcoded person
+
+  const prompts = [
+    "What is your favorite memory of Mary?",
+    "What did Mary like to do?",
+    "Do you have any favorite stories of times you spent with Mary at school?",
+    "What is your earliest memory of Mary?",
+    "How would you describe Mary's personality?",
+  ];
 
   const addMemory = async () => {
     if (!text) {
@@ -68,6 +79,20 @@ export default function NewPost() {
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>plant a memory</Text>
       <Text style={styles.subtitle}>write and reflect</Text>
+
+      {/* Display chosen prompt */}
+      {selectedPrompt && (
+        <View style={styles.promptContainer}>
+          <Image
+            style={styles.promptTape}
+            source={require("@/assets/tape.png")}
+          ></Image>
+          <View style={styles.promptCard}>
+            <Text style={styles.promptText}>{prompts[selectedPrompt]}</Text>
+          </View>
+        </View>
+      )}
+
       {/* Display Memory Person */}
       <View style={styles.mainContainer}>
         <View style={styles.memoryPersonContainer}>
@@ -100,7 +125,7 @@ export default function NewPost() {
         {/* button commented out for now so i dont keep on posting random stuff to the database */}
         <Button
           title="next"
-          onPress={() => router.push("/add/preview")}
+          onPress={() => router.push("/add/pickflower")}
           color="#007AFF"
         />
       </View>
@@ -131,6 +156,7 @@ const styles = StyleSheet.create({
   memoryPersonContainer: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     marginBottom: 16,
   },
   memoryPersonLabel: {
@@ -148,6 +174,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     marginBottom: 12,
+    backgroundColor: "white",
   },
   toggleContainer: {
     flexDirection: "row",
@@ -160,5 +187,37 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     padding: 30,
+  },
+  promptCard: {
+    backgroundColor: "white",
+    borderRadius: 15,
+    padding: 20,
+    marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: "#BEBEBE",
+    marginHorizontal: 15,
+  },
+  promptText: {
+    fontSize: 16,
+    color: "#000",
+    textAlign: "center",
+  },
+  promptTape: {
+    margin: -15,
+    width: 100,
+    resizeMode: "contain",
+    zIndex: 10,
+  },
+  promptContainer: {
+    alignItems: "center",
+    gap: -10,
   },
 });
