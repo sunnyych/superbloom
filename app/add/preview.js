@@ -11,6 +11,8 @@ import {
   SafeAreaView,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
+import { flowerTypes, colorPalette, renderFlower } from "@/utils/flowerUtils";
+import { useFlower } from "@/utils/FlowerContext";
 
 // Hardcoded values
 const hardcodedUsername = "helen-smith";
@@ -59,15 +61,24 @@ const postImages = {
 
 export default PostPreview = () => {
   const router = useRouter();
+
+  const { selectedType, setSelectedType, selectedColor, setSelectedColor } =
+    useFlower();
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>plant a memory</Text>
       <Text style={styles.subtitle}>write and reflect</Text>
       <View style={styles.container}>
         <View style={styles.post}>
-          <View style={styles.iconContainer}>
-            <Text style={styles.icon}>🌷</Text>
-            {/* You can customize icon based on flower type */}
+          <View style={styles.previewContainer}>
+            {renderFlower(
+              flowerTypes[selectedType].BloomComponent,
+              flowerTypes[selectedType].StemComponent,
+              selectedColor,
+              "#94CDA0",
+              60 // size parameter
+            )}
           </View>
           <Text style={styles.postText}>{item.text}</Text>
           <Text style={styles.date}>{item.time_stamp}</Text>

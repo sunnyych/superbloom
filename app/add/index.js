@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
   skipButtonText: {
     color: "#A393EB",
     fontSize: 16,
+    fontFamily: "Rubik_500Medium",
   },
   titleContainer: {
     alignItems: "center",
@@ -177,10 +178,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000",
     textAlign: "center",
+    fontFamily: "Rubik_400Regular",
   },
   selectedPromptText: {
     color: "#8B7CEC",
-    fontWeight: "bold",
+    fontFamily: "Rubik_500Medium",
   },
   confirmButton: {
     backgroundColor: "#8B7CEC",
@@ -196,5 +198,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "600",
+    fontFamily: "Rubik_500Medium",
   },
 });

@@ -10,11 +10,13 @@ import { useRouter } from "expo-router";
 import Svg, { Path } from "react-native-svg";
 // if not working, run npm install react-native-svg
 import { flowerTypes, colorPalette, renderFlower } from "@/utils/flowerUtils";
+import { useFlower } from "@/utils/FlowerContext";
 
 export default function CustomizeFlowerScreen({ navigation }) {
-  const [selectedType, setSelectedType] = useState(0);
-  const [selectedColor, setSelectedColor] = useState(colorPalette[0]);
   const router = useRouter();
+
+  const { selectedType, setSelectedType, selectedColor, setSelectedColor } =
+    useFlower();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -87,7 +89,7 @@ export default function CustomizeFlowerScreen({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.navButton, styles.nextButton]}
-          onPress={() => router.push("/tabs/home")}
+          onPress={() => router.push("/add/preview")}
         >
           <Text style={styles.nextButtonText}>next</Text>
         </TouchableOpacity>
@@ -174,6 +176,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000",
     marginBottom: 10,
+    fontFamily: "Rubik_500Medium",
   },
   typeOptions: {
     flexDirection: "row",
@@ -234,6 +237,7 @@ const styles = StyleSheet.create({
   backButtonText: {
     color: "#A393EB",
     fontSize: 16,
+    fontFamily: "Rubik_500Medium",
   },
   nextButton: {
     backgroundColor: "#A393EB",
@@ -241,5 +245,6 @@ const styles = StyleSheet.create({
   nextButtonText: {
     color: "white",
     fontSize: 16,
+    fontFamily: "Rubik_500Medium",
   },
 });

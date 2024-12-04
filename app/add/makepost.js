@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 12,
     backgroundColor: "white",
+    fontFamily: "Rubik_400Regular",
   },
   toggleContainer: {
     flexDirection: "row",
@@ -209,6 +210,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000",
     textAlign: "center",
+    fontFamily: "Rubik_400Regular",
   },
   promptTape: {
     margin: -15,
