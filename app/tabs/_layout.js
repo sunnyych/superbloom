@@ -6,28 +6,19 @@ import { StyleSheet, View, TouchableOpacity, Image } from "react-native";
 import Theme from "@/assets/theme";
 // import { UserProvider } from "@/components/UserContext";
 
-// const CustomAddButton = ({ children, onPress }) => {
-//   return (
-//     <TouchableOpacity
-//       onPress={() => router.push("/tabs/add")}
-//       style={styles.addButtonContainer}
-//     >
-//       <View
-//         style={{
-//           width: 80,
-//           height: 80,
-//           borderRadius: 100,
-//           backgroundColor: "#8B7CEC",
-//           zIndex: 10,
-//           alignItems: "center",
-//           justifyContent: "center",
-//         }}
-//       >
-//         {children}
-//       </View>
-//     </TouchableOpacity>
-//   );
-// };
+const CustomAddButton = () => {
+  return (
+    <TouchableOpacity
+      onPress={() => router.push("/add")}
+      style={styles.addButtonContainer}
+    >
+      <Image
+        style={{ width: 80, height: 80 }}
+        source={require("@/assets/icons/plus-button.png")}
+      />
+    </TouchableOpacity>
+  );
+};
 
 export default function TabLayout() {
   return (
@@ -35,7 +26,7 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: "white",
         tabBarInactiveTintColor: "#8B7CEC",
-        // tabBarShowLabel: false,
+        tabBarShowLabel: false,
         headerShow: false,
         tabBarStyle: styles.navBar,
         tabBarPosition: "bottom",
@@ -56,23 +47,6 @@ export default function TabLayout() {
           contentStyle: { backgroundColor: "transparent" },
         }}
       />
-      {/* <Tabs.Screen
-        name="add"
-        options={{
-          // headerShown: false,
-          tabBarLabel: "Add",
-          tabBarIcon: () => (
-            // <FontAwesome size={32} name="plus" color={color} />
-            <Image
-              style={{ width: 80, height: 80 }}
-              source={require("@/assets/icons/plus-button.png")}
-            />
-          ),
-          tabBarButton: (props) => <CustomAddButton {...props} />,
-          tabBarInactiveTintColor: "white",
-          headerShown: false,
-        }}
-      /> */}
       <Tabs.Screen
         name="community"
         options={{
@@ -84,6 +58,24 @@ export default function TabLayout() {
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Theme.colors.backgroundPrimary },
           headerTintColor: Theme.colors.textPrimary,
+        }}
+      />
+      <Tabs.Screen
+        name="add"
+        options={{
+          // headerShown: false,
+          tabBarLabel: "Add",
+          // tabBarIcon: () => (
+          //   // <FontAwesome size={32} name="plus" color={color} />
+          //   <Image
+          //     style={{ width: 80, height: 80 }}
+          //     source={require("@/assets/icons/plus-button.png")}
+          //   />
+          // ),
+          tabBarButton: (props) => <CustomAddButton {...props} />,
+          tabBarInactiveTintColor: "white",
+          headerShown: false,
+          presentation: "modal",
         }}
       />
       <Tabs.Screen
@@ -133,5 +125,6 @@ const styles = StyleSheet.create({
   },
   addButtonContainer: {
     position: "absolute",
+    bottom: 0,
   },
 });

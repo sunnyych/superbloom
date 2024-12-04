@@ -145,7 +145,7 @@ export default function OuterGarden() {
       </View>
 
       {/* Add button to add a flower */}
-      <Link href="/add" style={styles.postButtonContainer}>
+      <Link href="/add/chooseprompt" style={styles.postButtonContainer}>
         <View style={styles.postButton}>
           <FontAwesome size={36} name="plus" color="white" />
         </View>
@@ -202,14 +202,15 @@ const styles = StyleSheet.create({
   },
   switchGardensContainer: {
     alignItems: "center",
-    padding: 15,
-    marginTop: 50,
+    padding: 10,
+    marginTop: 40,
     position: "absolute",
     alignSelf: "flex-end",
   },
   subtextRemembering: {
     fontFamily: "SourceSerifPro_700Bold",
     color: "#3C3661",
+    fontSize: 12,
   },
   subtextName: {
     fontFamily: "Rubik_700Bold",

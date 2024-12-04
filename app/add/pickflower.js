@@ -21,7 +21,10 @@ export default function CustomizeFlowerScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.closeButton}>
+        <TouchableOpacity
+          style={styles.closeButton}
+          onPress={() => router.push("tabs/home")}
+        >
           <Text style={styles.closeButtonText}>✕</Text>
         </TouchableOpacity>
       </View>
@@ -101,7 +104,7 @@ export default function CustomizeFlowerScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f4ff",
+    backgroundColor: "#FCF8FE",
   },
   header: {
     flexDirection: "row",
@@ -232,15 +235,15 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   backButton: {
-    backgroundColor: "#F0EDFF",
+    backgroundColor: "#EEE7FF",
   },
   backButtonText: {
-    color: "#A393EB",
+    color: "#8B7CEC",
     fontSize: 16,
     fontFamily: "Rubik_500Medium",
   },
   nextButton: {
-    backgroundColor: "#A393EB",
+    backgroundColor: "#8B7CEC",
   },
   nextButtonText: {
     color: "white",

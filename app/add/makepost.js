@@ -9,6 +9,7 @@ import {
   Switch,
   SafeAreaView,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import db from "@/databse/db"; // Supabase client
 import { useRouter } from "expo-router";
@@ -77,6 +78,15 @@ export default function NewPost() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.closeButton}
+          onPress={() => router.push("tabs/home")}
+        >
+          <Text style={styles.closeButtonText}>✕</Text>
+        </TouchableOpacity>
+      </View>
+
       <Text style={styles.title}>plant a memory</Text>
       <Text style={styles.subtitle}>write and reflect</Text>
 
@@ -121,13 +131,20 @@ export default function NewPost() {
             trackColor={{ false: "#ccc", true: "#e6e0ff" }}
           />
         </View>
-        {/* <Button title="next" onPress={addMemory} color="#007AFF" /> */}
-        {/* button commented out for now so i dont keep on posting random stuff to the database */}
-        <Button
-          title="next"
+      </View>
+      <View style={styles.navigationButtons}>
+        <TouchableOpacity
+          style={[styles.navButton, styles.backButton]}
+          onPress={() => router.back()}
+        >
+          <Text style={styles.backButtonText}>back</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.navButton, styles.nextButton]}
           onPress={() => router.push("/add/pickflower")}
-          color="#007AFF"
-        />
+        >
+          <Text style={styles.nextButtonText}>next</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -137,7 +154,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#f8f4ff",
+    backgroundColor: "#FCF8FE",
   },
   title: {
     fontSize: 28,
@@ -221,5 +238,52 @@ const styles = StyleSheet.create({
   promptContainer: {
     alignItems: "center",
     gap: -10,
+  },
+  navigationButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 20,
+    marginTop: "auto",
+  },
+  navButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+  },
+  backButton: {
+    backgroundColor: "#EEE7FF",
+  },
+  backButtonText: {
+    color: "#8B7CEC",
+    fontSize: 16,
+    fontFamily: "Rubik_500Medium",
+  },
+  nextButton: {
+    backgroundColor: "#8B7CEC",
+  },
+  nextButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontFamily: "Rubik_500Medium",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  closeButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#A393EB",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  closeButtonText: {
+    color: "white",
+    fontSize: 20,
+    fontFamily: "Rubik_500Medium",
   },
 });

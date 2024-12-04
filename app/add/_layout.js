@@ -7,6 +7,10 @@ import { PromptContext } from "@/utils/PromptContext";
 import { FlowerContext } from "@/utils/FlowerContext";
 import { colorPalette } from "@/utils/flowerUtils";
 
+export const unstable_settings = {
+  initialRouteName: "index",
+};
+
 export default function AddPostLayout() {
   const router = useRouter();
   const [selectedPrompt, setSelectedPrompt] = useState("");
@@ -24,11 +28,13 @@ export default function AddPostLayout() {
           setSelectedColor,
         }}
       >
-        <Stack screenOptions={{ headerShown: true, presentation: "modal" }}>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
           <Stack.Screen
-            name="index"
+            name="chooseprompt"
             options={{
               title: "choose prompt",
+              presentation: "modal",
             }}
           />
           <Stack.Screen
@@ -40,6 +46,7 @@ export default function AddPostLayout() {
                   <Text style={styles.backText}>back</Text>
                 </Pressable>
               ),
+              // presentation: "modal",
             }}
           />
           <Stack.Screen
@@ -51,6 +58,7 @@ export default function AddPostLayout() {
                   <Text style={styles.backText}>back</Text>
                 </Pressable>
               ),
+              // presentation: "modal",
             }}
           />
           <Stack.Screen
@@ -62,6 +70,7 @@ export default function AddPostLayout() {
                   <Text style={styles.backText}>back</Text>
                 </Pressable>
               ),
+              // presentation: "modal",
             }}
           />
         </Stack>
