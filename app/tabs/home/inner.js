@@ -10,7 +10,7 @@ import {
   Image,
   Switch,
 } from "react-native";
-import { useRouter, Link } from "expo-router";
+import { useRouter, Link, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { globalState } from "@/components/Global";
 
@@ -86,7 +86,7 @@ export default function InnerGarden() {
       {/* Add button to add a flower */}
       <Link href="/add" style={styles.postButtonContainer}>
         <View style={styles.postButton}>
-          <FontAwesome size={40} name="plus" color="white" />
+          <FontAwesome size={36} name="plus" color="white" />
         </View>
       </Link>
     </View>
@@ -171,5 +171,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingTop: 2,
     paddingLeft: 1,
+    shadowColor: "#8B7CEC",
+    shadowRadius: 5,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.8, // Add this property
+    elevation: 10,
   },
 });

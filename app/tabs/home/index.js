@@ -10,14 +10,24 @@ import {
   Pressable,
   Image,
   Switch,
+  ActivityIndicator,
 } from "react-native";
-import { useRouter, Link, useFocusEffect } from "expo-router";
+import {
+  useRouter,
+  Link,
+  useFocusEffect,
+  useLocalSearchParams,
+} from "expo-router";
 import { useEffect, useState, useCallback } from "react";
 import { globalState } from "@/components/Global";
 
 export default function OuterGarden() {
   const router = useRouter();
   const { translateX, translateY } = useBackground();
+  const { postIds } = useLocalSearchParams(); // Get post IDs from query params
+  const [isToggled, setIsToggled] = useState(true);
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [selectedGardenId, setSelectedGardenId] = useState(
     globalState.selectedGardenId
@@ -28,6 +38,15 @@ export default function OuterGarden() {
     router.push("/tabs/home/inner");
     translateX.value = -200; // Reset background position
     translateY.value = -450;
+  };
+
+  const handleToggle = () => {
+    setIsToggled(!isToggled);
+    if (!isToggled) {
+      // Pass only necessary data, such as post IDs
+      const postIds = posts.map((post) => post.id).join(",");
+      router.push(`/tabs/home/collage?postIds=${postIds}`);
+    }
   };
 
   useEffect(() => {
@@ -48,6 +67,44 @@ export default function OuterGarden() {
     }, [])
   );
 
+  // Fetch posts based on the postIds passed in the URL
+  useEffect(() => {
+    const fetchPosts = async () => {
+      if (postIds) {
+        const ids = postIds.split(","); // Convert the comma-separated string into an array of IDs
+        try {
+          const { data, error } = await db
+            .from("post")
+            .select("*")
+            .in("id", ids); // Fetch posts based on the received IDs
+
+          if (error) {
+            console.error("Error fetching posts:", error.message);
+            return;
+          }
+          setPosts(data || []);
+          setName(data[0].memory_person);
+          console.log("name", name);
+        } catch (err) {
+          console.error("Error fetching posts:", err);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchPosts();
+  }, [postIds]);
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#9d82ff" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       {/* Display the selected garden ID in the top-right corner */}
@@ -66,8 +123,8 @@ export default function OuterGarden() {
           </Pressable>
           <View style={styles.toggleContainer}>
             <Switch
-              value={isGarden}
-              onValueChange={setIsGarden}
+              value={isToggled}
+              onValueChange={handleToggle}
               thumbColor={isGarden ? "#9d82ff" : "#ccc"}
               trackColor={{ false: "#ccc", true: "#e6e0ff" }}
             />
@@ -90,7 +147,7 @@ export default function OuterGarden() {
       {/* Add button to add a flower */}
       <Link href="/add" style={styles.postButtonContainer}>
         <View style={styles.postButton}>
-          <FontAwesome size={40} name="plus" color="white" />
+          <FontAwesome size={36} name="plus" color="white" />
         </View>
       </Link>
     </View>
@@ -155,6 +212,7 @@ const styles = StyleSheet.create({
     color: "#3C3661",
   },
   subtextName: {
+    fontFamily: "Rubik_700Bold",
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 16,
@@ -175,5 +233,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingTop: 2,
     paddingLeft: 1,
+    shadowColor: "#8B7CEC",
+    shadowRadius: 5,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.8, // Add this property
+    elevation: 10,
   },
 });

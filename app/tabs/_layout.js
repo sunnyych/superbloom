@@ -35,28 +35,22 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: "white",
         tabBarInactiveTintColor: "#8B7CEC",
-        tabBarShowLabel: false,
+        // tabBarShowLabel: false,
         headerShow: false,
         tabBarStyle: styles.navBar,
         tabBarPosition: "bottom",
+        tabBarIconStyle: {
+          width: 48, // or whatever size you want
+          height: 48,
+        },
       }}
     >
-      <Tabs.Screen
-        name="settings"
-        options={{
-          tabBarLabel: "Settings",
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome size={32} name="cog" color={color} />
-          ),
-          // headerShown: false,
-        }}
-      />
       <Tabs.Screen
         name="home"
         options={{
           tabBarLabel: "Home",
           tabBarIcon: ({ size, color }) => (
-            <FontAwesome size={32} name="home" color={color} />
+            <FontAwesome size={40} name="home" color={color} />
           ),
           headerShown: false,
           contentStyle: { backgroundColor: "transparent" },
@@ -85,7 +79,7 @@ export default function TabLayout() {
           title: "Community",
           tabBarLabel: "Community",
           tabBarIcon: ({ size, color }) => (
-            <FontAwesome size={32} name="user" color={color} />
+            <FontAwesome size={40} name="user" color={color} />
           ),
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Theme.colors.backgroundPrimary },
@@ -100,7 +94,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => {
             return (
               <Image
-                style={{ width: 32, height: 32 }}
+                style={{ width: 40, height: 40 }}
                 // ty https://youtu.be/gPaBicMaib4
                 source={
                   focused
@@ -113,16 +107,27 @@ export default function TabLayout() {
           headerShown: false,
         }}
       />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          tabBarLabel: "Settings",
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome size={40} name="cog" color={color} />
+          ),
+          // headerShown: false,
+        }}
+      />
     </Tabs>
   );
 }
 
 const styles = StyleSheet.create({
   navBar: {
+    // position: "absolute",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     backgroundColor: "#0E0835",
-    height: 100,
+    height: 115,
     overflow: "hidden",
     paddingTop: 10,
   },

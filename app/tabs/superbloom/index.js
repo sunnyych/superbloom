@@ -15,32 +15,8 @@ import {
   TextInput,
 } from "react-native";
 import { useRouter } from "expo-router";
-// font import source: https://www.npmjs.com/package/@expo-google-fonts/source-serif-pro
-// if it doesn't work, run dis in terminal "npx expo install @expo-google-fonts/source-serif-pro expo-font expo-app-loading"
-import {
-  useFonts,
-  SourceSerifPro_400Regular,
-  SourceSerifPro_400Regular_Italic,
-  SourceSerifPro_600SemiBold,
-  SourceSerifPro_600SemiBold_Italic,
-  SourceSerifPro_700Bold,
-  SourceSerifPro_700Bold_Italic,
-  SourceSerifPro_900Black,
-  SourceSerifPro_900Black_Italic,
-} from "@expo-google-fonts/source-serif-pro";
 
 export default function SuperbloomHome() {
-  let [fontsLoaded] = useFonts({
-    SourceSerifPro_400Regular,
-    SourceSerifPro_400Regular_Italic,
-    SourceSerifPro_600SemiBold,
-    SourceSerifPro_600SemiBold_Italic,
-    SourceSerifPro_700Bold,
-    SourceSerifPro_700Bold_Italic,
-    SourceSerifPro_900Black,
-    SourceSerifPro_900Black_Italic,
-  });
-
   const router = useRouter();
   const [requested, setRequested] = useState(false);
 
@@ -48,69 +24,69 @@ export default function SuperbloomHome() {
     setRequested(true);
   };
 
-  if (fontsLoaded) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.title}>join a superbloom</Text>
-        <Text style={styles.subtitle}>search for an event</Text>
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Enter a username..."
-            //value={searchQuery}
-            //onChangeText={setSearchQuery}
-          />
-          <TouchableOpacity style={styles.searchButton}>
-            {/*took out  onPress={handleSearch}*/}
-            <Text style={styles.searchButtonText}>🔍</Text>
-          </TouchableOpacity>
-        </View>
-        {/* TO DO: figure out searching,,, for now i just hard code hihi */}
-        <View style={styles.resultContainer}>
-          <View style={styles.avatar} />
-          <View style={styles.resultInfo}>
-            <Text style={styles.resultName}>Celebrating Mary</Text>
-            <Text style={styles.resultUsername}>Hosted by Helen Smith</Text>
-            {requested ? (
-              <TouchableOpacity
-                style={styles.openSuperbloomButton}
-                onPress={() => router.push("tabs/superbloom/exsuperbloom")}
-              >
-                <Text style={styles.openSuperbloomText}>open superbloom</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={styles.requestButton}
-                onPress={handleRequested}
-              >
-                <Text style={styles.requestTest}>request to join</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-          <View style={styles.date}>
-            <Text style={styles.month}>Nov</Text>
-            <Text style={styles.days}>05-13</Text>
-          </View>
-        </View>
-        <TouchableOpacity
-          style={styles.createSuperbloomButton}
-          onPress={() => router.push("tabs/superbloom/newbloom")}
-        >
-          <View style={styles.createSuperbloomIcon}>
-            <Image
-              source={require("@/assets/icons/icon-superblooms.png")}
-              style={styles.superbloomIcon}
-            ></Image>
-          </View>
-          <View style={styles.createSuperbloomTextWrap}>
-            <Text style={styles.createSuperbloomText}>create a superbloom</Text>
-          </View>
+  // if (fontsLoaded) {
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>join a superbloom</Text>
+      <Text style={styles.subtitle}>search for an event</Text>
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Enter a username..."
+          //value={searchQuery}
+          //onChangeText={setSearchQuery}
+        />
+        <TouchableOpacity style={styles.searchButton}>
+          {/*took out  onPress={handleSearch}*/}
+          <Text style={styles.searchButtonText}>🔍</Text>
         </TouchableOpacity>
-      </SafeAreaView>
-    );
-  } else {
-    return <Text>loading...</Text>;
-  }
+      </View>
+      {/* TO DO: figure out searching,,, for now i just hard code hihi */}
+      <View style={styles.resultContainer}>
+        <View style={styles.avatar} />
+        <View style={styles.resultInfo}>
+          <Text style={styles.resultName}>Celebrating Mary</Text>
+          <Text style={styles.resultUsername}>Hosted by Helen Smith</Text>
+          {requested ? (
+            <TouchableOpacity
+              style={styles.openSuperbloomButton}
+              onPress={() => router.push("tabs/superbloom/exsuperbloom")}
+            >
+              <Text style={styles.openSuperbloomText}>open superbloom</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.requestButton}
+              onPress={handleRequested}
+            >
+              <Text style={styles.requestTest}>request to join</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+        <View style={styles.date}>
+          <Text style={styles.month}>Nov</Text>
+          <Text style={styles.days}>05-13</Text>
+        </View>
+      </View>
+      <TouchableOpacity
+        style={styles.createSuperbloomButton}
+        onPress={() => router.push("tabs/superbloom/newbloom")}
+      >
+        <View style={styles.createSuperbloomIcon}>
+          <Image
+            source={require("@/assets/icons/icon-superblooms.png")}
+            style={styles.superbloomIcon}
+          ></Image>
+        </View>
+        <View style={styles.createSuperbloomTextWrap}>
+          <Text style={styles.createSuperbloomText}>create a superbloom</Text>
+        </View>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+  // } else {
+  //   return <Text>loading...</Text>;
+  // }
 }
 
 const styles = StyleSheet.create({
