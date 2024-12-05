@@ -234,7 +234,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     // backgroundColor: "#9d82ff",
-    borderRadius: 8,
     overflow: "hidden",
     alignItems: "center",
     gap: 10,
@@ -256,8 +255,8 @@ const styles = StyleSheet.create({
   },
   switchGardensContainer: {
     alignItems: "center",
-    padding: 10,
-    marginTop: 40,
+    padding: 5,
+    marginTop: 50,
     position: "absolute",
     alignSelf: "flex-end",
   },
@@ -267,7 +266,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   subtextRemembering: {
-    fontFamily: "SourceSerifPro_700Bold",
+    fontFamily: "SourceSerifPro_700Bold_Italic",
     color: "#3C3661",
     fontSize: 12,
   },
@@ -277,7 +276,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
     color: "#8B7CEC",
-    paddingBottom: 10,
+    marginBottom: 10,
   },
   postButtonContainer: {
     position: "absolute",

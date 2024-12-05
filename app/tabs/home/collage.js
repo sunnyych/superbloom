@@ -135,7 +135,7 @@ const Collage = () => {
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {posts.map((item) => (
-          <View style={styles.popupContent}>
+          <View key={item.id} style={styles.popupContent}>
             <View style={styles.paddedContent}>
               <View style={styles.iconContainer}>
                 {renderFlower(
@@ -154,9 +154,9 @@ const Collage = () => {
               <Text style={styles.date}>{DateFormatter(item.time_stamp)}</Text>
             </View>
             {/* Image */}
-            {item.media && (
+            {item.media ? (
               <Image source={postImages[item.media]} style={styles.image} />
-            )}
+            ) : null}
           </View>
         ))}
       </ScrollView>

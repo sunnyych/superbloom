@@ -15,6 +15,14 @@ import {
   Rubik_700Bold,
 } from "@expo-google-fonts/rubik"; // Import Rubik font
 
+import {
+  SourceSerifPro_600SemiBold,
+  SourceSerifPro_600SemiBold_Italic,
+  SourceSerifPro_700Bold,
+  SourceSerifPro_700Bold_Italic,
+  SourceSerifPro_900Black_Italic,
+} from "@expo-google-fonts/source-serif-pro";
+
 export default function Index() {
   const router = useRouter(); // Hook for navigation
 
@@ -22,6 +30,11 @@ export default function Index() {
     Rubik_400Regular,
     Rubik_500Medium,
     Rubik_700Bold,
+    SourceSerifPro_600SemiBold,
+    SourceSerifPro_600SemiBold_Italic,
+    SourceSerifPro_700Bold,
+    SourceSerifPro_700Bold_Italic,
+    SourceSerifPro_900Black_Italic,
   });
 
   if (!fontsLoaded) {
@@ -46,11 +59,13 @@ export default function Index() {
 
       {/* Welcome Text */}
       <Text style={styles.welcomeText}>superbloom</Text>
-      <Text style={styles.celebrateText}>celebrate life</Text>
+      <Text style={styles.celebrateText}>
+        plant their stories,{"\n"} celebrate life.
+      </Text>
 
       {/* Buttons */}
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Log In</Text>
+        <Text style={styles.buttonText}>log in</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -82,25 +97,29 @@ const styles = StyleSheet.create({
     color: "#FFF", // White color for the text
     marginBottom: 10, // Space between "superbloom" and "celebrate life"
     textAlign: "center", // Center-align the text
+    fontFamily: "SourceSerifPro_700Bold",
   },
   celebrateText: {
-    fontSize: 24, // Smaller size for "celebrate life"
+    fontSize: 20, // Smaller size for "celebrate life"
     color: "#492A93", // Set color to #492A93
-    fontFamily: "Rubik_400Regular", // Apply Rubik font
+    fontFamily: "Rubik_500Medium", // Apply Rubik font
     textAlign: "center", // Center-align the text
+    marginBottom: 40,
   },
   loginButton: {
     backgroundColor: "#000", // Black background for "Log In" button
     paddingVertical: 12,
     paddingHorizontal: 40,
-    borderRadius: 8,
+    borderRadius: 30,
     marginBottom: 20, // Space between the buttons
+    width: "50%",
   },
   secondButton: {
     backgroundColor: "#000", // Black background for the second button
     paddingVertical: 12,
     paddingHorizontal: 40,
-    borderRadius: 8,
+    borderRadius: 30,
+    width: "50%",
   },
   buttonText: {
     color: "#FFF", // White text color
