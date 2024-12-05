@@ -9,13 +9,19 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router"; // Import useRouter for navigation
 import { useFonts } from "expo-font"; // Import useFonts for Rubik font
-import { Rubik_400Regular } from "@expo-google-fonts/rubik"; // Import Rubik font
+import {
+  Rubik_400Regular,
+  Rubik_500Medium,
+  Rubik_700Bold,
+} from "@expo-google-fonts/rubik"; // Import Rubik font
 
 export default function Index() {
   const router = useRouter(); // Hook for navigation
 
   const [fontsLoaded] = useFonts({
     Rubik_400Regular,
+    Rubik_500Medium,
+    Rubik_700Bold,
   });
 
   if (!fontsLoaded) {

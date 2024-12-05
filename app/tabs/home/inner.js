@@ -25,7 +25,7 @@ export default function InnerGarden() {
   const handleGoBack = () => {
     translateX.value = -400; // Reset background position
     translateY.value = 0;
-    router.push("/tabs/home");
+    router.back();
   };
 
   useEffect(() => {
@@ -39,17 +39,6 @@ export default function InnerGarden() {
       <Text style={styles.gardenIdText}>
         Garden ID: {selectedGardenId || "None"}
       </Text>
-
-      {/* <View style={styles.content}>
-        <View style={styles.buttonContainer}>
-          <Pressable onPress={handleGoBack}>
-            <Image
-              style={styles.signIcon}
-              source={require("@/assets/icons/private-sign.png")}
-            />
-          </Pressable>
-        </View>
-      </View> */}
 
       {/* Buttons in lower right for toggling */}
       <View style={styles.content}>

@@ -2,6 +2,8 @@ import { useBackground } from "./_layout";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import db from "@/databse/db";
 // import { useFocusEffect } from "@react-navigation/native";
+import Dropdown from "@/components/Dropdown";
+import Toggle from "@/components/Toggle";
 
 import {
   View,
@@ -33,7 +35,7 @@ export default function OuterGarden() {
   const { translateX, translateY } = useBackground();
   const { postIds } = useLocalSearchParams(); // Get post IDs from query params
 
-  const [isToggled, setIsToggled] = useState(true);
+  const [isToggled, setIsToggled] = useState(false);
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -54,9 +56,19 @@ export default function OuterGarden() {
     translateY.value = -450;
   };
 
+  // const handleToggle = () => {
+  //   setIsToggled(!isToggled);
+  //   if (!isToggled) {
+  //     // Pass only necessary data, such as post IDs
+  //     const postIds = posts.map((post) => post.id).join(",");
+  //     router.push(`/tabs/home/collage?postIds=${postIds}`);
+  //   }
+  // };
   const handleToggle = () => {
-    setIsToggled(!isToggled);
-    if (!isToggled) {
+    const newToggleState = !isToggled;
+    setIsToggled(newToggleState);
+
+    if (newToggleState) {
       // Pass only necessary data, such as post IDs
       const postIds = posts.map((post) => post.id).join(",");
       router.push(`/tabs/home/collage?postIds=${postIds}`);
@@ -108,7 +120,7 @@ export default function OuterGarden() {
     fetchPosts();
   }, [selectedGardenId]);
 
-  console.log("posts :" + JSON.stringify(posts, null, 2));
+  // console.log("posts :" + JSON.stringify(posts, null, 2));
 
   // Loading state
   if (isLoading) {
@@ -186,12 +198,7 @@ export default function OuterGarden() {
             />
           </Pressable>
           <View style={styles.toggleContainer}>
-            <Switch
-              value={isToggled}
-              onValueChange={handleToggle}
-              thumbColor={isGarden ? "#9d82ff" : "#ccc"}
-              trackColor={{ false: "#ccc", true: "#e6e0ff" }}
-            />
+            <Toggle onToggle={handleToggle} isEnabled={isToggled} />
           </View>
         </View>
       </View>
@@ -206,6 +213,7 @@ export default function OuterGarden() {
             source={require("@/assets/matcha.jpg")}
           ></Image>
         </View>
+        <Dropdown />
       </View>
 
       {/* Add button to add a flower */}
@@ -322,5 +330,12 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.8, // Add this property
     elevation: 10,
+  },
+  toggleContainer: {
+    width: 90,
+    height: 40,
+    borderRadius: 16,
+    padding: 2,
+    justifyContent: "center",
   },
 });

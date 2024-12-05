@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import db from "@/databse/db"; // Assuming you have your database module
+import Toggle from "@/components/Toggle";
 
 const Collage = () => {
   const router = useRouter();
@@ -47,9 +48,11 @@ const Collage = () => {
 
   // Toggle function to navigate back to the garden
   const handleToggle = () => {
-    setIsToggled(!isToggled);
-    if (isToggled) {
-      router.back();
+    const newToggleState = !isToggled;
+    setIsToggled(newToggleState);
+
+    if (!newToggleState) {
+      router.push("/tabs/home");
     }
   };
 
@@ -93,20 +96,16 @@ const Collage = () => {
 
   return (
     <View style={styles.container}>
-      {/* Scrollable Content */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* Header */}
         <View style={styles.header}>
           <Text style={styles.title}>in memory of</Text>
           <Text style={styles.subtitle}>{name}</Text>
         </View>
 
-        {/* Dynamic Posts */}
         {posts.map((item) => (
           <View key={item.id} style={styles.post}>
             <View style={styles.iconContainer}>
-              <Text style={styles.icon}>🌷</Text>{" "}
-              {/* You can customize icon based on flower type */}
+              <Text style={styles.icon}>🌷</Text>
             </View>
             <Text style={styles.postText}>{item.text}</Text>
             <Text style={styles.date}>{item.time_stamp}</Text>
@@ -115,18 +114,8 @@ const Collage = () => {
         ))}
       </ScrollView>
 
-      {/* Toggle at the Bottom Right */}
       <View style={styles.toggleContainer}>
-        <Switch
-          trackColor={{ false: "#dcd6ff", true: "#9d82ff" }}
-          thumbColor={isToggled ? "#9d82ff" : "#ffffff"}
-          ios_backgroundColor="#dcd6ff"
-          onValueChange={handleToggle}
-          value={isToggled}
-        />
-        <TouchableOpacity style={styles.toggleIcon}>
-          <Text style={styles.icon}>📰</Text>
-        </TouchableOpacity>
+        <Toggle onToggle={handleToggle} isEnabled={isToggled} />
       </View>
     </View>
   );
@@ -139,21 +128,24 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   scrollContainer: {
-    paddingBottom: 80, // Prevent overlap with the toggle
+    paddingBottom: 80,
   },
   header: {
     alignItems: "center",
+    marginTop: 65,
     marginBottom: 20,
   },
   title: {
-    fontSize: 24,
-    color: "#7f7f7f",
+    fontSize: 20,
+    color: "#A896E8",
+    fontFamily: "SourceSerifPro_700Bold",
     fontWeight: "bold",
   },
   subtitle: {
     fontSize: 28,
     color: "#9d82ff",
     fontWeight: "bold",
+    fontFamily: "Rubik_700Bold",
   },
   post: {
     marginBottom: 24,
@@ -190,9 +182,10 @@ const styles = StyleSheet.create({
   toggleContainer: {
     position: "absolute",
     bottom: 16,
-    right: 16,
+    left: 16,
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: 120,
   },
   toggleIcon: {
     marginLeft: 10,
