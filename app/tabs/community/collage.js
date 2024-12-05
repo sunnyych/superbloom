@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   },
   toggleContainer: {
     position: "absolute",
-    bottom: 16,
+    bottom: 150,
     right: 16,
     flexDirection: "row",
     alignItems: "center",

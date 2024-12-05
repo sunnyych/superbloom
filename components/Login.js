@@ -6,6 +6,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -45,12 +46,8 @@ export default function Login() {
     <View style={styles.container}>
       <StatusBar style="light" />
       <View style={styles.splash}>
-        <MaterialCommunityIcons
-          size={64}
-          name="bee-flower"
-          color={Theme.colors.iconHighlighted}
-        />
-        <Text style={styles.splashText}>Buzz</Text>
+        <Image source={require("@/assets/icons/icon-superblooms.png")} />
+        <Text style={styles.splashText}>superbloom</Text>
       </View>
       <TextInput
         onChangeText={(text) => setEmail(text)}
@@ -92,7 +89,7 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 60,
     padding: 12,
-    backgroundColor: Theme.colors.backgroundPrimary,
+    backgroundColor: "#A99CFF",
     flex: 1,
   },
   splash: {
@@ -117,10 +114,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   input: {
-    color: Theme.colors.textPrimary,
-    backgroundColor: Theme.colors.backgroundSecondary,
+    color: "#231F43",
+    backgroundColor: "#EEE7FF",
     width: "100%",
     padding: 16,
+    borderRadius: 100,
   },
   button: {
     color: Theme.colors.textHighlighted,

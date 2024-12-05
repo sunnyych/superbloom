@@ -32,17 +32,6 @@ import {
 } from "@expo-google-fonts/source-serif-pro";
 
 export default function SuperbloomHome() {
-  let [fontsLoaded] = useFonts({
-    SourceSerifPro_400Regular,
-    SourceSerifPro_400Regular_Italic,
-    SourceSerifPro_600SemiBold,
-    SourceSerifPro_600SemiBold_Italic,
-    SourceSerifPro_700Bold,
-    SourceSerifPro_700Bold_Italic,
-    SourceSerifPro_900Black,
-    SourceSerifPro_900Black_Italic,
-  });
-
   const router = useRouter();
 
   const [requestedDatabase, setRequestedDatabase] = useState(database);
@@ -140,6 +129,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f8f4ff",
     padding: 16,
+    marginBottom: 120,
   },
   title: {
     fontSize: 28,
@@ -283,7 +273,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
     fontWeight: "bold",
-    color: "#7f7f7f",
+    color: "#8B7CEC",
     flexShrink: 1,
   },
 });

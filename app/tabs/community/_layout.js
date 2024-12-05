@@ -36,6 +36,9 @@ export default function FeedStackLayout() {
       <Stack.Screen
         // index.js is the outer garden
         name="post"
+        options={{
+          presentation: "modal",
+        }}
       />
     </Stack>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   View,
   Text,
@@ -9,51 +9,22 @@ import {
 import { useRouter } from "expo-router";
 import Svg, { Path } from "react-native-svg";
 // if not working, run npm install react-native-svg
-
-// flower svgs
-const flowerTypes = [
-  {
-    id: "tulip",
-    path: "M10 30 C10 10 90 10 90 30 L50 90 Z", // Simplified example path
-  },
-  {
-    id: "rose",
-    path: "M10 30 C10 10 90 10 90 30 C90 50 10 50 10 30", // Simplified example path
-  },
-  {
-    id: "daisy",
-    path: "M50 50 L90 50 M50 50 L10 50 M50 50 L50 10 M50 50 L50 90", // Simplified example path
-  },
-  {
-    id: "lily",
-    path: "M10 90 Q50 10 90 90", // Simplified example path
-  },
-];
-
-const colorPalette = [
-  // row 1
-  "#FF8B8B", // coral
-  "#FFB981", // peach
-  "#FFE281", // yellow
-  "#A8F4D6", // mint
-  "#81DEFF", // light blue
-  // row 1
-  "#C4CFFF", // periwinkle
-  "#8B9FFF", // blue
-  "#B893FF", // lavender
-  "#D593FF", // purple
-  "#FF93D8", // pink
-];
+import { flowerTypes, colorPalette, renderFlower } from "@/utils/flowerUtils";
+import { useFlower } from "@/utils/FlowerContext";
 
 export default function CustomizeFlowerScreen({ navigation }) {
-  const [selectedType, setSelectedType] = useState(0);
-  const [selectedColor, setSelectedColor] = useState(colorPalette[0]);
   const router = useRouter();
+
+  const { selectedType, setSelectedType, selectedColor, setSelectedColor } =
+    useFlower();
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.closeButton}>
+        <TouchableOpacity
+          style={styles.closeButton}
+          onPress={() => router.push("tabs/home")}
+        >
           <Text style={styles.closeButtonText}>✕</Text>
         </TouchableOpacity>
       </View>
@@ -64,14 +35,13 @@ export default function CustomizeFlowerScreen({ navigation }) {
       </View>
 
       <View style={styles.previewContainer}>
-        <Svg width={150} height={150} viewBox="0 0 100 100">
-          <Path
-            d={flowerTypes[selectedType].path}
-            fill={selectedColor}
-            stroke="#000"
-            strokeWidth="1"
-          />
-        </Svg>
+        {renderFlower(
+          flowerTypes[selectedType].BloomComponent,
+          flowerTypes[selectedType].StemComponent,
+          selectedColor,
+          "#94CDA0",
+          100 // size parameter
+        )}
       </View>
 
       <View style={styles.optionsContainer}>
@@ -86,9 +56,13 @@ export default function CustomizeFlowerScreen({ navigation }) {
               ]}
               onPress={() => setSelectedType(index)}
             >
-              <Svg width={30} height={30} viewBox="0 0 100 100">
-                <Path d={type.path} fill="#000" />
-              </Svg>
+              {renderFlower(
+                type.BloomComponent,
+                type.StemComponent,
+                "#434243",
+                "#434243",
+                40 // smaller size for type selection
+              )}
             </TouchableOpacity>
           ))}
         </View>
@@ -118,7 +92,7 @@ export default function CustomizeFlowerScreen({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.navButton, styles.nextButton]}
-          onPress={() => router.push("/tabs/home")}
+          onPress={() => router.push("/add/preview")}
         >
           <Text style={styles.nextButtonText}>next</Text>
         </TouchableOpacity>
@@ -130,7 +104,7 @@ export default function CustomizeFlowerScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F9FF",
+    backgroundColor: "#FCF8FE",
   },
   header: {
     flexDirection: "row",
@@ -183,7 +157,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
-    width: "75%",
+    width: "60%",
     height: 150,
     backgroundColor: "white",
     marginBottom: 20,
@@ -199,12 +173,13 @@ const styles = StyleSheet.create({
   },
   optionsContainer: {
     paddingHorizontal: 20,
-    marginHorizontal: 30,
+    marginHorizontal: 40,
   },
   optionLabel: {
     fontSize: 16,
     color: "#000",
     marginBottom: 10,
+    fontFamily: "Rubik_500Medium",
   },
   typeOptions: {
     flexDirection: "row",
@@ -228,7 +203,9 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   selectedTypeButton: {
-    backgroundColor: "#A393EB",
+    backgroundColor: "#E8E2FE",
+    borderWidth: 4,
+    borderColor: "#8B7CEC",
   },
   colorGrid: {
     flexDirection: "row",
@@ -243,8 +220,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   selectedColorButton: {
-    borderWidth: 3,
-    borderColor: "#A393EB",
+    borderWidth: 4,
+    borderColor: "#8B7CEC",
   },
   navigationButtons: {
     flexDirection: "row",
@@ -258,17 +235,19 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   backButton: {
-    backgroundColor: "#F0EDFF",
+    backgroundColor: "#EEE7FF",
   },
   backButtonText: {
-    color: "#A393EB",
+    color: "#8B7CEC",
     fontSize: 16,
+    fontFamily: "Rubik_500Medium",
   },
   nextButton: {
-    backgroundColor: "#A393EB",
+    backgroundColor: "#8B7CEC",
   },
   nextButtonText: {
     color: "white",
     fontSize: 16,
+    fontFamily: "Rubik_500Medium",
   },
 });

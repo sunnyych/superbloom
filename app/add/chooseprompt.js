@@ -10,11 +10,12 @@ import {
 } from "react-native";
 import db from "@/databse/db"; // Supabase client
 import { useRouter } from "expo-router";
+import { usePrompt } from "@/utils/PromptContext";
 
 export default function ChoosePrompt() {
   // States for user input
-  const [selectedPrompt, setSelectedPrompt] = useState("");
   const router = useRouter();
+  const { selectedPrompt, setSelectedPrompt } = usePrompt();
 
   // Hardcoded values
   const hardcodedUsername = "helen-smith";
@@ -31,15 +32,17 @@ export default function ChoosePrompt() {
   ];
 
   const goToMakePost = () => {
-    router.push("/tabs/add/makepost");
+    setSelectedPrompt(-1);
+    router.push("/add/makepost");
   };
+  console.log("selected prompt is " + selectedPrompt);
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.closeButton}
-          onPress={() => router.back()}
+          onPress={() => router.push("tabs/home")}
         >
           <Text style={styles.closeButtonText}>✕</Text>
         </TouchableOpacity>
@@ -78,16 +81,24 @@ export default function ChoosePrompt() {
         ))}
       </ScrollView>
 
-      <TouchableOpacity
-        style={[
-          styles.confirmButton,
-          selectedPrompt === null && styles.confirmButtonDisabled,
-        ]}
-        disabled={selectedPrompt === null}
-        onPress={goToMakePost}
-      >
-        <Text style={styles.confirmButtonText}>confirm</Text>
-      </TouchableOpacity>
+      <View style={styles.navigationButtons}>
+        <TouchableOpacity
+          style={[styles.navButton, styles.backButton]}
+          onPress={() => router.back()}
+        >
+          <Text style={styles.backButtonText}>back</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.navButton,
+            selectedPrompt >= 0 ? styles.nextButton : styles.disabledNextButton,
+          ]}
+          onPress={() => router.push("/add/makepost")}
+          disabled={!selectedPrompt}
+        >
+          <Text style={styles.nextButtonText}>next</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -95,7 +106,7 @@ export default function ChoosePrompt() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F9FF",
+    backgroundColor: "#FCF8FE",
   },
   header: {
     flexDirection: "row",
@@ -125,6 +136,7 @@ const styles = StyleSheet.create({
   skipButtonText: {
     color: "#A393EB",
     fontSize: 16,
+    fontFamily: "Rubik_500Medium",
   },
   titleContainer: {
     alignItems: "center",
@@ -159,17 +171,28 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 3,
+    borderWidth: 1,
+    borderColor: "#BEBEBE",
   },
   selectedPromptCard: {
-    backgroundColor: "#A393EB",
+    backgroundColor: "#F4EFFF",
+    borderWidth: 3,
+    borderColor: "#8B7CEC",
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 10,
+      height: 5,
+    },
   },
   promptText: {
     fontSize: 16,
     color: "#000",
     textAlign: "center",
+    fontFamily: "Rubik_400Regular",
   },
   selectedPromptText: {
-    color: "white",
+    color: "#8B7CEC",
+    fontFamily: "Rubik_400Regular",
   },
   confirmButton: {
     backgroundColor: "#8B7CEC",
@@ -185,5 +208,41 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "600",
+    fontFamily: "Rubik_500Medium",
+  },
+  navigationButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 20,
+    marginTop: "auto",
+  },
+  navButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+  },
+  backButton: {
+    backgroundColor: "#EEE7FF",
+  },
+  backButtonText: {
+    color: "#8B7CEC",
+    fontSize: 16,
+    fontFamily: "Rubik_500Medium",
+  },
+  nextButton: {
+    backgroundColor: "#8B7CEC",
+  },
+  nextButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontFamily: "Rubik_500Medium",
+  },
+  disabledNextButton: {
+    backgroundColor: "#EAE9ED",
+  },
+  disabledNextButtonText: {
+    color: "#CCCCCC",
+    fontSize: 16,
+    fontFamily: "Rubik_500Medium",
   },
 });

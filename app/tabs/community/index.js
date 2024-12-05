@@ -1,4 +1,6 @@
 import React from "react";
+import { FontAwesome6 } from "@expo/vector-icons";
+
 import {
   View,
   Text,
@@ -6,6 +8,7 @@ import {
   StyleSheet,
   FlatList,
   Image,
+  SafeAreaView,
 } from "react-native";
 import { useRouter } from "expo-router";
 import Theme from "@/assets/theme";
@@ -13,16 +16,45 @@ import Theme from "@/assets/theme";
 const FriendsPage = () => {
   const router = useRouter();
 
+  const imageMapping = {
+    "Thu Le": require("../../../assets/pfps/thu.jpg"),
+    "Myan Ngo": require("../../../assets/pfps/myan.jpg"),
+    "Sunny Yu": require("../../../assets/pfps/sunny.jpg"),
+    "Felicia Yan": require("../../../assets/pfps/felicia.jpg"),
+  };
+
   const friends = [
-    { name: "Thu Le", username: "@thulium" },
-    { name: "Myan Ngo", username: "@mngo" },
-    { name: "Sunny Yu", username: "@sunny.ych" },
-    { name: "Felicia Yan", username: "@feliciaaa" },
+    {
+      name: "Thu Le",
+      username: "@thulium",
+      image: "../../../assets/pfps/thu.jpg",
+    },
+    {
+      name: "Myan Ngo",
+      username: "@mngo",
+      image: "../../../assets/pfps/myan.jpg",
+    },
+    {
+      name: "Sunny Yu",
+      username: "@sunny.ych",
+      image: "../../../assets/pfps/sunny.jpg",
+    },
+    {
+      name: "Felicia Yan",
+      username: "@feliciaaa",
+      image: "../../../assets/pfps/felicia.jpg",
+    },
   ];
 
   const renderFriend = ({ item }) => (
     <View style={styles.friendContainer}>
-      <View style={styles.avatar} />
+      <View style={styles.avatar}>
+        {/* Render the image */}
+        <Image
+          source={imageMapping[item.name]} // Dynamically load the image
+          style={styles.avatarImage}
+        />
+      </View>
       <View style={styles.friendInfo}>
         <Text style={styles.name}>{item.name}</Text>
         <Text style={styles.username}>{item.username}</Text>
@@ -41,7 +73,7 @@ const FriendsPage = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>friends</Text>
       <Text style={styles.subtitle}>visit a friend’s gardens</Text>
       <FlatList
@@ -55,11 +87,11 @@ const FriendsPage = () => {
         onPress={() => router.push("/tabs/community/add_friend")}
       >
         <View style={styles.addFriendIcon}>
-          <Text style={styles.addFriendIconText}>+</Text>
+          <FontAwesome6 size={20} name="user-plus" color="white" />
         </View>
         <Text style={styles.addFriendText}>add friend</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -68,7 +100,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f8f4ff",
     padding: 16,
-    marginTop: -60,
+    marginBottom: 120,
   },
   closeButton: {
     position: "absolute",
@@ -92,13 +124,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginTop: 40,
-    padding: 10,
+
+    fontFamily: "SourceSerifPro_700Bold",
   },
   subtitle: {
     fontSize: 16,
     textAlign: "center",
     color: "#7f7f7f",
     marginBottom: 20,
+    fontFamily: "SourceSerifPro_700Bold_Italic",
   },
   list: {
     paddingBottom: 100,
@@ -115,6 +149,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+    margin: 30,
   },
   avatar: {
     width: 48,
@@ -122,6 +157,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#dcd6ff",
     borderRadius: 24,
     marginRight: 12,
+  },
+  avatarImage: {
+    width: "100%", // Takes up the entire width of the avatar container
+    height: "100%", // Takes up the entire height of the avatar container
+    resizeMode: "cover", // Ensures the image fills the circle without stretching
+    borderRadius: 24, // Rounds the corners of the image
   },
   friendInfo: {
     flex: 1,
@@ -151,7 +192,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#dcd6ff",
-    borderRadius: 24,
+    borderRadius: 50,
     padding: 10,
   },
   addFriendIcon: {
@@ -171,7 +212,7 @@ const styles = StyleSheet.create({
   addFriendText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#7f7f7f",
+    color: "#8B7CEC",
   },
 });
 
