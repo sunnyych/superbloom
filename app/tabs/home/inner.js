@@ -142,8 +142,8 @@ const styles = StyleSheet.create({
   },
   switchGardensContainer: {
     alignItems: "center",
-    padding: 15,
-    marginTop: 50,
+    padding: 10,
+    marginTop: 40,
     position: "absolute",
     alignSelf: "flex-end",
   },
@@ -155,8 +155,10 @@ const styles = StyleSheet.create({
   subtextRemembering: {
     fontFamily: "SourceSerifPro_700Bold",
     color: "#3C3661",
+    fontSize: 12,
   },
   subtextName: {
+    fontFamily: "Rubik_700Bold",
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 16,

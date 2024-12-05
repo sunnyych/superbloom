@@ -9,14 +9,19 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
+  SafeAreaView,
+  Modal,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useRouter, useLocalSearchParams } from "expo-router";
+import PostModal from "@/components/PostModal";
 
 const Post = () => {
   const router = useRouter();
   const { text, media, time_stamp } = useLocalSearchParams(); // Extract passed params
+  const [modalVisible, setModalVisible] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+
   const postImages = {
     "star.jpg": require("../../../assets/posts/star.jpg"),
     "game.jpg": require("../../../assets/posts/game.jpg"),
@@ -44,29 +49,26 @@ const Post = () => {
   };
   console.log("media", media);
 
+  const handleBack = () => {
+    setModalVisible(false); // Close the modal
+    router.back(); // Navigate back to the previous screen
+  };
+
   return (
     <View style={styles.container}>
-      {/* Back Button */}
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+      <PostModal
+        visible={modalVisible}
+        onClose={handleBack}
+        text={text}
+        media={media}
+        timeStamp={time_stamp}
+        postImages={postImages}
+      />
+
+      {/* Back Button
+      <TouchableOpacity style={styles.backButton} onPress={handleBack}>
         <Text style={styles.backButtonText}>back</Text>
-      </TouchableOpacity>
-
-      {/* Post Content */}
-      <View style={styles.postContainer}>
-        {/* Flower Icon */}
-        <View style={styles.iconContainer}>
-          <Text style={styles.icon}>🌻</Text>
-        </View>
-
-        {/* Post Text */}
-        <Text style={styles.postText}>{text}</Text>
-
-        {/* Date */}
-        <Text style={styles.date}>{time_stamp}</Text>
-
-        {/* Image */}
-        <Image source={postImages[media]} style={styles.image} />
-      </View>
+      </TouchableOpacity> */}
     </View>
   );
 };
@@ -75,7 +77,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f8f4ff",
+    // backgroundColor: "rgba(0, 0, 0, 0.5)",
     padding: 16,
+    marginTop: 50,
+    justifyContent: "center",
   },
   backButton: {
     position: "absolute",
@@ -92,7 +97,7 @@ const styles = StyleSheet.create({
     color: "#7f7f7f",
   },
   postContainer: {
-    marginTop: 60,
+    // marginTop: 60,
     padding: 16,
     backgroundColor: "#ffffff",
     borderRadius: 12,
@@ -101,6 +106,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+    marginHorizontal: 30,
   },
   iconContainer: {
     alignItems: "center",

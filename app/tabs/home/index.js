@@ -1,7 +1,6 @@
 import { useBackground } from "./_layout";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import db from "@/databse/db";
-
 // import { useFocusEffect } from "@react-navigation/native";
 
 import {
@@ -14,6 +13,7 @@ import {
   Switch,
   ActivityIndicator,
   TouchableOpacity,
+  Modal,
 } from "react-native";
 import {
   useRouter,
@@ -26,6 +26,7 @@ import { flowerTypes, colorPalette, renderFlower } from "@/utils/flowerUtils";
 
 import { globalState } from "@/components/Global";
 import { getPathWithConventionsCollapsed } from "expo-router/build/fork/getPathFromState-forks";
+import PostModal from "@/components/PostModal";
 
 export default function OuterGarden() {
   const router = useRouter();
@@ -40,6 +41,10 @@ export default function OuterGarden() {
     globalState.selectedGardenId
   );
   const [isGarden, setIsGarden] = useState(true); // Toggle for garden/collage view
+
+  // Post modal when a flower is clicked
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
 
   console.log("selected garden Id is", selectedGardenId);
 
@@ -84,7 +89,7 @@ export default function OuterGarden() {
         const { data, error } = await db
           .from("post")
           .select(
-            "id, username, memory_person, text, flower_type, media, time_stamp"
+            "id, username, memory_person, text, flower_type, media, time_stamp, flower_type, flower_color"
           ) // Fetch post info
           .eq("garden_id", selectedGardenId); // Filter by garden_id
 
@@ -103,7 +108,7 @@ export default function OuterGarden() {
     fetchPosts();
   }, [selectedGardenId]);
 
-  console.log("posts :" + posts);
+  console.log("posts :" + JSON.stringify(posts, null, 2));
 
   // Loading state
   if (isLoading) {
@@ -115,19 +120,57 @@ export default function OuterGarden() {
   }
 
   // Function to get a random position
-  const getRandomPosition = (max) => {
-    return Math.floor(Math.random() * max);
+  const getRandomPosition = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
   const handleFlowerPress = (text, media, time_stamp) => {
     // Navigate to the post page, passing post data
-    router.push(
-      `/tabs/community/post?text=${text}&media=${media}&time_stamp=${time_stamp}`
-    );
+    // router.push(
+    //   `/tabs/community/post?text=${text}&media=${media}&time_stamp=${time_stamp}`
+    // );
+    setSelectedPost({ text, media, time_stamp });
+    setModalVisible(true);
+  };
+
+  const handleBack = () => {
+    setModalVisible(false); // Close the modal
+    setTimeout(() => setSelectedPost(null), 100);
   };
 
   return (
     <View style={styles.container}>
+      {/* Render flowers for each post */}
+      <View style={styles.gardenArea}>
+        {posts.map((post) => {
+          // Generate random positions for the flowers
+          const randomTop = getRandomPosition(10, 20); // Adjust the max to control range of vertical positions
+          const randomLeft = getRandomPosition(10, 80); // Adjust the max to control range of horizontal positions
+
+          return (
+            <TouchableOpacity
+              key={post.id}
+              style={[
+                styles.flower,
+                { top: randomTop + "%", left: randomLeft + "%" },
+              ]}
+              onPress={() =>
+                handleFlowerPress(post.text, post.media, post.time_stamp)
+              }
+            >
+              <View>
+                {renderFlower(
+                  flowerTypes[post.flower_type].BloomComponent,
+                  flowerTypes[post.flower_type].StemComponent,
+                  post.flower_color,
+                  "#94CDA0",
+                  75
+                )}
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
       {/* Display the selected garden ID in the top-right corner */}
       <Text style={styles.gardenIdText}>
         Garden ID: {selectedGardenId || "None"}
@@ -172,34 +215,15 @@ export default function OuterGarden() {
         </View>
       </Link>
 
-      {/* Render flowers for each post */}
-      <View style={styles.gardenArea}>
-        {posts.map((post) => {
-          // Generate random positions for the flowers
-          const randomTop = getRandomPosition(250); // Adjust the max to control range of vertical positions
-          const randomLeft = getRandomPosition(250); // Adjust the max to control range of horizontal positions
-
-          return (
-            <TouchableOpacity
-              key={post.id}
-              style={[styles.flower, { top: randomTop, left: randomLeft }]}
-              onPress={() =>
-                handleFlowerPress(post.text, post.media, post.time_stamp)
-              }
-            >
-              <View>
-                {renderFlower(
-                  flowerTypes[post.flower_type].BloomComponent,
-                  flowerTypes[post.flower_type].StemComponent,
-                  post.flower_color,
-                  "#94CDA0",
-                  70
-                )}
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
+      {modalVisible && selectedPost && (
+        <PostModal
+          visible={modalVisible}
+          onClose={handleBack} // Close the modal
+          text={selectedPost.text} // Pass the selected post's data
+          media={selectedPost.media}
+          timeStamp={selectedPost.time_stamp}
+        />
+      )}
     </View>
   );
 }
