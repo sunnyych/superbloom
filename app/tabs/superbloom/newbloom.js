@@ -20,7 +20,6 @@ import { RadioButton } from "react-native-paper";
 import { useRouter } from "expo-router";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 // ty https://www.npmjs.com/package/@react-native-community/datetimepicker
-import DatePicker from "@react-native-community/datetimepicker";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 export default function NewSuperbloom() {
