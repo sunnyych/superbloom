@@ -21,6 +21,7 @@ import { useRouter } from "expo-router";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 // ty https://www.npmjs.com/package/@react-native-community/datetimepicker
 import RNDateTimePicker from "@react-native-community/datetimepicker";
+import { database } from "./superbloom-database";
 
 export default function NewSuperbloom() {
   const [celebrated, setCelebrated] = useState("");
@@ -30,13 +31,22 @@ export default function NewSuperbloom() {
   const [end, setEnd] = useState(new Date());
   const [checked, setChecked] = useState("");
   const router = useRouter();
+  const [requestedDatabase, setRequestedDatabase] = useState(database);
 
-  const handleAddStart = (date) => {
-    setStart(date);
+  const addBloom = (newBloom) => {
+    setRequestedDatabase((prevDatabase) => [...prevDatabase, newBloom]);
   };
 
-  const handleAddEnd = (date) => {
-    setEnd(date);
+  const handleAddStart = (event, date) => {
+    if (date) {
+      setStart(date);
+    }
+  };
+
+  const handleAddEnd = (event, date) => {
+    if (date) {
+      setEnd(date);
+    }
   };
 
   const handleAddBloom = () => {
@@ -105,7 +115,7 @@ export default function NewSuperbloom() {
           <Text style={styles.dateText}>start date</Text>
           <View style={styles.datePickerContainer}>
             <RNDateTimePicker
-              value={end}
+              value={start}
               mode="date"
               minimumDate={new Date()}
               onChange={handleAddStart}

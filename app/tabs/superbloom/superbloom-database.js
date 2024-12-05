@@ -1,4 +1,8 @@
 // local database for superblooms since not that many we need
+
+import mrWhistlerImage from "@/assets/profiles/mr-whistler.jpg";
+import johnWhiteImage from "@/assets/profiles/john-white.jpg";
+
 export const database = [
   {
     id: "1",
@@ -10,6 +14,7 @@ export const database = [
     start: "05",
     end: "07",
     requested: false,
+    image: mrWhistlerImage,
   },
   {
     id: "2",
@@ -21,5 +26,6 @@ export const database = [
     start: "13",
     end: "15",
     requested: false,
+    image: johnWhiteImage,
   },
 ];

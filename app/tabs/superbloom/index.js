@@ -44,6 +44,17 @@ export default function SuperbloomHome() {
     );
   };
 
+  let [fontsLoaded] = useFonts({
+    SourceSerifPro_400Regular,
+    SourceSerifPro_400Regular_Italic,
+    SourceSerifPro_600SemiBold,
+    SourceSerifPro_600SemiBold_Italic,
+    SourceSerifPro_700Bold,
+    SourceSerifPro_700Bold_Italic,
+    SourceSerifPro_900Black,
+    SourceSerifPro_900Black_Italic,
+  });
+
   if (fontsLoaded) {
     return (
       <SafeAreaView style={styles.container}>
@@ -67,7 +78,7 @@ export default function SuperbloomHome() {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View style={styles.defaultContainer}>
-              <View style={styles.avatar} />
+              <Image source={item.image} style={styles.avatar} />
               <View style={styles.defaultInfo}>
                 <Text style={styles.defaultName}>
                   Celebrating {item.celebrated}
