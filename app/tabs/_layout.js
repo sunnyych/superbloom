@@ -1,6 +1,7 @@
 // there should be 4 tabs: settings, home, community, and superbloom
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { FontAwesome6 } from "@expo/vector-icons";
 import { router, Tabs } from "expo-router";
 import { StyleSheet, View, TouchableOpacity, Image } from "react-native";
 import Theme from "@/assets/theme";
@@ -59,7 +60,7 @@ export default function TabLayout() {
           title: "Community",
           tabBarLabel: "Community",
           tabBarIcon: ({ size, color }) => (
-            <FontAwesome size={40} name="user" color={color} />
+            <FontAwesome6 size={35} name="user-group" color={color} />
           ),
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Theme.colors.backgroundPrimary },

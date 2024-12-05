@@ -1,5 +1,7 @@
 import { useBackground } from "./_layout";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import db from "@/databse/db";
+
 // import { useFocusEffect } from "@react-navigation/native";
 
 import {
@@ -11,6 +13,7 @@ import {
   Image,
   Switch,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import {
   useRouter,
@@ -19,12 +22,16 @@ import {
   useLocalSearchParams,
 } from "expo-router";
 import { useEffect, useState, useCallback } from "react";
+import { flowerTypes, colorPalette, renderFlower } from "@/utils/flowerUtils";
+
 import { globalState } from "@/components/Global";
+import { getPathWithConventionsCollapsed } from "expo-router/build/fork/getPathFromState-forks";
 
 export default function OuterGarden() {
   const router = useRouter();
   const { translateX, translateY } = useBackground();
   const { postIds } = useLocalSearchParams(); // Get post IDs from query params
+
   const [isToggled, setIsToggled] = useState(true);
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,6 +40,8 @@ export default function OuterGarden() {
     globalState.selectedGardenId
   );
   const [isGarden, setIsGarden] = useState(true); // Toggle for garden/collage view
+
+  console.log("selected garden Id is", selectedGardenId);
 
   const goToInner = () => {
     router.push("/tabs/home/inner");
@@ -67,34 +76,34 @@ export default function OuterGarden() {
     }, [])
   );
 
-  // Fetch posts based on the postIds passed in the URL
+  // Fetch posts for this garden
   useEffect(() => {
     const fetchPosts = async () => {
-      if (postIds) {
-        const ids = postIds.split(","); // Convert the comma-separated string into an array of IDs
-        try {
-          const { data, error } = await db
-            .from("post")
-            .select("*")
-            .in("id", ids); // Fetch posts based on the received IDs
+      try {
+        // Fetch posts for a specific garden_id from Supabase
+        const { data, error } = await db
+          .from("post")
+          .select(
+            "id, username, memory_person, text, flower_type, media, time_stamp"
+          ) // Fetch post info
+          .eq("garden_id", selectedGardenId); // Filter by garden_id
 
-          if (error) {
-            console.error("Error fetching posts:", error.message);
-            return;
-          }
-          setPosts(data || []);
-          setName(data[0].memory_person);
-          console.log("name", name);
-        } catch (err) {
-          console.error("Error fetching posts:", err);
-        } finally {
-          setIsLoading(false);
+        if (error) {
+          console.error("Supabase error:", error.message);
+          return;
         }
+        setPosts(data || []); // Set posts to the state
+      } catch (err) {
+        console.error("Error fetching posts:", err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchPosts();
-  }, [postIds]);
+  }, [selectedGardenId]);
+
+  console.log("posts :" + posts);
 
   // Loading state
   if (isLoading) {
@@ -104,6 +113,18 @@ export default function OuterGarden() {
       </View>
     );
   }
+
+  // Function to get a random position
+  const getRandomPosition = (max) => {
+    return Math.floor(Math.random() * max);
+  };
+
+  const handleFlowerPress = (text, media, time_stamp) => {
+    // Navigate to the post page, passing post data
+    router.push(
+      `/tabs/community/post?text=${text}&media=${media}&time_stamp=${time_stamp}`
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -150,6 +171,35 @@ export default function OuterGarden() {
           <FontAwesome size={36} name="plus" color="white" />
         </View>
       </Link>
+
+      {/* Render flowers for each post */}
+      <View style={styles.gardenArea}>
+        {posts.map((post) => {
+          // Generate random positions for the flowers
+          const randomTop = getRandomPosition(250); // Adjust the max to control range of vertical positions
+          const randomLeft = getRandomPosition(250); // Adjust the max to control range of horizontal positions
+
+          return (
+            <TouchableOpacity
+              key={post.id}
+              style={[styles.flower, { top: randomTop, left: randomLeft }]}
+              onPress={() =>
+                handleFlowerPress(post.text, post.media, post.time_stamp)
+              }
+            >
+              <View>
+                {renderFlower(
+                  flowerTypes[post.flower_type].BloomComponent,
+                  flowerTypes[post.flower_type].StemComponent,
+                  post.flower_color,
+                  "#94CDA0",
+                  70
+                )}
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
     </View>
   );
 }
@@ -170,8 +220,8 @@ const styles = StyleSheet.create({
   },
   content: {
     position: "absolute",
-    bottom: 20,
-    left: 20,
+    bottom: 15,
+    left: 15,
   },
   title: {
     fontSize: 24,
@@ -207,6 +257,11 @@ const styles = StyleSheet.create({
     marginTop: 40,
     position: "absolute",
     alignSelf: "flex-end",
+  },
+  signIcon: {
+    width: 80,
+    height: 100,
+    resizeMode: "contain",
   },
   subtextRemembering: {
     fontFamily: "SourceSerifPro_700Bold",

@@ -22,19 +22,6 @@ const hardcodedUserId = 1;
 const hardcodedGardenId = 1;
 const hardcodedMemoryPerson = "Mary Chen"; // Hardcoded person
 
-const item = {
-  username: hardcodedUsername,
-  user_id: hardcodedUserId,
-  garden_id: hardcodedGardenId,
-  memory_person: hardcodedMemoryPerson,
-  text: "placeholder text for now",
-  media: null, // Optional media
-  public: false, // True or false based on the toggle
-  time_stamp: new Date().toISOString(), // Current timestamp
-  flower_color: "pink", // Hardcoded or dynamic
-  flower_type: 1, // Hardcoded for now
-};
-
 const postImages = {
   "star.jpg": require("@/assets/posts/star.jpg"),
   "game.jpg": require("@/assets/posts/game.jpg"),
@@ -61,51 +48,61 @@ const postImages = {
   "song.jpg": require("@/assets/posts/song.jpg"),
 };
 
-const addMemory = async (router) => {
-  if (!text) {
-    Alert.alert("Error", "Please fill in the memory text.");
-    return;
-  }
-
-  try {
-    const { error } = await db.from("post").insert([
-      {
-        username: hardcodedUsername,
-        user_id: hardcodedUserId,
-        garden_id: hardcodedGardenId,
-        memory_person: hardcodedMemoryPerson,
-        text: text,
-        media: media || null, // Optional media
-        public: isPublic, // True or false based on the toggle
-        time_stamp: new Date().toISOString(), // Current timestamp
-        flower_color: "pink", // Hardcoded or dynamic
-        flower_type: 1, // Hardcoded for now
-      },
-    ]);
-
-    if (error) {
-      console.error("Error adding memory:", error);
-      Alert.alert("Error", "Failed to add memory.");
-    } else {
-      // Alert.alert("Success", "Memory added successfully!");
-      // Clear the form after success
-      setText("");
-      setMedia("");
-      setIsPublic(true);
-      router.push("tabs/home/");
-    }
-  } catch (err) {
-    console.error("Unexpected error:", err);
-    Alert.alert("Error", "An unexpected error occurred.");
-  }
-};
-
 export default PostPreview = () => {
   const router = useRouter();
 
   const { text, setText, media, setMedia, isPublic, setIsPublic } = usePost();
   const { selectedType, setSelectedType, selectedColor, setSelectedColor } =
     useFlower();
+
+  const item = {
+    username: hardcodedUsername,
+    user_id: hardcodedUserId,
+    garden_id: hardcodedGardenId,
+    memory_person: hardcodedMemoryPerson,
+    text: text,
+    media: media || null, // Optional media
+    public: false, // True or false based on the toggle
+    time_stamp: new Date().toISOString(), // Current timestamp
+    flower_color: selectedColor,
+    flower_type: selectedType,
+  };
+
+  const addMemory = async () => {
+    try {
+      const { error } = await db.from("post").insert([
+        {
+          username: hardcodedUsername,
+          user_id: hardcodedUserId,
+          garden_id: hardcodedGardenId,
+          memory_person: hardcodedMemoryPerson,
+          text: text,
+          media: media || "", // Optional media
+          public: isPublic, // True or false based on the toggle
+          time_stamp: new Date().toISOString(), // Current timestamp
+          flower_color: "pink", // Hardcoded or dynamic
+          flower_type: 1, // Hardcoded for now
+        },
+      ]);
+
+      if (error) {
+        console.error("Error adding memory:", error);
+        Alert.alert("Error", "Failed to add memory.");
+      } else {
+        // Alert.alert("Success", "Memory added successfully!");
+        // Clear the form after success
+        setText("");
+        setMedia("");
+        setIsPublic(true);
+        router.push("tabs/home/");
+      }
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      Alert.alert("Error", "An unexpected error occurred.");
+    }
+  };
+  console.log("selectedColor is" + selectedColor);
+  console.log("selectedType is" + selectedType);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -144,7 +141,7 @@ export default PostPreview = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.navButton, styles.nextButton]}
-          onPress={() => addMemory(router)}
+          onPress={addMemory}
         >
           <Text style={styles.nextButtonText}>plant</Text>
         </TouchableOpacity>

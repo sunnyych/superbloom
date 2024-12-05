@@ -163,7 +163,6 @@ const styles = StyleSheet.create({
   toggleContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 16,
   },
   toggleLabel: {
     fontSize: 18,

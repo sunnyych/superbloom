@@ -1,4 +1,6 @@
 import React from "react";
+import { FontAwesome6 } from "@expo/vector-icons";
+
 import {
   View,
   Text,
@@ -56,7 +58,7 @@ const FriendsPage = () => {
         onPress={() => router.push("/tabs/community/add_friend")}
       >
         <View style={styles.addFriendIcon}>
-          <Text style={styles.addFriendIconText}>+</Text>
+          <FontAwesome6 size={20} name="user-plus" color="white" />
         </View>
         <Text style={styles.addFriendText}>add friend</Text>
       </TouchableOpacity>
@@ -93,6 +95,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginTop: 40,
+
     fontFamily: "SourceSerifPro_700Bold",
   },
   subtitle: {

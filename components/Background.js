@@ -40,8 +40,8 @@ export default function Background({ translateX, translateY }) {
 
 const styles = StyleSheet.create({
   background: {
-    width: "230%",
-    height: "230%",
+    width: "210%",
+    height: "210%",
     backgroundColor: "red",
   },
 });

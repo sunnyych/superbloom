@@ -149,9 +149,9 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   selectedGarden: {
-    backgroundColor: "#cce5ff", // Highlighted background color for selected garden
+    backgroundColor: "#E8E2FE", // Highlighted background color for selected garden
     borderWidth: 2,
-    borderColor: "#007AFF", // Border color for selected garden
+    borderColor: "#8B7CEC", // Border color for selected garden
   },
   gardenImage: {
     width: 100,

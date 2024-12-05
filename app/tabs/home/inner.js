@@ -109,8 +109,8 @@ const styles = StyleSheet.create({
   },
   content: {
     position: "absolute",
-    bottom: 20,
-    left: 20,
+    bottom: 15,
+    left: 15,
   },
   title: {
     fontSize: 24,
@@ -146,6 +146,11 @@ const styles = StyleSheet.create({
     marginTop: 50,
     position: "absolute",
     alignSelf: "flex-end",
+  },
+  signIcon: {
+    width: 80,
+    height: 100,
+    resizeMode: "contain",
   },
   subtextRemembering: {
     fontFamily: "SourceSerifPro_700Bold",
