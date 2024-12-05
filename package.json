@@ -4,8 +4,8 @@
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web"
   },
   "dependencies": {
@@ -23,12 +23,20 @@
     "react": "18.3.1",
     "react-modal": "^3.16.1",
     "react-native": "0.76.2",
+    "react-native-date-picker": "^5.0.7",
     "react-native-gesture-handler": "~2.20.2",
+    "react-native-paper": "^5.12.5",
     "react-native-reanimated": "~3.16.1",
     "react-native-safe-area-context": "4.12.0",
     "react-native-screens": "^4.0.0",
+<<<<<<< HEAD
+    "react-native-svg": "^15.9.0",
+    "react-native-url-polyfill": "^2.0.0",
+    "@react-native-community/datetimepicker": "8.2.0"
+=======
     "react-native-svg": "^15.10.0",
     "react-native-url-polyfill": "^2.0.0"
+>>>>>>> 24a609792669e403f305f239248dd7682810b7aa
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
