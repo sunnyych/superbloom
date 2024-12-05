@@ -13,20 +13,29 @@ import {
   SafeAreaView,
   StyleSheet,
   ImageBackground,
+  TouchableOpacity,
 } from "react-native";
 import { useRouter } from "expo-router";
 
 export default function Superbloom() {
+  const router = useRouter();
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ImageBackground
         source={require("@/assets/backgrounds/background-superbloom.png")}
         resizeMode="cover"
         style={styles.background}
       >
-        <Text>hi hehe</Text>
+        <View style={styles.closeContainer}>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => router.back()}
+          >
+            <Text style={styles.closeButtonText}>back</Text>
+          </TouchableOpacity>
+        </View>
       </ImageBackground>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -36,6 +45,24 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
+    resizeMode: "cover",
+  },
+  closeContainer: {
+    marginTop: 46,
+    marginLeft: 16,
+    width: "20%",
+  },
+  closeButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+    backgroundColor: "#EEE7FF",
     justifyContent: "center",
+    alignItems: "center",
+  },
+  closeButtonText: {
+    color: "#8B7CEC",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });

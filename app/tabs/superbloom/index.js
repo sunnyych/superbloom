@@ -13,10 +13,12 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  FlatList,
 } from "react-native";
 import { useRouter } from "expo-router";
 // font import source: https://www.npmjs.com/package/@expo-google-fonts/source-serif-pro
 // if it doesn't work, run dis in terminal "npx expo install @expo-google-fonts/source-serif-pro expo-font expo-app-loading"
+import { database } from "./superbloom-database";
 import {
   useFonts,
   SourceSerifPro_400Regular,
@@ -42,10 +44,15 @@ export default function SuperbloomHome() {
   });
 
   const router = useRouter();
-  const [requested, setRequested] = useState(false);
 
-  const handleRequested = () => {
-    setRequested(true);
+  const [requestedDatabase, setRequestedDatabase] = useState(database);
+
+  const handleRequested = (id) => {
+    setRequestedDatabase((prevDatabase) =>
+      prevDatabase.map((item) =>
+        item.id === id ? { ...item, requested: true } : item
+      )
+    );
   };
 
   if (fontsLoaded) {
@@ -56,7 +63,7 @@ export default function SuperbloomHome() {
         <View style={styles.searchContainer}>
           <TextInput
             style={styles.searchInput}
-            placeholder="Enter a username..."
+            placeholder="Enter a name..."
             //value={searchQuery}
             //onChangeText={setSearchQuery}
           />
@@ -65,33 +72,48 @@ export default function SuperbloomHome() {
             <Text style={styles.searchButtonText}>🔍</Text>
           </TouchableOpacity>
         </View>
-        {/* TO DO: figure out searching,,, for now i just hard code hihi */}
-        <View style={styles.resultContainer}>
-          <View style={styles.avatar} />
-          <View style={styles.resultInfo}>
-            <Text style={styles.resultName}>Celebrating Mary</Text>
-            <Text style={styles.resultUsername}>Hosted by Helen Smith</Text>
-            {requested ? (
-              <TouchableOpacity
-                style={styles.openSuperbloomButton}
-                onPress={() => router.push("tabs/superbloom/exsuperbloom")}
-              >
-                <Text style={styles.openSuperbloomText}>open superbloom</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={styles.requestButton}
-                onPress={handleRequested}
-              >
-                <Text style={styles.requestTest}>request to join</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-          <View style={styles.date}>
-            <Text style={styles.month}>Nov</Text>
-            <Text style={styles.days}>05-13</Text>
-          </View>
-        </View>
+
+        <FlatList
+          data={requestedDatabase}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View style={styles.defaultContainer}>
+              <View style={styles.avatar} />
+              <View style={styles.defaultInfo}>
+                <Text style={styles.defaultName}>
+                  Celebrating {item.celebrated}
+                </Text>
+                <Text style={styles.defaultUsername}>
+                  Hosted by {item.host}
+                </Text>
+                {item.requested ? (
+                  <TouchableOpacity
+                    style={styles.openSuperbloomButton}
+                    onPress={() => router.push("tabs/superbloom/exsuperbloom")}
+                  >
+                    <Text style={styles.openSuperbloomText}>
+                      open superbloom
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.requestButton}
+                    onPress={() => handleRequested(item.id)}
+                  >
+                    <Text style={styles.requestText}>request to join</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+              <View style={styles.date}>
+                <Text style={styles.month}>{item.month}</Text>
+                <Text style={styles.days}>
+                  {item.start}-{item.end}
+                </Text>
+              </View>
+            </View>
+          )}
+        />
+
         <TouchableOpacity
           style={styles.createSuperbloomButton}
           onPress={() => router.push("tabs/superbloom/newbloom")}
@@ -165,7 +187,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#fff",
   },
-  resultContainer: {
+  defaultContainer: {
     flexDirection: "row",
     alignItems: "center",
     padding: 12,
@@ -173,20 +195,20 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   avatar: {
-    width: 75,
-    height: 75,
+    width: 60,
+    height: 60,
     backgroundColor: "#dcd6ff",
     borderRadius: 50,
     marginRight: 12,
   },
-  resultInfo: {
+  defaultInfo: {
     flex: 1,
   },
-  resultName: {
+  defaultName: {
     fontSize: 18,
     fontWeight: "bold",
   },
-  resultUsername: {
+  defaultUsername: {
     fontSize: 16,
   },
   requestButton: {
@@ -198,15 +220,14 @@ const styles = StyleSheet.create({
     width: 160,
     marginTop: 5,
   },
-  requestTest: {
+  requestText: {
     color: "#fff",
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 16,
   },
   date: {
-    width: 65,
-    marginLeft: 15,
+    marginLeft: 10,
   },
   month: {
     textAlign: "center",
