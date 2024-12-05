@@ -7,6 +7,8 @@ import {
   Modal,
   TouchableOpacity,
 } from "react-native";
+import { flowerTypes, colorPalette, renderFlower } from "@/utils/flowerUtils";
+import { format, formatDistanceToNow } from "date-fns";
 
 const postImages = {
   "star.jpg": require("@/assets/posts/star.jpg"),
@@ -34,7 +36,33 @@ const postImages = {
   "song.jpg": require("@/assets/posts/song.jpg"),
 };
 
-const PostModal = ({ visible, onClose, text, media, timeStamp }) => {
+const DateFormatter = (isoDate) => {
+  const date = new Date(isoDate);
+
+  // Format as "October 23, 2024"
+  const formattedDate = format(date, "MMMM d, yyyy");
+
+  // Format as "2 hours ago"
+  const relativeTime = formatDistanceToNow(date, { addSuffix: true });
+
+  const words = relativeTime.split(" ");
+  const timeScale = words.length > 1 ? words[words.length - 2] : null;
+  if (timeScale === "days" || timeScale === "hours") {
+    return relativeTime;
+  }
+  return formattedDate;
+};
+
+const PostModal = ({
+  visible,
+  onClose,
+  text,
+  media,
+  flower_type,
+  flower_color,
+  timeStamp,
+}) => {
+  console.log("timeStamp:", timeStamp);
   return (
     <Modal
       visible={visible}
@@ -50,16 +78,23 @@ const PostModal = ({ visible, onClose, text, media, timeStamp }) => {
 
         <View style={styles.popupContent}>
           {/* Flower Icon */}
-          <View style={styles.iconContainer}>
-            <Text style={styles.icon}>🌻</Text>
+          <View style={styles.paddedContent}>
+            <View style={styles.iconContainer}>
+              {renderFlower(
+                flowerTypes[flower_type].BloomComponent,
+                flowerTypes[flower_type].StemComponent,
+                flower_color,
+                "#94CDA0",
+                60
+              )}
+            </View>
+
+            {/* Post Text */}
+            <Text style={styles.text}>{text}</Text>
+
+            {/* Date */}
+            <Text style={styles.date}>{DateFormatter(timeStamp)}</Text>
           </View>
-
-          {/* Post Text */}
-          <Text style={styles.text}>{text}</Text>
-
-          {/* Date */}
-          <Text style={styles.date}>{timeStamp}</Text>
-
           {/* Image */}
           {media && <Image source={postImages[media]} style={styles.image} />}
         </View>
@@ -77,14 +112,16 @@ const styles = StyleSheet.create({
   },
   popupContent: {
     width: "90%",
-    padding: 20,
     backgroundColor: "#fff",
-    borderRadius: 12,
+    borderRadius: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 5,
+  },
+  paddedContent: {
+    padding: 20,
   },
   iconContainer: {
     alignItems: "center",
@@ -98,18 +135,20 @@ const styles = StyleSheet.create({
     color: "#4a4a4a",
     lineHeight: 22,
     marginBottom: 16,
+    fontFamily: "Rubik_400Regular",
   },
   date: {
     fontSize: 14,
     color: "#a0a0a0",
     textAlign: "right",
     marginBottom: 16,
+    fontFamily: "Rubik_500Medium",
   },
   image: {
     width: "100%",
-    height: 200,
-    borderRadius: 8,
-    marginBottom: 16,
+    height: 250,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
   backButton: {
     position: "absolute",

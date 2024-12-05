@@ -158,6 +158,8 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: "white",
     borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "#D1CBE4",
     overflow: "hidden",
     shadowColor: "#000",
     shadowOffset: {
@@ -168,7 +170,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
     width: 150,
-    padding: 15,
+    padding: 10,
   },
   item: {
     paddingHorizontal: 16,

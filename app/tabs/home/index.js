@@ -4,6 +4,7 @@ import db from "@/databse/db";
 // import { useFocusEffect } from "@react-navigation/native";
 import Dropdown from "@/components/Dropdown";
 import Toggle from "@/components/Toggle";
+import Flower from "@/components/Flower";
 
 import {
   View,
@@ -24,10 +25,8 @@ import {
   useLocalSearchParams,
 } from "expo-router";
 import { useEffect, useState, useCallback } from "react";
-import { flowerTypes, colorPalette, renderFlower } from "@/utils/flowerUtils";
 
 import { globalState } from "@/components/Global";
-import { getPathWithConventionsCollapsed } from "expo-router/build/fork/getPathFromState-forks";
 import PostModal from "@/components/PostModal";
 
 export default function OuterGarden() {
@@ -56,25 +55,6 @@ export default function OuterGarden() {
     translateY.value = -450;
   };
 
-  // const handleToggle = () => {
-  //   setIsToggled(!isToggled);
-  //   if (!isToggled) {
-  //     // Pass only necessary data, such as post IDs
-  //     const postIds = posts.map((post) => post.id).join(",");
-  //     router.push(`/tabs/home/collage?postIds=${postIds}`);
-  //   }
-  // };
-  const handleToggle = () => {
-    const newToggleState = !isToggled;
-    setIsToggled(newToggleState);
-
-    if (newToggleState) {
-      // Pass only necessary data, such as post IDs
-      const postIds = posts.map((post) => post.id).join(",");
-      router.push(`/tabs/home/collage?postIds=${postIds}`);
-    }
-  };
-
   useEffect(() => {
     // Reactively update the displayed garden ID when the globalState changes
     const interval = setInterval(() => {
@@ -101,7 +81,7 @@ export default function OuterGarden() {
         const { data, error } = await db
           .from("post")
           .select(
-            "id, username, memory_person, text, flower_type, media, time_stamp, flower_type, flower_color"
+            "id, username, memory_person, text, media, time_stamp, flower_type, flower_color"
           ) // Fetch post info
           .eq("garden_id", selectedGardenId); // Filter by garden_id
 
@@ -131,17 +111,18 @@ export default function OuterGarden() {
     );
   }
 
-  // Function to get a random position
-  const getRandomPosition = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
-  const handleFlowerPress = (text, media, time_stamp) => {
+  const handleFlowerPress = (
+    text,
+    media,
+    time_stamp,
+    flower_type,
+    flower_color
+  ) => {
     // Navigate to the post page, passing post data
     // router.push(
     //   `/tabs/community/post?text=${text}&media=${media}&time_stamp=${time_stamp}`
     // );
-    setSelectedPost({ text, media, time_stamp });
+    setSelectedPost({ text, media, time_stamp, flower_type, flower_color });
     setModalVisible(true);
   };
 
@@ -150,43 +131,31 @@ export default function OuterGarden() {
     setTimeout(() => setSelectedPost(null), 100);
   };
 
+  const handleToggle = () => {
+    const newToggleState = !isToggled;
+    setIsToggled(newToggleState);
+
+    if (newToggleState) {
+      // Pass only necessary data, such as post IDs
+      const postIds = posts.map((post) => post.id).join(",");
+      router.push(`/tabs/home/collage?postIds=${postIds}`);
+    }
+  };
+
   return (
     <View style={styles.container}>
       {/* Render flowers for each post */}
       <View style={styles.gardenArea}>
         {posts.map((post) => {
-          // Generate random positions for the flowers
-          const randomTop = getRandomPosition(20, 20); // Adjust the max to control range of vertical positions
-          const randomLeft = getRandomPosition(10, 80); // Adjust the max to control range of horizontal positions
-
           return (
-            <TouchableOpacity
+            <Flower
               key={post.id}
-              style={[
-                styles.flower,
-                { top: randomTop + "%", left: randomLeft + "%" },
-              ]}
-              onPress={() =>
-                handleFlowerPress(post.text, post.media, post.time_stamp)
-              }
-            >
-              <View>
-                {renderFlower(
-                  flowerTypes[post.flower_type].BloomComponent,
-                  flowerTypes[post.flower_type].StemComponent,
-                  post.flower_color,
-                  "#94CDA0",
-                  75
-                )}
-              </View>
-            </TouchableOpacity>
+              post={post}
+              handleFlowerPress={handleFlowerPress}
+            />
           );
         })}
       </View>
-      {/* Display the selected garden ID in the top-right corner */}
-      <Text style={styles.gardenIdText}>
-        Garden ID: {selectedGardenId || "None"}
-      </Text>
 
       {/* Buttons in lower right for toggling */}
       <View style={styles.content}>
@@ -230,6 +199,8 @@ export default function OuterGarden() {
           text={selectedPost.text} // Pass the selected post's data
           media={selectedPost.media}
           timeStamp={selectedPost.time_stamp}
+          flower_color={selectedPost.flower_color}
+          flower_type={selectedPost.flower_type}
         />
       )}
     </View>

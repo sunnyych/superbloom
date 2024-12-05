@@ -3,7 +3,12 @@
 import { Stack } from "expo-router";
 import { createContext, useContext } from "react";
 import { View } from "react-native";
-import { useSharedValue } from "react-native-reanimated";
+import {
+  useSharedValue,
+  interpolate,
+  useAnimatedStyle,
+  withSpring,
+} from "react-native-reanimated";
 import Background from "@/components/Background";
 
 // Create Context for Shared Values
@@ -36,6 +41,13 @@ export default function FeedStackLayout() {
           name="inner"
           options={{
             title: "Inner Garden",
+          }}
+        />
+        <Stack.Screen
+          name="collage"
+          options={{
+            title: "Collage",
+            animation: "default",
           }}
         />
       </Stack>

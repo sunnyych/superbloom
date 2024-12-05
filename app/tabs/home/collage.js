@@ -12,6 +12,27 @@ import {
 import { useRouter, useLocalSearchParams } from "expo-router";
 import db from "@/databse/db"; // Assuming you have your database module
 import Toggle from "@/components/Toggle";
+import Dropdown from "@/components/Dropdown";
+
+import { flowerTypes, colorPalette, renderFlower } from "@/utils/flowerUtils";
+import { format, formatDistanceToNow } from "date-fns";
+
+const DateFormatter = (isoDate) => {
+  const date = new Date(isoDate);
+
+  // Format as "October 23, 2024"
+  const formattedDate = format(date, "MMMM d, yyyy");
+
+  // Format as "2 hours ago"
+  const relativeTime = formatDistanceToNow(date, { addSuffix: true });
+
+  const words = relativeTime.split(" ");
+  const timeScale = words.length > 1 ? words[words.length - 2] : null;
+  if (timeScale === "days" || timeScale === "hours") {
+    return relativeTime;
+  }
+  return formattedDate;
+};
 
 const Collage = () => {
   const router = useRouter();
@@ -93,23 +114,49 @@ const Collage = () => {
       </View>
     );
   }
+  console.log(posts);
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.header}>
+      <View style={styles.header}>
+        <View>
+          <Image
+            style={styles.profilePic}
+            source={require("@/assets/matcha.jpg")}
+          />
+        </View>
+        <View>
           <Text style={styles.title}>in memory of</Text>
           <Text style={styles.subtitle}>{name}</Text>
         </View>
-
+        <View style={styles.dropdown}>
+          <Dropdown />
+        </View>
+      </View>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         {posts.map((item) => (
-          <View key={item.id} style={styles.post}>
-            <View style={styles.iconContainer}>
-              <Text style={styles.icon}>🌷</Text>
+          <View style={styles.popupContent}>
+            <View style={styles.paddedContent}>
+              <View style={styles.iconContainer}>
+                {renderFlower(
+                  flowerTypes[item.flower_type].BloomComponent,
+                  flowerTypes[item.flower_type].StemComponent,
+                  item.flower_color,
+                  "#94CDA0",
+                  60
+                )}
+              </View>
+
+              {/* Post Text */}
+              <Text style={styles.text}>{item.text}</Text>
+
+              {/* Date */}
+              <Text style={styles.date}>{DateFormatter(item.time_stamp)}</Text>
             </View>
-            <Text style={styles.postText}>{item.text}</Text>
-            <Text style={styles.date}>{item.time_stamp}</Text>
-            <Image source={postImages[item.media]} style={styles.postImage} />
+            {/* Image */}
+            {item.media && (
+              <Image source={postImages[item.media]} style={styles.image} />
+            )}
           </View>
         ))}
       </ScrollView>
@@ -129,11 +176,17 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     paddingBottom: 80,
+    alignItems: "center",
+    gap: 10,
   },
   header: {
     alignItems: "center",
     marginTop: 65,
     marginBottom: 20,
+    marginHorizontal: 20,
+    flexDirection: "row",
+    // gap: 20,
+    justifyContent: "flex-start",
   },
   title: {
     fontSize: 20,
@@ -142,42 +195,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   subtitle: {
-    fontSize: 28,
+    fontSize: 24,
     color: "#9d82ff",
     fontWeight: "bold",
     fontFamily: "Rubik_700Bold",
-  },
-  post: {
-    marginBottom: 24,
-    backgroundColor: "#ffffff",
-    borderRadius: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-    padding: 16,
-  },
-  iconContainer: {
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  postText: {
-    fontSize: 16,
-    color: "#7f7f7f",
-    lineHeight: 22,
-    marginBottom: 12,
-  },
-  date: {
-    fontSize: 14,
-    color: "#b0b0b0",
-    textAlign: "right",
-    marginBottom: 16,
-  },
-  postImage: {
-    width: "100%",
-    height: 200,
-    borderRadius: 12,
   },
   toggleContainer: {
     position: "absolute",
@@ -199,6 +220,66 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: 18,
     color: "#ffffff",
+  },
+  popupContent: {
+    width: "90%",
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  paddedContent: {
+    padding: 20,
+  },
+  iconContainer: {
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  icon: {
+    fontSize: 28,
+  },
+  text: {
+    fontSize: 16,
+    color: "#4a4a4a",
+    lineHeight: 22,
+    marginBottom: 16,
+    fontFamily: "Rubik_400Regular",
+  },
+  date: {
+    fontSize: 14,
+    color: "#a0a0a0",
+    textAlign: "right",
+    marginBottom: 16,
+    fontFamily: "Rubik_500Medium",
+  },
+  image: {
+    width: "100%",
+    height: 250,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  profileContainer: {
+    shadowColor: "#202020",
+    shadowOffset: { width: 1, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 1,
+  },
+  profilePic: {
+    height: 70,
+    width: 70,
+    borderRadius: 1000,
+    borderColor: "#FFFFFF",
+    borderWidth: 4,
+    resizeMode: "cover",
+    backgroundColor: "#FFFFFF",
+    marginRight: 15,
+  },
+  dropdown: {
+    position: "absolute",
+    right: 0,
   },
 });
 
