@@ -144,7 +144,7 @@ export default function OuterGarden() {
       <View style={styles.gardenArea}>
         {posts.map((post) => {
           // Generate random positions for the flowers
-          const randomTop = getRandomPosition(10, 20); // Adjust the max to control range of vertical positions
+          const randomTop = getRandomPosition(20, 20); // Adjust the max to control range of vertical positions
           const randomLeft = getRandomPosition(10, 80); // Adjust the max to control range of horizontal positions
 
           return (

@@ -174,11 +174,14 @@ export default function Superbloom() {
             </View>
           ))}
 
-        <View style={styles.postButtonContainer}>
+        <TouchableOpacity
+          style={styles.postButtonContainer}
+          onPress={() => router.push("tabs/superbloom/import")}
+        >
           <View style={styles.postButton}>
             <FontAwesome size={36} name="plus" color="white" />
           </View>
-        </View>
+        </TouchableOpacity>
         <View style={styles.toggleContainer}>
           <Switch
             trackColor={{ false: "#dcd6ff", true: "#9d82ff" }}
