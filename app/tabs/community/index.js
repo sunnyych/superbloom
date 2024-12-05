@@ -16,16 +16,45 @@ import Theme from "@/assets/theme";
 const FriendsPage = () => {
   const router = useRouter();
 
+  const imageMapping = {
+    "Thu Le": require("../../../assets/pfps/thu.jpg"),
+    "Myan Ngo": require("../../../assets/pfps/myan.jpg"),
+    "Sunny Yu": require("../../../assets/pfps/sunny.jpg"),
+    "Felicia Yan": require("../../../assets/pfps/felicia.jpg"),
+  };
+
   const friends = [
-    { name: "Thu Le", username: "@thulium" },
-    { name: "Myan Ngo", username: "@mngo" },
-    { name: "Sunny Yu", username: "@sunny.ych" },
-    { name: "Felicia Yan", username: "@feliciaaa" },
+    {
+      name: "Thu Le",
+      username: "@thulium",
+      image: "../../../assets/pfps/thu.jpg",
+    },
+    {
+      name: "Myan Ngo",
+      username: "@mngo",
+      image: "../../../assets/pfps/myan.jpg",
+    },
+    {
+      name: "Sunny Yu",
+      username: "@sunny.ych",
+      image: "../../../assets/pfps/sunny.jpg",
+    },
+    {
+      name: "Felicia Yan",
+      username: "@feliciaaa",
+      image: "../../../assets/pfps/felicia.jpg",
+    },
   ];
 
   const renderFriend = ({ item }) => (
     <View style={styles.friendContainer}>
-      <View style={styles.avatar} />
+      <View style={styles.avatar}>
+        {/* Render the image */}
+        <Image
+          source={imageMapping[item.name]} // Dynamically load the image
+          style={styles.avatarImage}
+        />
+      </View>
       <View style={styles.friendInfo}>
         <Text style={styles.name}>{item.name}</Text>
         <Text style={styles.username}>{item.username}</Text>
@@ -128,6 +157,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#dcd6ff",
     borderRadius: 24,
     marginRight: 12,
+  },
+  avatarImage: {
+    width: "100%", // Takes up the entire width of the avatar container
+    height: "100%", // Takes up the entire height of the avatar container
+    resizeMode: "cover", // Ensures the image fills the circle without stretching
+    borderRadius: 24, // Rounds the corners of the image
   },
   friendInfo: {
     flex: 1,

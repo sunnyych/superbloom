@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Redirect } from "expo-router";
 
 import Login from "@/components/Login";
-import db from "@/database/db";
+import db from "@/databse/db";
 import Loading from "@/components/Loading";
 
 // font import source: https://www.npmjs.com/package/@expo-google-fonts/source-serif-pro
