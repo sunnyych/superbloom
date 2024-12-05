@@ -32,8 +32,10 @@ export default function ChoosePrompt() {
   ];
 
   const goToMakePost = () => {
+    setSelectedPrompt(-1);
     router.push("/add/makepost");
   };
+  console.log("selected prompt is " + selectedPrompt);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -87,8 +89,12 @@ export default function ChoosePrompt() {
           <Text style={styles.backButtonText}>back</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.navButton, styles.nextButton]}
+          style={[
+            styles.navButton,
+            selectedPrompt >= 0 ? styles.nextButton : styles.disabledNextButton,
+          ]}
           onPress={() => router.push("/add/makepost")}
+          disabled={!selectedPrompt}
         >
           <Text style={styles.nextButtonText}>next</Text>
         </TouchableOpacity>
@@ -228,6 +234,14 @@ const styles = StyleSheet.create({
   },
   nextButtonText: {
     color: "white",
+    fontSize: 16,
+    fontFamily: "Rubik_500Medium",
+  },
+  disabledNextButton: {
+    backgroundColor: "#EAE9ED",
+  },
+  disabledNextButtonText: {
+    color: "#CCCCCC",
     fontSize: 16,
     fontFamily: "Rubik_500Medium",
   },

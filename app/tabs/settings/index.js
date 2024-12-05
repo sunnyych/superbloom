@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, Image, ActivityIndicator, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
 import db from "@/databse/db"; // Supabase client
 import { globalState } from "@/components/Global";
 
@@ -35,7 +44,9 @@ const Profile = () => {
 
   const handleSelectGarden = (gardenId) => {
     globalState.selectedGardenId = gardenId; // Update the global state
-    console.log(`Selected Garden ID updated to: ${globalState.selectedGardenId}`);
+    console.log(
+      `Selected Garden ID updated to: ${globalState.selectedGardenId}`
+    );
     setGardens((prevGardens) =>
       prevGardens.map((garden) =>
         garden.garden_id === gardenId
@@ -54,39 +65,47 @@ const Profile = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Gardens for {hardcodedUsername}</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <Text style={styles.title}>settings</Text>
+        <Text style={styles.subtitle}>edit your gardens</Text>
+        <Text style={styles.title}>Gardens for {hardcodedUsername}</Text>
 
-      {gardens.length > 0 ? (
-        <FlatList
-          data={gardens}
-          keyExtractor={(item) => item.garden_id.toString()} // Use garden_id as the key
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={[
-                styles.gardenContainer,
-                item.isSelected && styles.selectedGarden, // Highlight if selected
-              ]}
-              onPress={() => handleSelectGarden(item.garden_id)} // Select garden
-            >
-              <Image
-                source={
-                  item.image
-                    ? { uri: item.image } // Load the image dynamically if it exists
-                    : fallbackImage // Use logo.png as the fallback
-                }
-                style={styles.gardenImage}
-              />
-              <Text style={styles.gardenName}>Name: {item.garden_name}</Text>
-              <Text style={styles.gardenYear}>Year: {item.year || "N/A"}</Text>
-              <Text style={styles.gardenId}>Garden ID: {item.garden_id}</Text>
-            </TouchableOpacity>
-          )}
-        />
-      ) : (
-        <Text style={styles.noGardensText}>No gardens available for this user.</Text>
-      )}
-    </View>
+        {gardens.length > 0 ? (
+          <FlatList
+            data={gardens}
+            keyExtractor={(item) => item.garden_id.toString()} // Use garden_id as the key
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={[
+                  styles.gardenContainer,
+                  item.isSelected && styles.selectedGarden, // Highlight if selected
+                ]}
+                onPress={() => handleSelectGarden(item.garden_id)} // Select garden
+              >
+                <Image
+                  source={
+                    item.image
+                      ? { uri: item.image } // Load the image dynamically if it exists
+                      : fallbackImage // Use logo.png as the fallback
+                  }
+                  style={styles.gardenImage}
+                />
+                <Text style={styles.gardenName}>Name: {item.garden_name}</Text>
+                <Text style={styles.gardenYear}>
+                  Year: {item.year || "N/A"}
+                </Text>
+                <Text style={styles.gardenId}>Garden ID: {item.garden_id}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        ) : (
+          <Text style={styles.noGardensText}>
+            No gardens available for this user.
+          </Text>
+        )}
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -94,7 +113,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#fff",
+    backgroundColor: "#f8f4ff",
+    marginBottom: 80,
   },
   loaderContainer: {
     flex: 1,
@@ -102,16 +122,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 16,
+    marginTop: 40,
+    fontFamily: "SourceSerifPro_700Bold",
+  },
+  subtitle: {
+    fontSize: 16,
+    textAlign: "center",
+    color: "#7f7f7f",
+    marginBottom: 20,
+    fontFamily: "SourceSerifPro_700Bold_Italic",
   },
   gardenContainer: {
     padding: 12,
     marginVertical: 8,
     backgroundColor: "#f9f9f9",
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#BEBEBE",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,

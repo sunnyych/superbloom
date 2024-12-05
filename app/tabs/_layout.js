@@ -26,13 +26,19 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: "white",
         tabBarInactiveTintColor: "#8B7CEC",
-        tabBarShowLabel: false,
+        // tabBarShowLabel: false,
         headerShow: false,
         tabBarStyle: styles.navBar,
         tabBarPosition: "bottom",
         tabBarIconStyle: {
           width: 48, // or whatever size you want
           height: 48,
+        },
+        tabBarLabelStyle: {
+          fontFamily: "Rubik_500Medium",
+        },
+        contentStyle: {
+          marginBottom: 120,
         },
       }}
     >
@@ -58,9 +64,10 @@ export default function TabLayout() {
           headerTitleAlign: "center",
           headerStyle: { backgroundColor: Theme.colors.backgroundPrimary },
           headerTintColor: Theme.colors.textPrimary,
+          headerShown: false,
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="add"
         options={{
           // headerShown: false,
@@ -77,12 +84,12 @@ export default function TabLayout() {
           headerShown: false,
           presentation: "modal",
         }}
-      />
+      /> */}
       <Tabs.Screen
         name="superbloom"
         options={{
           title: "Superbloom",
-          tabBarLabel: "Superbloom",
+          tabBarLabel: "Superblooms",
           tabBarIcon: ({ focused }) => {
             return (
               <Image
@@ -106,7 +113,7 @@ export default function TabLayout() {
           tabBarIcon: ({ size, color }) => (
             <FontAwesome size={40} name="cog" color={color} />
           ),
-          // headerShown: false,
+          headerShown: false,
         }}
       />
     </Tabs>
@@ -115,7 +122,7 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   navBar: {
-    // position: "absolute",
+    position: "absolute",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     backgroundColor: "#0E0835",

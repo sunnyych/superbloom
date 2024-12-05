@@ -11,6 +11,7 @@ import {
   StyleSheet,
   FlatList,
   ActivityIndicator,
+  SafeAreaView,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import db from "@/databse/db";
@@ -87,43 +88,48 @@ const Profile = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.closeButton}
-        onPress={() => router.back()}
-      >
-        <Text style={styles.closeButtonText}>×</Text>
-      </TouchableOpacity>
-      <Text style={styles.title}>{user.realUsername}</Text>
-      <Text style={styles.subtitle}>@{user.username}</Text>
+    <SafeAreaView style={styles.safeContainer}>
+      <View style={styles.container}>
+        <TouchableOpacity
+          style={styles.closeButton}
+          onPress={() => router.back()}
+        >
+          <Text style={styles.closeButtonText}>×</Text>
+        </TouchableOpacity>
+        <Text style={styles.title}>{user.realUsername}</Text>
+        <Text style={styles.subtitle}>@{user.username}</Text>
 
-      <FlatList
-        data={gardens}
-        keyExtractor={(item) => item.garden_id.toString()}
-        horizontal
-        contentContainerStyle={styles.gardenList}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.gardenContainer}
-            onPress={() => handleGardenClick(item.garden_name)}
-          >
-            <Image
-              source={
-                localImages[item.image] ||
-                require("../../../assets/profiles/john-white.jpg")
-              }
-              style={styles.gardenImage}
-            />
-            <Text style={styles.gardenName}>{item.garden_name}</Text>
-            <Text style={styles.gardenYears}>({item.year})</Text>
-          </TouchableOpacity>
-        )}
-      />
+        <FlatList
+          data={gardens}
+          keyExtractor={(item) => item.garden_id.toString()}
+          horizontal
+          contentContainerStyle={styles.gardenList}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.gardenContainer}
+              onPress={() => handleGardenClick(item.garden_name)}
+            >
+              <Image
+                source={
+                  localImages[item.image] ||
+                  require("../../../assets/profiles/john-white.jpg")
+                }
+                style={styles.gardenImage}
+              />
+              <Text style={styles.gardenName}>{item.garden_name}</Text>
+              <Text style={styles.gardenYears}>({item.year})</Text>
+            </TouchableOpacity>
+          )}
+        />
 
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Text style={styles.backButtonText}>back</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Text style={styles.backButtonText}>back</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -132,6 +138,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f8f4ff",
     padding: 16,
+  },
+  safeContainer: {
+    flex: 1,
+    padding: 50,
   },
   loaderContainer: {
     flex: 1,

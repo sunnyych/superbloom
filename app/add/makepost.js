@@ -14,20 +14,15 @@ import {
 import db from "@/databse/db"; // Supabase client
 import { useRouter } from "expo-router";
 import { usePrompt } from "@/utils/PromptContext";
+import { usePost } from "@/utils/PostContext";
 
 export default function NewPost() {
-  // States for user input
-  const [text, setText] = useState("");
-  const [media, setMedia] = useState("");
-  const [isPublic, setIsPublic] = useState(true); // Toggle for public or private post
-
   const router = useRouter();
+
   const { selectedPrompt, setSelectedPrompt } = usePrompt();
+  const { text, setText, media, setMedia, isPublic, setIsPublic } = usePost();
 
   // Hardcoded values
-  const hardcodedUsername = "helen-smith";
-  const hardcodedUserId = 1;
-  const hardcodedGardenId = 1;
   const hardcodedMemoryPerson = "Mary Chen"; // Hardcoded person
 
   const prompts = [
@@ -38,43 +33,7 @@ export default function NewPost() {
     "How would you describe Mary's personality?",
   ];
 
-  const addMemory = async () => {
-    if (!text) {
-      Alert.alert("Error", "Please fill in the memory text.");
-      return;
-    }
-
-    try {
-      const { error } = await db.from("post").insert([
-        {
-          username: hardcodedUsername,
-          user_id: hardcodedUserId,
-          garden_id: hardcodedGardenId,
-          memory_person: hardcodedMemoryPerson,
-          text: text,
-          media: media || null, // Optional media
-          public: isPublic, // True or false based on the toggle
-          time_stamp: new Date().toISOString(), // Current timestamp
-          flower_color: "pink", // Hardcoded or dynamic
-          flower_type: 1, // Hardcoded for now
-        },
-      ]);
-
-      if (error) {
-        console.error("Error adding memory:", error);
-        Alert.alert("Error", "Failed to add memory.");
-      } else {
-        // Alert.alert("Success", "Memory added successfully!");
-        // Clear the form after success
-        setText("");
-        setMedia("");
-        setIsPublic(true);
-      }
-    } catch (err) {
-      console.error("Unexpected error:", err);
-      Alert.alert("Error", "An unexpected error occurred.");
-    }
-  };
+  console.log("selected prompt is " + selectedPrompt);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -90,8 +49,7 @@ export default function NewPost() {
       <Text style={styles.title}>plant a memory</Text>
       <Text style={styles.subtitle}>write and reflect</Text>
 
-      {/* Display chosen prompt */}
-      {selectedPrompt && (
+      {selectedPrompt >= 0 && (
         <View style={styles.promptContainer}>
           <Image
             style={styles.promptTape}
@@ -103,7 +61,6 @@ export default function NewPost() {
         </View>
       )}
 
-      {/* Display Memory Person */}
       <View style={styles.mainContainer}>
         <View style={styles.memoryPersonContainer}>
           <Text style={styles.memoryPersonLabel}>Memory Person:</Text>
@@ -132,6 +89,7 @@ export default function NewPost() {
           />
         </View>
       </View>
+
       <View style={styles.navigationButtons}>
         <TouchableOpacity
           style={[styles.navButton, styles.backButton]}
@@ -140,10 +98,18 @@ export default function NewPost() {
           <Text style={styles.backButtonText}>back</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.navButton, styles.nextButton]}
+          style={[
+            styles.navButton,
+            text ? styles.nextButton : styles.disabledNextButton,
+          ]}
           onPress={() => router.push("/add/pickflower")}
+          disabled={!text}
         >
-          <Text style={styles.nextButtonText}>next</Text>
+          <Text
+            style={text ? styles.nextButtonText : styles.disabledNextButtonText}
+          >
+            next
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -263,6 +229,14 @@ const styles = StyleSheet.create({
   },
   nextButtonText: {
     color: "white",
+    fontSize: 16,
+    fontFamily: "Rubik_500Medium",
+  },
+  disabledNextButton: {
+    backgroundColor: "#EAE9ED",
+  },
+  disabledNextButtonText: {
+    color: "#CCCCCC",
     fontSize: 16,
     fontFamily: "Rubik_500Medium",
   },

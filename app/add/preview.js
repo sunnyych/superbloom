@@ -10,15 +10,17 @@ import {
   ActivityIndicator,
   SafeAreaView,
 } from "react-native";
+import db from "@/databse/db"; // Supabase client
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { flowerTypes, colorPalette, renderFlower } from "@/utils/flowerUtils";
 import { useFlower } from "@/utils/FlowerContext";
+import { usePost } from "@/utils/PostContext";
 
 // Hardcoded values
 const hardcodedUsername = "helen-smith";
 const hardcodedUserId = 1;
 const hardcodedGardenId = 1;
-const hardcodedMemoryPerson = "John Doe"; // Hardcoded person
+const hardcodedMemoryPerson = "Mary Chen"; // Hardcoded person
 
 const item = {
   username: hardcodedUsername,
@@ -59,9 +61,49 @@ const postImages = {
   "song.jpg": require("@/assets/posts/song.jpg"),
 };
 
+const addMemory = async (router) => {
+  if (!text) {
+    Alert.alert("Error", "Please fill in the memory text.");
+    return;
+  }
+
+  try {
+    const { error } = await db.from("post").insert([
+      {
+        username: hardcodedUsername,
+        user_id: hardcodedUserId,
+        garden_id: hardcodedGardenId,
+        memory_person: hardcodedMemoryPerson,
+        text: text,
+        media: media || null, // Optional media
+        public: isPublic, // True or false based on the toggle
+        time_stamp: new Date().toISOString(), // Current timestamp
+        flower_color: "pink", // Hardcoded or dynamic
+        flower_type: 1, // Hardcoded for now
+      },
+    ]);
+
+    if (error) {
+      console.error("Error adding memory:", error);
+      Alert.alert("Error", "Failed to add memory.");
+    } else {
+      // Alert.alert("Success", "Memory added successfully!");
+      // Clear the form after success
+      setText("");
+      setMedia("");
+      setIsPublic(true);
+      router.push("tabs/home/");
+    }
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    Alert.alert("Error", "An unexpected error occurred.");
+  }
+};
+
 export default PostPreview = () => {
   const router = useRouter();
 
+  const { text, setText, media, setMedia, isPublic, setIsPublic } = usePost();
   const { selectedType, setSelectedType, selectedColor, setSelectedColor } =
     useFlower();
 
@@ -76,7 +118,7 @@ export default PostPreview = () => {
         </TouchableOpacity>
       </View>
       <Text style={styles.title}>plant a memory</Text>
-      <Text style={styles.subtitle}>write and reflect</Text>
+      <Text style={styles.subtitle}>preview your post</Text>
       <View style={styles.container}>
         <View style={styles.post}>
           <View style={styles.previewContainer}>
@@ -88,7 +130,7 @@ export default PostPreview = () => {
               60 // size parameter
             )}
           </View>
-          <Text style={styles.postText}>{item.text}</Text>
+          <Text style={styles.postText}>{text}</Text>
           <Text style={styles.date}>{item.time_stamp}</Text>
           <Image source={postImages[item.media]} style={styles.postImage} />
         </View>
@@ -102,7 +144,7 @@ export default PostPreview = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.navButton, styles.nextButton]}
-          onPress={() => router.push("tabs/home/")}
+          onPress={() => addMemory(router)}
         >
           <Text style={styles.nextButtonText}>plant</Text>
         </TouchableOpacity>

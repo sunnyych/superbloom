@@ -6,6 +6,7 @@ import {
   StyleSheet,
   FlatList,
   Image,
+  SafeAreaView,
 } from "react-native";
 import { useRouter } from "expo-router";
 import Theme from "@/assets/theme";
@@ -41,7 +42,7 @@ const FriendsPage = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>friends</Text>
       <Text style={styles.subtitle}>visit a friend’s gardens</Text>
       <FlatList
@@ -59,7 +60,7 @@ const FriendsPage = () => {
         </View>
         <Text style={styles.addFriendText}>add friend</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f8f4ff",
     padding: 16,
-    marginTop: -60,
+    marginBottom: 120,
   },
   closeButton: {
     position: "absolute",
@@ -92,13 +93,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginTop: 40,
-    padding: 10,
+    fontFamily: "SourceSerifPro_700Bold",
   },
   subtitle: {
     fontSize: 16,
     textAlign: "center",
     color: "#7f7f7f",
     marginBottom: 20,
+    fontFamily: "SourceSerifPro_700Bold_Italic",
   },
   list: {
     paddingBottom: 100,
@@ -115,6 +117,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+    margin: 30,
   },
   avatar: {
     width: 48,
@@ -151,7 +154,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#dcd6ff",
-    borderRadius: 24,
+    borderRadius: 50,
     padding: 10,
   },
   addFriendIcon: {
@@ -171,7 +174,7 @@ const styles = StyleSheet.create({
   addFriendText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#7f7f7f",
+    color: "#8B7CEC",
   },
 });
 
