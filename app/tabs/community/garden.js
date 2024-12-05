@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import db from "@/databse/db";
+import { flowerTypes, colorPalette, renderFlower } from "@/utils/flowerUtils";
 
 const Garden = () => {
   const router = useRouter();
@@ -53,7 +54,7 @@ const Garden = () => {
         const { data, error } = await db
           .from("post")
           .select(
-            "id, username, memory_person, text, flower_type, media, time_stamp"
+            "id, username, memory_person, text, flower_type, media, time_stamp, flower_color"
           ) // Fetch post info
           .eq("memory_person", gardenName); // Filter by garden_id
 
@@ -141,11 +142,20 @@ const Garden = () => {
                 handleFlowerPress(post.text, post.media, post.time_stamp)
               }
             >
-              <Image
+              {/* <Image
                 source={flowerImages[post.flower_type] || flowerImages[0]}
                 style={styles.flowerImage}
                 resizeMode="cover"
-              />
+              /> */}
+              <View>
+                {renderFlower(
+                  flowerTypes[post.flower_type].BloomComponent,
+                  flowerTypes[post.flower_type].StemComponent,
+                  post.flower_color,
+                  // "#94CDA0",
+                  70
+                )}
+              </View>
             </TouchableOpacity>
           );
         })}
@@ -216,8 +226,8 @@ const styles = StyleSheet.create({
   },
   toggleContainer: {
     position: "absolute",
-    bottom: 16,
-    right: 16,
+    bottom: 150,
+    right: 30,
     flexDirection: "row",
     alignItems: "center",
   },
