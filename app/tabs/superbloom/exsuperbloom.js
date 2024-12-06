@@ -30,7 +30,7 @@ export default function Superbloom() {
   const [description, setDescription] = useState("");
   const [img, setImg] = useState(null);
 
-  const [isToggled, setIsToggled] = useState(true);
+  const [isToggled, setIsToggled] = useState(false);
   const [fadeAnim] = useState(new Animated.Value(0));
   const [isLoading, setIsLoading] = useState(false);
 
@@ -138,8 +138,9 @@ export default function Superbloom() {
   };
 
   const handleToggle = () => {
-    setIsToggled(!isToggled);
-    if (!isToggled) {
+    const newToggleState = !isToggled;
+    setIsToggled(newToggleState);
+    if (newToggleState) {
       // Pass only necessary data, such as post IDs
       const postIds = flowerPositions.map((post) => post.id).join(",");
       router.push(`/tabs/superbloom/collage?postIds=${postIds}`);
