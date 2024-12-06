@@ -90,10 +90,16 @@ const Garden = () => {
     }
   };
 
-  const handleFlowerPress = (text, media, time_stamp) => {
+  const handleFlowerPress = (
+    text,
+    media,
+    time_stamp,
+    flower_type,
+    flower_color
+  ) => {
     // Navigate to the post page, passing post data
     router.push(
-      `/tabs/community/post?text=${text}&media=${media}&time_stamp=${time_stamp}`
+      `/tabs/community/post?text=${text}&media=${media}&time_stamp=${time_stamp}&flower_type=${flower_type}&flower_color=${flower_color}`
     );
   };
 
@@ -139,14 +145,15 @@ const Garden = () => {
               key={post.id}
               style={[styles.flower, { top: randomTop, left: randomLeft }]}
               onPress={() =>
-                handleFlowerPress(post.text, post.media, post.time_stamp)
+                handleFlowerPress(
+                  post.text,
+                  post.media,
+                  post.time_stamp,
+                  post.flower_type,
+                  post.flower_color
+                )
               }
             >
-              {/* <Image
-                source={flowerImages[post.flower_type] || flowerImages[0]}
-                style={styles.flowerImage}
-                resizeMode="cover"
-              /> */}
               <View>
                 {renderFlower(
                   flowerTypes[post.flower_type].BloomComponent,

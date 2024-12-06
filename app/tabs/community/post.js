@@ -18,7 +18,7 @@ import PostModal from "@/components/PostModal";
 
 const Post = () => {
   const router = useRouter();
-  const { text, media, time_stamp } = useLocalSearchParams(); // Extract passed params
+  const { text, media, time_stamp, flower_type } = useLocalSearchParams(); // Extract passed params
   const [modalVisible, setModalVisible] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -63,6 +63,7 @@ const Post = () => {
         media={media}
         timeStamp={time_stamp}
         postImages={postImages}
+        flower_type={flower_type}
       />
 
       {/* Back Button
