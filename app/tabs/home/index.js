@@ -5,6 +5,7 @@ import db from "@/databse/db";
 import Dropdown from "@/components/Dropdown";
 import Toggle from "@/components/Toggle";
 import Flower from "@/components/Flower";
+import { Dimensions } from "react-native";
 
 import {
   View,
@@ -33,6 +34,11 @@ export default function OuterGarden() {
   const router = useRouter();
   const { translateX, translateY } = useBackground();
   const { postIds } = useLocalSearchParams(); // Get post IDs from query params
+  const { width, height } = Dimensions.get("window");
+
+  const getRandomPosition = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
 
   const [isToggled, setIsToggled] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -74,29 +80,58 @@ export default function OuterGarden() {
   );
 
   // Fetch posts for this garden
+  // useEffect(() => {
+  //   const fetchPosts = async () => {
+  //     try {
+  //       // Fetch posts for a specific garden_id from Supabase
+  //       const { data, error } = await db
+  //         .from("post")
+  //         .select(
+  //           "id, username, memory_person, text, media, time_stamp, flower_type, flower_color"
+  //         ) // Fetch post info
+  //         .eq("garden_id", selectedGardenId); // Filter by garden_id
+
+  //       if (error) {
+  //         console.error("Supabase error:", error.message);
+  //         return;
+  //       }
+  //       setPosts(data || []); // Set posts to the state
+  //     } catch (err) {
+  //       console.error("Error fetching posts:", err);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchPosts();
+  // }, [selectedGardenId]);
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        // Fetch posts for a specific garden_id from Supabase
         const { data, error } = await db
           .from("post")
           .select(
             "id, username, memory_person, text, media, time_stamp, flower_type, flower_color"
-          ) // Fetch post info
-          .eq("garden_id", selectedGardenId); // Filter by garden_id
-
+          )
+          .eq("garden_id", selectedGardenId);
         if (error) {
           console.error("Supabase error:", error.message);
           return;
         }
-        setPosts(data || []); // Set posts to the state
+        // Add random positions to each post
+        const postsWithPositions = data.map((post) => ({
+          ...post,
+          randomTop: getRandomPosition(height * 0.02, height * 0.03), // Random top position
+          randomLeft: getRandomPosition(width * 0.02, width * 0.2), // Random left position
+        }));
+        setPosts(postsWithPositions); // Set posts with positions
       } catch (err) {
         console.error("Error fetching posts:", err);
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchPosts();
   }, [selectedGardenId]);
 
@@ -145,7 +180,7 @@ export default function OuterGarden() {
   return (
     <View style={styles.container}>
       {/* Render flowers for each post */}
-      <View style={styles.gardenArea}>
+      <View style={[styles.gardenArea, { position: "relative" }]}>
         {posts.map((post) => {
           return (
             <Flower

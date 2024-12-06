@@ -17,8 +17,9 @@ const getRandomPosition = (min, max) => {
 
 const Flower = ({ post, handleFlowerPress }) => {
   // Generate random positions for the flowers
-  const randomTop = getRandomPosition(20, 20); // Adjust the max to control range of vertical positions
-  const randomLeft = getRandomPosition(10, 80); // Adjust the max to control range of horizontal positions
+  // const randomTop = getRandomPosition(20, 20); // Adjust the max to control range of vertical positions
+  // const randomLeft = getRandomPosition(10, 80); // Adjust the max to control range of horizontal positions
+  const { randomTop, randomLeft } = post;
 
   // Create a shared value for opacity
   const opacity = useSharedValue(0);

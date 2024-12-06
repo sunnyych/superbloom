@@ -4,6 +4,8 @@ import db from "@/databse/db";
 // import { useFocusEffect } from "@react-navigation/native";
 import Dropdown from "@/components/Dropdown";
 import Toggle from "@/components/Toggle";
+import Flower from "@/components/Flower";
+import { Dimensions } from "react-native";
 
 import {
   View,
@@ -38,6 +40,7 @@ export default function OuterGarden() {
   const [isToggled, setIsToggled] = useState(false);
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { width, height } = Dimensions.get("window");
 
   const [selectedGardenId, setSelectedGardenId] = useState(
     globalState.selectedGardenId
@@ -94,7 +97,14 @@ export default function OuterGarden() {
           console.error("Supabase error:", error.message);
           return;
         }
-        setPosts(data || []); // Set posts to the state
+
+        // setPosts(data || []); // Set posts to the state
+        const postsWithPositions = data.map((post) => ({
+          ...post,
+          randomTop: getRandomPosition(height * 0.02, height * 0.03), // Random top position
+          randomLeft: getRandomPosition(width * 0.02, width * 0.2), // Random left position
+        }));
+        setPosts(postsWithPositions); // Set posts to the state
       } catch (err) {
         console.error("Error fetching posts:", err);
       } finally {
@@ -145,7 +155,7 @@ export default function OuterGarden() {
     <View style={styles.container}>
       {/* Render flowers for each post */}
       <View style={styles.gardenArea}>
-        {posts.map((post) => {
+        {/* {posts.map((post) => {
           // Generate random positions for the flowers
           const randomTop = getRandomPosition(20, 20); // Adjust the max to control range of vertical positions
           const randomLeft = getRandomPosition(10, 80); // Adjust the max to control range of horizontal positions
@@ -177,6 +187,16 @@ export default function OuterGarden() {
                 )}
               </View>
             </TouchableOpacity>
+          );
+        })}
+      </View> */}
+        {posts.map((post) => {
+          return (
+            <Flower
+              key={post.id}
+              post={post}
+              handleFlowerPress={handleFlowerPress}
+            />
           );
         })}
       </View>
