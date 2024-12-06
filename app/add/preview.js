@@ -11,6 +11,7 @@ import {
 import { useRouter } from "expo-router";
 import { useFlower } from "@/utils/FlowerContext";
 import { usePost } from "@/utils/PostContext";
+import { useSuperbloom } from "@/utils/SuperbloomContext";
 import { flowerTypes, renderFlower } from "@/utils/flowerUtils";
 import db from "@/databse/db"; // Supabase client
 
@@ -18,7 +19,7 @@ import db from "@/databse/db"; // Supabase client
 const hardcodedUsername = "helen-smith";
 const hardcodedUserId = 1;
 const hardcodedGardenId = 1;
-const hardcodedMemoryPerson = "Mary Chen";
+let hardcodedMemoryPerson = "Mary Chen";
 
 const addMemory = async (
   router,
@@ -26,7 +27,8 @@ const addMemory = async (
   media,
   isPublic,
   selectedColor,
-  selectedType
+  selectedType,
+  added_superbloom
 ) => {
   if (!text) {
     Alert.alert("Error", "Please fill in the memory text.");
@@ -34,6 +36,9 @@ const addMemory = async (
   }
 
   try {
+    // if (addedSuperbloom) {
+    //   hardcodedMemoryPerson = ""
+    // }
     const { error } = await db.from("post").insert([
       {
         username: hardcodedUsername,
@@ -46,6 +51,7 @@ const addMemory = async (
         time_stamp: new Date().toISOString(),
         flower_color: selectedColor,
         flower_type: selectedType,
+        added_superbloom: addedSuperbloom,
       },
     ]);
 
@@ -53,7 +59,12 @@ const addMemory = async (
       console.error("Error adding memory:", error);
       Alert.alert("Error", "Failed to add memory.");
     } else {
-      router.push("tabs/home/");
+      if (addedSuperbloom) {
+        router.push("tabs/superbloom/");
+        postBloom(false);
+      } else {
+        router.push("tabs/home/");
+      }
     }
   } catch (err) {
     console.error("Unexpected error:", err);
@@ -61,10 +72,20 @@ const addMemory = async (
   }
 };
 
+const handleClose = () => {
+  if (addedSuperbloom) {
+    postBloom(false);
+    router.push("tabs/superbloom");
+  } else {
+    router.push("tabs/home");
+  }
+};
+
 const PostPreview = () => {
   const router = useRouter();
   const { text, media, isPublic } = usePost();
   const { selectedType, selectedColor } = useFlower();
+  const { addedSuperbloom, postBloom } = useSuperbloom();
 
   return (
     <SafeAreaView style={styles.container}>

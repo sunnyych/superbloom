@@ -6,6 +6,7 @@ import { useState } from "react";
 import { PromptContext } from "@/utils/PromptContext";
 import { FlowerContext } from "@/utils/FlowerContext";
 import { PostContext } from "@/utils/PostContext";
+import { SuperbloomProvider } from "@/utils/SuperbloomContext";
 
 import { colorPalette } from "@/utils/flowerUtils";
 
@@ -33,61 +34,63 @@ export default function AddPostLayout() {
       <PostContext.Provider
         value={{ text, setText, media, setMedia, isPublic, setIsPublic }}
       >
-        <FlowerContext.Provider
-          value={{
-            selectedType,
-            setSelectedType,
-            selectedColor,
-            setSelectedColor,
-          }}
-        >
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" />
-            <Stack.Screen
-              name="chooseprompt"
-              options={{
-                title: "choose prompt",
-                presentation: "modal",
-              }}
-            />
-            <Stack.Screen
-              name="makepost"
-              options={{
-                title: "make new post",
-                headerLeft: () => (
-                  <Pressable onPress={() => router.back()}>
-                    <Text style={styles.backText}>back</Text>
-                  </Pressable>
-                ),
-                // presentation: "modal",
-              }}
-            />
-            <Stack.Screen
-              name="pickflower"
-              options={{
-                title: "customize flower",
-                headerLeft: () => (
-                  <Pressable onPress={() => router.back()}>
-                    <Text style={styles.backText}>back</Text>
-                  </Pressable>
-                ),
-                // presentation: "modal",
-              }}
-            />
-            <Stack.Screen
-              name="preview"
-              options={{
-                title: "preview post",
-                headerLeft: () => (
-                  <Pressable onPress={() => router.back()}>
-                    <Text style={styles.backText}>back</Text>
-                  </Pressable>
-                ),
-                // presentation: "modal",
-              }}
-            />
-          </Stack>
-        </FlowerContext.Provider>
+        <SuperbloomProvider>
+          <FlowerContext.Provider
+            value={{
+              selectedType,
+              setSelectedType,
+              selectedColor,
+              setSelectedColor,
+            }}
+          >
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="index" />
+              <Stack.Screen
+                name="chooseprompt"
+                options={{
+                  title: "choose prompt",
+                  presentation: "modal",
+                }}
+              />
+              <Stack.Screen
+                name="makepost"
+                options={{
+                  title: "make new post",
+                  headerLeft: () => (
+                    <Pressable onPress={() => router.back()}>
+                      <Text style={styles.backText}>back</Text>
+                    </Pressable>
+                  ),
+                  // presentation: "modal",
+                }}
+              />
+              <Stack.Screen
+                name="pickflower"
+                options={{
+                  title: "customize flower",
+                  headerLeft: () => (
+                    <Pressable onPress={() => router.back()}>
+                      <Text style={styles.backText}>back</Text>
+                    </Pressable>
+                  ),
+                  // presentation: "modal",
+                }}
+              />
+              <Stack.Screen
+                name="preview"
+                options={{
+                  title: "preview post",
+                  headerLeft: () => (
+                    <Pressable onPress={() => router.back()}>
+                      <Text style={styles.backText}>back</Text>
+                    </Pressable>
+                  ),
+                  // presentation: "modal",
+                }}
+              />
+            </Stack>
+          </FlowerContext.Provider>
+        </SuperbloomProvider>
       </PostContext.Provider>
     </PromptContext.Provider>
   );
