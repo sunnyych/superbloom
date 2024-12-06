@@ -61,6 +61,7 @@ const PostModal = ({
   flower_type,
   flower_color,
   timeStamp,
+  username,
 }) => {
   console.log("timeStamp:", timeStamp);
   return (
@@ -88,7 +89,8 @@ const PostModal = ({
                 60
               )}
             </View>
-
+            {/* username text (for superbloom view)*/}
+            <Text style={styles.username}>{username}</Text>
             {/* Post Text */}
             <Text style={styles.text}>{text}</Text>
 
@@ -129,6 +131,12 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 28,
+  },
+  username: {
+    fontSize: 16,
+    color: "a0a0a0",
+    fontFamily: "Rubik_500Medium",
+    marginBottom: 16,
   },
   text: {
     fontSize: 16,

@@ -1,8 +1,3 @@
-// two buttons: add from a garden, write a new memory
-
-// on click "add from a garden": navigate to import.js
-
-// on click "write a new memory": same logic as newpost.js in home
 import { useState } from "react";
 import {
   View,
@@ -21,21 +16,19 @@ import { useRouter } from "expo-router";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 // ty https://www.npmjs.com/package/@react-native-community/datetimepicker
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import { database } from "./superbloom-database";
+import * as ImagePicker from "expo-image-picker";
+import { useSuperbloom } from "@/utils/SuperbloomContext";
 
 export default function NewSuperbloom() {
+  const { addBloom } = useSuperbloom();
   const [celebrated, setCelebrated] = useState("");
+  const [memory_person, setMemory_person] = useState("");
   const [description, setDescription] = useState("");
-  const [month, setMonth] = useState("");
   const [start, setStart] = useState(new Date());
   const [end, setEnd] = useState(new Date());
   const [checked, setChecked] = useState("");
+  const [img, setImg] = useState(null);
   const router = useRouter();
-  const [requestedDatabase, setRequestedDatabase] = useState(database);
-
-  const addBloom = (newBloom) => {
-    setRequestedDatabase((prevDatabase) => [...prevDatabase, newBloom]);
-  };
 
   const handleAddStart = (event, date) => {
     if (date) {
@@ -50,23 +43,48 @@ export default function NewSuperbloom() {
   };
 
   const handleAddBloom = () => {
+    setMemory_person(celebrated.toLowerCase());
+
     const newBloom = {
       id: (Math.random() * 10).toString(),
       celebrated,
+      memory_person,
       host: "James Landay",
       description,
-      month: start.toLocaleString("default", { month: "long" }),
+      month: start.toLocaleString("default", { month: "long" }).substring(0, 3),
       start: start.getDate(),
       end: end.getDate(),
       requested: true, // bc self made it, so they don't need to request
+      image: img,
     };
 
     addBloom(newBloom);
-
     setCelebrated("");
     setDescription("");
     setStart(new Date());
     setEnd(new Date());
+    router.back();
+  };
+
+  // ty https://docs.expo.dev/versions/latest/sdk/imagepicker/
+  const pickImage = async () => {
+    try {
+      // No permissions request is necessary for launching the image library
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ["images", "videos"],
+        allowsEditing: true,
+        quality: 1,
+      });
+
+      console.log(result);
+
+      if (!result.canceled) {
+        setImg(result.assets[0]);
+      }
+    } catch (error) {
+      console.error("Error launching image picker:", error);
+      Alert.alert("Error", "Something went wrong while picking the image.");
+    }
   };
 
   const dismissKeyboard = () => {
@@ -97,12 +115,23 @@ export default function NewSuperbloom() {
             />
             <Text style={styles.guideText}>description</Text>
           </View>
-          <TouchableOpacity style={styles.image}>
-            <MaterialCommunityIcons
-              name="file-image-plus-outline"
-              size={44}
-              color="white"
-            />
+          <TouchableOpacity style={styles.image} onPress={pickImage}>
+            {img ? (
+              <Image
+                source={img}
+                style={styles.uploadedImg}
+                onError={(error) =>
+                  console.error("Image loading error:", error.nativeEvent.error)
+                }
+              />
+            ) : (
+              <MaterialCommunityIcons
+                name="file-image-plus-outline"
+                size={44}
+                color="white"
+                style={styles.notUploadedImg}
+              />
+            )}
           </TouchableOpacity>
         </View>
         <TextInput
@@ -162,10 +191,21 @@ export default function NewSuperbloom() {
           </View>
         </View>
         <TouchableOpacity
-          style={[styles.confirmButton]}
+          style={[
+            celebrated ? styles.confirmButton : styles.confirmButtonDisabled,
+          ]}
           onPress={handleAddBloom}
+          disabled={!celebrated}
         >
-          <Text style={styles.confirmButtonText}>confirm</Text>
+          <Text
+            style={[
+              celebrated
+                ? styles.confirmButtonText
+                : styles.confirmButtonTextDisabled,
+            ]}
+          >
+            confirm
+          </Text>
         </TouchableOpacity>
       </SafeAreaView>
     </TouchableWithoutFeedback>
@@ -234,11 +274,22 @@ const styles = StyleSheet.create({
   image: {
     width: 80,
     height: 80,
-    backgroundColor: "#8B7CEC",
     borderRadius: 50,
     marginLeft: 26,
     alignItems: "center",
     justifyContent: "center",
+  },
+  uploadedImg: {
+    width: 80,
+    height: 80,
+    borderRadius: 50,
+  },
+  notUploadedImg: {
+    width: 80,
+    height: 80,
+    backgroundColor: "#8B7CEC",
+    borderRadius: 50,
+    padding: 16,
   },
   descriptionInput: {
     marginLeft: 36,
@@ -323,11 +374,24 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
   },
   confirmButtonDisabled: {
-    opacity: 0.5,
+    backgroundColor: "#EAE9ED",
+    marginTop: 30,
+    marginRight: 36,
+    padding: 15,
+    borderRadius: 25,
+    alignItems: "center",
+    width: 100,
+    alignSelf: "flex-end",
   },
   confirmButtonText: {
     color: "white",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "600",
+    fontFamily: "Rubik_500Medium",
+  },
+  confirmButtonTextDisabled: {
+    color: "#CCCCCC",
+    fontSize: 16,
+    fontFamily: "Rubik_500Medium",
   },
 });

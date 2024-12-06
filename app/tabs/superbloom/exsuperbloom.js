@@ -1,10 +1,3 @@
-// superbloom main page
-
-// on click back, navigate to index.js
-
-// on click add button, navigate to newpost.js
-
-// on click the toggle, navigate to collage.js
 import { useState, useEffect } from "react";
 import {
   View,
@@ -17,18 +10,100 @@ import {
   Image,
   Switch,
   Animated,
+  ActivityIndicator,
 } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import db from "@/databse/db";
+import { useSuperbloom } from "@/utils/SuperbloomContext";
+import Toggle from "@/components/Toggle";
+import Flower from "@/components/Flower";
+import { Dimensions } from "react-native";
+import PostModal from "@/components/PostModal";
 
 export default function Superbloom() {
+  const { requestedDatabase } = useSuperbloom();
   const router = useRouter();
+
+  // these are from my own superbloom-database
+  const [celebratedName, setCelebratedName] = useState("");
+  const [description, setDescription] = useState("");
+  const [img, setImg] = useState(null);
+
   const [isToggled, setIsToggled] = useState(true);
   const [fadeAnim] = useState(new Animated.Value(0));
-  const [flowerFadeAnim] = useState(new Animated.Value(0));
-  //const [flowerFadeAnim, setFlowerFadeAnim] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [showFlowers, setShowFlowers] = useState(false);
   const [flowerPositions, setFlowerPositions] = useState([]);
+  const { memory_person } = useLocalSearchParams();
+  const { width, height } = Dimensions.get("window");
+
+  // Post modal when a flower is clicked
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
+
+  const getRandomPosition = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const { data, error } = await db
+          .from("post")
+          .select("*")
+          .eq("memory_person", memory_person)
+          .eq("added_superbloom", true);
+
+        if (error) {
+          console.error("Supabase error:", error.message);
+          return;
+        }
+        const postsWithPositions = data.map((post) => ({
+          ...post,
+          randomTop: getRandomPosition(height * 0.02, height * 0.03), // Random top position
+          randomLeft: getRandomPosition(0, width), // Random left position
+        }));
+        setFlowerPositions(postsWithPositions);
+      } catch (err) {
+        console.error("Error fetching posts:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, [memory_person]);
+
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#9d82ff" />
+      </View>
+    );
+  }
+
+  useEffect(() => {
+    if (!memory_person) {
+      console.error("No celebrated value provided.");
+      return;
+    }
+
+    const matchedBloom = requestedDatabase.find(
+      (bloom) =>
+        bloom.memory_person.toLowerCase() === memory_person.toLowerCase()
+    );
+
+    if (matchedBloom) {
+      setDescription(matchedBloom.description);
+      setCelebratedName(matchedBloom.celebrated);
+      setImg(matchedBloom.image);
+      console.log("Found description:", matchedBloom.description);
+    } else {
+      console.warn("No matching celebrated found in the database.");
+    }
+  }, [memory_person]);
 
   useEffect(() => {
     // Fade in the text when the component mounts
@@ -39,82 +114,58 @@ export default function Superbloom() {
     }).start();
   }, []);
 
-  const generateRandomPositions = () => {
-    const newFlowerPositions = [];
-    //const newFlowerFadeAnim = [];
-
-    while (newFlowerPositions.length < 10) {
-      const randomX = Math.random() * 300;
-      const randomY = Math.random() * 400;
-
-      // Check for overlap
-      const overlap = newFlowerPositions.some(
-        (position) =>
-          Math.abs(position.x - randomX) < 50 &&
-          Math.abs(position.y - randomY) < 50
-      );
-
-      if (!overlap) {
-        newFlowerPositions.push({ x: randomX, y: randomY });
-        //newFlowerFadeAnim.push(new Animated.Value(0));
-      }
-    }
-    //setFlowerFadeAnim(newFlowerFadeAnim);
-    setFlowerPositions(newFlowerPositions);
-    //animateFlowersFadeIn();
+  const handleFlowerPress = (
+    text,
+    media,
+    time_stamp,
+    flower_type,
+    flower_color,
+    username
+  ) => {
+    // Navigate to the post page, passing post data
+    // router.push(
+    //   `/tabs/community/post?text=${text}&media=${media}&time_stamp=${time_stamp}`
+    // );
+    setSelectedPost({
+      text,
+      media,
+      time_stamp,
+      flower_type,
+      flower_color,
+      username,
+    });
+    setModalVisible(true);
   };
-
-  // const animateFlowersFadeIn = () => {
-  //   const animations = flowerFadeAnim.map((anim) =>
-  //     Animated.timing(anim, {
-  //       toValue: 1,
-  //       duration: 1000,
-  //       useNativeDriver: true,
-  //     })
-  //   );
-  //   //Animated.stagger(200, animations).start();
-  // };
-
-  useEffect(() => {
-    // Fade in the text when the component mounts
-    Animated.timing(flowerFadeAnim, {
-      toValue: 1, // Make the text fully visible
-      duration: 1000, // Animation duration in milliseconds
-      useNativeDriver: true,
-    }).start();
-  }, []);
 
   const handleToggle = () => {
     setIsToggled(!isToggled);
     if (!isToggled) {
       // Pass only necessary data, such as post IDs
-      const postIds = posts.map((post) => post.id).join(",");
-      router.push(`/tabs/superbloom/collage`);
+      const postIds = flowerPositions.map((post) => post.id).join(",");
+      router.push(`/tabs/superbloom/collage?postIds=${postIds}`);
     }
   };
 
+  const handleImport = () => {
+    // const postIds = flowerPositions.map((post) => post.id).join(",");
+    // router.push(`/tabs/superbloom/import?postIds=${postIds}`);
+    router.push(`/tabs/superbloom/import`);
+  };
+
   const handleTap = () => {
-    // Fade out the text when the screen is tapped
     Animated.timing(fadeAnim, {
       toValue: 0, // Fade out the text (invisible)
-      duration: 100, // Animation duration for fade-out (NOTE TO SELF: CHANGE BACK TO 1000)
+      duration: 100,
       useNativeDriver: true,
     }).start();
 
     setShowFlowers(true);
-    generateRandomPositions();
   };
 
-  const flowers = [
-    require("@/assets/flowers/flower0.jpg"),
-    require("@/assets/flowers/flower1.jpg"),
-    require("@/assets/flowers/flower2.jpg"),
-    require("@/assets/flowers/flower3.jpg"),
-    require("@/assets/flowers/flower0.jpg"),
-    require("@/assets/flowers/flower1.jpg"),
-    require("@/assets/flowers/flower2.jpg"),
-    require("@/assets/flowers/flower3.jpg"),
-  ];
+  const handleBack = () => {
+    setModalVisible(false); // Close the modal
+    setTimeout(() => setSelectedPost(null), 100);
+  };
 
   return (
     <View style={styles.container}>
@@ -133,13 +184,10 @@ export default function Superbloom() {
         </View>
 
         <View style={styles.titleContainer}>
-          <Image
-            source={require("@/assets/profiles/mr-whistler.jpg")}
-            style={styles.avatar}
-          />
+          <Image source={img} style={styles.avatar} />
           <View>
             <Text style={styles.titleText}>superbloom for</Text>
-            <Text style={styles.name}>Mr. Whistler</Text>
+            <Text style={styles.name}>{celebratedName}</Text>
           </View>
         </View>
 
@@ -147,50 +195,55 @@ export default function Superbloom() {
           style={[styles.fadeTextContainer, { opacity: fadeAnim }]}
         >
           <Text style={styles.fadingText}>
-            A celebration of Mr. Whistler's life, 1 year since his passing. He
-            was the bestest kitty ever.
+            {description} Add memories and moments for friends and family.
           </Text>
-          <TouchableOpacity onPress={handleTap} style={styles.fadingButton}>
-            <Text style={styles.fadingButtonText}>press to start</Text>
-          </TouchableOpacity>
+          {memory_person === "mr-whistler" && (
+            <TouchableOpacity onPress={handleTap} style={styles.fadingButton}>
+              <Text style={styles.fadingButtonText}>press to start</Text>
+            </TouchableOpacity>
+          )}
         </Animated.View>
 
-        {showFlowers &&
-          flowerPositions.map((position, index) => (
-            <View style={styles.flowerContainer}>
-              <Animated.Image
-                key={index}
-                source={flowers[index]}
-                style={[
-                  styles.flowerImage,
-                  {
-                    left: position.x,
-                    top: position.y,
-                    opacity: flowerFadeAnim,
-                  },
-                ]}
-                resizeMode={"contain"}
-              />
-            </View>
-          ))}
+        {showFlowers && (
+          <View style={styles.flowerContainer}>
+            {flowerPositions.map((post) => {
+              return (
+                <Flower
+                  key={post.id}
+                  post={post}
+                  handleFlowerPress={handleFlowerPress}
+                />
+              );
+            })}
+          </View>
+        )}
+
+        {modalVisible && selectedPost && (
+          <PostModal
+            visible={modalVisible}
+            onClose={handleBack} // Close the modal
+            text={selectedPost.text} // Pass the selected post's data
+            username={selectedPost.username}
+            media={selectedPost.media}
+            timeStamp={selectedPost.time_stamp}
+            flower_color={selectedPost.flower_color}
+            flower_type={selectedPost.flower_type}
+          />
+        )}
 
         <TouchableOpacity
           style={styles.postButtonContainer}
-          onPress={() => router.push("tabs/superbloom/import")}
+          onPress={handleImport}
         >
           <View style={styles.postButton}>
             <FontAwesome size={36} name="plus" color="white" />
           </View>
         </TouchableOpacity>
-        <View style={styles.toggleContainer}>
-          <Switch
-            trackColor={{ false: "#dcd6ff", true: "#9d82ff" }}
-            thumbColor={isToggled ? "#9d82ff" : "#ffffff"}
-            ios_backgroundColor="#dcd6ff"
-            onValueChange={handleToggle}
-            value={isToggled}
-          />
-        </View>
+        {memory_person === "mr-whistler" && (
+          <View style={styles.toggleContainer}>
+            <Toggle onToggle={handleToggle} isEnabled={isToggled} />
+          </View>
+        )}
       </ImageBackground>
     </View>
   );
@@ -275,7 +328,7 @@ const styles = StyleSheet.create({
   },
   flowerContainer: {
     position: "absolute",
-    top: 300,
+    top: 100,
   },
   flowerImage: {
     position: "absolute",

@@ -1,8 +1,3 @@
-// "join a superbloom"
-
-// search for an event
-
-// on click "request to join", chaneg button color and text to "open superbloom", and navigate to superbloom.js
 import { useState } from "react";
 import {
   View,
@@ -14,11 +9,17 @@ import {
   Image,
   TextInput,
   FlatList,
+  Alert,
 } from "react-native";
+import {
+  Swipeable,
+  GestureHandlerRootView,
+} from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 // font import source: https://www.npmjs.com/package/@expo-google-fonts/source-serif-pro
 // if it doesn't work, run dis in terminal "npx expo install @expo-google-fonts/source-serif-pro expo-font expo-app-loading"
-import { database } from "./superbloom-database";
+import { useSuperbloom } from "@/utils/SuperbloomContext";
+
 import {
   useFonts,
   SourceSerifPro_400Regular,
@@ -32,16 +33,37 @@ import {
 } from "@expo-google-fonts/source-serif-pro";
 
 export default function SuperbloomHome() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   const router = useRouter();
 
-  const [requestedDatabase, setRequestedDatabase] = useState(database);
+  const { requestedDatabase, updateRequestStatus, deleteBloom } =
+    useSuperbloom();
+
+  const handleSearch = () => {
+    const results = requestedDatabase.filter(
+      (bloom) => bloom.celebrated.toLowerCase() === searchQuery.toLowerCase()
+    );
+    setSearchResults(results);
+  };
 
   const handleRequested = (id) => {
-    setRequestedDatabase((prevDatabase) =>
-      prevDatabase.map((item) =>
-        item.id === id ? { ...item, requested: true } : item
-      )
-    );
+    updateRequestStatus(id);
+  };
+
+  const handleDelete = (id) => (
+    <View style={styles.deleteContainer}>
+      <Text
+        style={styles.deleteText}
+        onPress={() => deleteBloom(id)} // Trigger deletion
+      >
+        Delete
+      </Text>
+    </View>
+  );
+
+  const handleViewBloom = (memory_person) => {
+    router.push(`tabs/superbloom/exsuperbloom?memory_person=${memory_person}`);
   };
 
   let [fontsLoaded] = useFonts({
@@ -64,55 +86,109 @@ export default function SuperbloomHome() {
           <TextInput
             style={styles.searchInput}
             placeholder="Enter a name..."
-            //value={searchQuery}
-            //onChangeText={setSearchQuery}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
           />
-          <TouchableOpacity style={styles.searchButton}>
-            {/*took out  onPress={handleSearch}*/}
+          <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
             <Text style={styles.searchButtonText}>🔍</Text>
           </TouchableOpacity>
         </View>
 
-        <FlatList
-          data={requestedDatabase}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.defaultContainer}>
-              <Image source={item.image} style={styles.avatar} />
-              <View style={styles.defaultInfo}>
-                <Text style={styles.defaultName}>
-                  Celebrating {item.celebrated}
-                </Text>
-                <Text style={styles.defaultUsername}>
-                  Hosted by {item.host}
-                </Text>
-                {item.requested ? (
-                  <TouchableOpacity
-                    style={styles.openSuperbloomButton}
-                    onPress={() => router.push("tabs/superbloom/exsuperbloom")}
-                  >
-                    <Text style={styles.openSuperbloomText}>
-                      open superbloom
-                    </Text>
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    style={styles.requestButton}
-                    onPress={() => handleRequested(item.id)}
-                  >
-                    <Text style={styles.requestText}>request to join</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-              <View style={styles.date}>
-                <Text style={styles.month}>{item.month}</Text>
-                <Text style={styles.days}>
-                  {item.start}-{item.end}
-                </Text>
-              </View>
-            </View>
-          )}
-        />
+        {searchResults.length > 0 ? (
+          <FlatList
+            data={searchResults}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <GestureHandlerRootView>
+                <Swipeable renderRightActions={() => handleDelete(item.id)}>
+                  <View style={styles.defaultContainer}>
+                    <Image source={item.image} style={styles.avatar} />
+                    <View style={styles.defaultInfo}>
+                      <Text style={styles.defaultName}>
+                        Celebrating {item.celebrated}
+                      </Text>
+                      <Text style={styles.defaultUsername}>
+                        Hosted by {item.host}
+                      </Text>
+                      {item.requested ? (
+                        <TouchableOpacity
+                          style={styles.openSuperbloomButton}
+                          onPress={() => handleViewBloom(item.memory_person)}
+                        >
+                          <Text style={styles.openSuperbloomText}>
+                            open superbloom
+                          </Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          style={styles.requestButton}
+                          onPress={() => handleRequested(item.id)}
+                        >
+                          <Text style={styles.requestText}>
+                            request to join
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                    <View style={styles.date}>
+                      <Text style={styles.month}>{item.month}</Text>
+                      <Text style={styles.days}>
+                        {item.start}-{item.end}
+                      </Text>
+                    </View>
+                  </View>
+                </Swipeable>
+              </GestureHandlerRootView>
+            )}
+          />
+        ) : (
+          <FlatList
+            data={requestedDatabase}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <GestureHandlerRootView>
+                <Swipeable renderRightActions={() => handleDelete(item.id)}>
+                  <View style={styles.defaultContainer}>
+                    <Image source={item.image} style={styles.avatar} />
+                    <View style={styles.defaultInfo}>
+                      <Text style={styles.defaultName}>
+                        Celebrating {item.celebrated}
+                      </Text>
+                      <Text style={styles.defaultUsername}>
+                        Hosted by {item.host}
+                      </Text>
+                      {item.requested ? (
+                        <TouchableOpacity
+                          style={styles.openSuperbloomButton}
+                          onPress={() => handleViewBloom(item.memory_person)}
+                        >
+                          <Text style={styles.openSuperbloomText}>
+                            open superbloom
+                          </Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          style={styles.requestButton}
+                          onPress={() => handleRequested(item.id)}
+                        >
+                          <Text style={styles.requestText}>
+                            request to join
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                    <View style={styles.date}>
+                      <Text style={styles.month}>{item.month}</Text>
+                      <Text style={styles.days}>
+                        {item.start}-{item.end}
+                      </Text>
+                    </View>
+                  </View>
+                </Swipeable>
+              </GestureHandlerRootView>
+            )}
+          />
+        )}
 
         <TouchableOpacity
           style={styles.createSuperbloomButton}
@@ -286,5 +362,17 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#8B7CEC",
     flexShrink: 1,
+  },
+  deleteContainer: {
+    backgroundColor: "red",
+    justifyContent: "center",
+    alignItems: "center",
+    width: 100,
+    height: "100%",
+  },
+  deleteText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });

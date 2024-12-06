@@ -13,44 +13,75 @@ import {
   SafeAreaView,
 } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import Reposts from "@/app/tabs/superbloom/reposts";
 
 export default function Import() {
+  const [importVisable, setVisableImport] = useState(false);
   const router = useRouter();
+  const { postIds } = useLocalSearchParams();
+
+  const handleImport = () => {
+    setVisableImport(true);
+  };
+
+  const handleBack = () => {
+    setVisableImport(false);
+  };
+
+  const handleAdd = () => {
+    router.push("add/chooseprompt");
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={() => router.back()}
-        >
-          <Text style={styles.closeButtonText}>✕</Text>
-        </TouchableOpacity>
-      </View>
+      {importVisable ? (
+        <View>
+          <View>
+            <TouchableOpacity style={styles.closeButton} onPress={handleBack}>
+              <Text style={styles.closeButtonText}>✕</Text>
+            </TouchableOpacity>
+          </View>
 
-      <Text style={styles.title}>add a memory</Text>
-      <Text style={styles.subtitle}>
-        contribute to Mr. Whistler's superbloom
-      </Text>
+          <Text style={styles.title}>import a memory</Text>
+          <Text style={styles.subtitle}>repost from your garden</Text>
+          <Reposts />
+        </View>
+      ) : (
+        <View>
+          <View style={styles.header}>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => router.back()}
+            >
+              <Text style={styles.closeButtonText}>✕</Text>
+            </TouchableOpacity>
+          </View>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.bigButtons}>
-          <Image
-            source={require("@/assets/icons/import-mem.png")}
-            style={styles.buttonIcon}
-            resizeMode={"contain"}
-          />
-          <Text style={styles.buttonText}>add from a garden</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.bigButtons}>
-          <Image
-            source={require("@/assets/icons/write-mem.png")}
-            style={styles.buttonIcon}
-            resizeMode={"contain"}
-          />
-          <Text style={styles.buttonText}>write a new memory</Text>
-        </TouchableOpacity>
-      </View>
+          <Text style={styles.title}>add a memory</Text>
+          <Text style={styles.subtitle}>
+            contribute to Mr. Whistler's superbloom
+          </Text>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.bigButtons} onPress={handleImport}>
+              <Image
+                source={require("@/assets/icons/import-mem.png")}
+                style={styles.buttonIcon}
+                resizeMode={"contain"}
+              />
+              <Text style={styles.buttonText}>add from a garden</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.bigButtons} onPress={handleAdd}>
+              <Image
+                source={require("@/assets/icons/write-mem.png")}
+                style={styles.buttonIcon}
+                resizeMode={"contain"}
+              />
+              <Text style={styles.buttonText}>write a new memory</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
     </SafeAreaView>
   );
 }

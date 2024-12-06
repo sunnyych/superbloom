@@ -11,33 +11,30 @@ import {
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import db from "@/databse/db"; // Assuming you have your database module
-import Toggle from "@/components/Toggle";
 import Dropdown from "@/components/Dropdown";
 
 import { flowerTypes, colorPalette, renderFlower } from "@/utils/flowerUtils";
 import { format, formatDistanceToNow } from "date-fns";
 
-const DateFormatter = (isoDate) => {
-  const date = new Date(isoDate);
+export default function Reposts() {
+  const memory_person = "mr_whistler";
+  const DateFormatter = (isoDate) => {
+    const date = new Date(isoDate);
 
-  // Format as "October 23, 2024"
-  const formattedDate = format(date, "MMMM d, yyyy");
+    // Format as "October 23, 2024"
+    const formattedDate = format(date, "MMMM d, yyyy");
 
-  // Format as "2 hours ago"
-  const relativeTime = formatDistanceToNow(date, { addSuffix: true });
+    // Format as "2 hours ago"
+    const relativeTime = formatDistanceToNow(date, { addSuffix: true });
 
-  const words = relativeTime.split(" ");
-  const timeScale = words.length > 1 ? words[words.length - 2] : null;
-  if (timeScale === "days" || timeScale === "hours") {
-    return relativeTime;
-  }
-  return formattedDate;
-};
-
-const Collage = () => {
+    const words = relativeTime.split(" ");
+    const timeScale = words.length > 1 ? words[words.length - 2] : null;
+    if (timeScale === "days" || timeScale === "hours") {
+      return relativeTime;
+    }
+    return formattedDate;
+  };
   const router = useRouter();
-  const { postIds } = useLocalSearchParams(); // Get post IDs from query params
-  const [isToggled, setIsToggled] = useState(true);
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [name, setName] = useState(null);
@@ -67,45 +64,31 @@ const Collage = () => {
     "song.jpg": require("../../../assets/posts/song.jpg"),
   };
 
-  // Toggle function to navigate back to the garden
-  const handleToggle = () => {
-    // const newToggleState = !isToggled;
-    // setIsToggled(newToggleState);
-
-    // if (!newToggleState) {
-    //   router.push("/tabs/home");
-    // }
-    router.back();
-  };
-
   // Fetch posts based on the postIds passed in the URL
   useEffect(() => {
     const fetchPosts = async () => {
-      if (postIds) {
-        const ids = postIds.split(","); // Convert the comma-separated string into an array of IDs
-        try {
-          const { data, error } = await db
-            .from("post")
-            .select("*")
-            .in("id", ids); // Fetch posts based on the received IDs
+      try {
+        const { data, error } = await db
+          .from("post")
+          .select("*")
+          .eq("memory_person", memory_person)
+          .eq("added_superbloom", true);
 
-          if (error) {
-            console.error("Error fetching posts:", error.message);
-            return;
-          }
-          setPosts(data || []);
-          setName(data[0].memory_person);
-          console.log("name", name);
-        } catch (err) {
-          console.error("Error fetching posts:", err);
-        } finally {
-          setIsLoading(false);
+        if (error) {
+          console.error("Error fetching posts:", error.message);
+          return;
         }
+        setPosts(data || []);
+        console.log("name", name);
+      } catch (err) {
+        console.error("Error fetching posts:", err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchPosts();
-  }, [postIds]);
+  }, []);
 
   // Loading state
   if (isLoading) {
@@ -128,7 +111,7 @@ const Collage = () => {
         </View>
         <View>
           <Text style={styles.title}>in memory of</Text>
-          <Text style={styles.subtitle}>{name}</Text>
+          <Text style={styles.subtitle}>Mr. Whistler</Text>
         </View>
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -145,9 +128,6 @@ const Collage = () => {
                 )}
               </View>
 
-              {/* username text */}
-              <Text style={styles.username}>@{item.username}</Text>
-
               {/* Post Text */}
               <Text style={styles.text}>{item.text}</Text>
 
@@ -161,18 +141,13 @@ const Collage = () => {
           </View>
         ))}
       </ScrollView>
-
-      <View style={styles.toggleContainer}>
-        <Toggle onToggle={handleToggle} isEnabled={isToggled} />
-      </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f4ff",
     padding: 16,
   },
   scrollContainer: {
@@ -201,23 +176,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontFamily: "Rubik_700Bold",
   },
-  toggleContainer: {
-    position: "absolute",
-    bottom: 16,
-    left: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 120,
-  },
-  toggleIcon: {
-    marginLeft: 10,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#9d82ff",
-    justifyContent: "center",
-    alignItems: "center",
-  },
+
   icon: {
     fontSize: 18,
     color: "#ffffff",
@@ -290,5 +249,3 @@ const styles = StyleSheet.create({
     right: 0,
   },
 });
-
-export default Collage;
