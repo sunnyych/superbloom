@@ -124,7 +124,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginTop: 40,
-
     fontFamily: "SourceSerifPro_700Bold",
   },
   subtitle: {
@@ -213,6 +212,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#8B7CEC",
+    fontFamily: "Rubik_500Medium",
   },
 });
 

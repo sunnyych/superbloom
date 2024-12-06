@@ -12,6 +12,8 @@ import {
   StyleSheet,
 } from "react-native";
 import { useRouter } from "expo-router";
+import { FontAwesome6 } from "@expo/vector-icons";
+
 import db from "@/databse/db";
 
 const AddFriend = () => {
@@ -58,7 +60,7 @@ const AddFriend = () => {
           onChangeText={setSearchQuery}
         />
         <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-          <Text style={styles.searchButtonText}>🔍</Text>
+          <FontAwesome6 size={14} name="magnifying-glass" color="white" />
         </TouchableOpacity>
       </View>
       {searchResults.length > 0 && (
@@ -104,6 +106,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f8f4ff",
     padding: 16,
+    marginBottom: 120,
   },
   closeButton: {
     position: "absolute",
@@ -126,13 +129,15 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     textAlign: "center",
-    marginTop: 40,
+    marginTop: 80,
+    fontFamily: "SourceSerifPro_700Bold",
   },
   subtitle: {
     fontSize: 16,
     textAlign: "center",
     color: "#7f7f7f",
     marginBottom: 20,
+    fontFamily: "SourceSerifPro_700Bold_Italic",
   },
   searchContainer: {
     flexDirection: "row",
@@ -153,6 +158,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#7f7f7f",
     paddingHorizontal: 8,
+    fontFamily: "Rubik_400Regular",
   },
   searchButton: {
     backgroundColor: "#9d82ff",
@@ -225,9 +231,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 16,
     left: 16,
-    backgroundColor: "#dcd6ff",
-    borderRadius: 16,
-    paddingHorizontal: 20,
+    backgroundColor: "#EEE7FF",
+    borderRadius: 25,
+    paddingHorizontal: 30,
     paddingVertical: 10,
   },
   backButtonText: {

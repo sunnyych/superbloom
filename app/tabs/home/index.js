@@ -214,7 +214,7 @@ export default function OuterGarden() {
         <View style={styles.profileContainer}>
           <Image
             style={styles.profilePic}
-            source={require("@/assets/matcha.jpg")}
+            source={require("@/assets/pfps/mary.png")}
           ></Image>
         </View>
         <Dropdown />

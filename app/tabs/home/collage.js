@@ -122,7 +122,7 @@ const Collage = () => {
         <View>
           <Image
             style={styles.profilePic}
-            source={require("@/assets/matcha.jpg")}
+            source={require("@/assets/pfps/mary.png")}
           />
         </View>
         <View>
