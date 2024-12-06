@@ -15,11 +15,14 @@ import {
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import Reposts from "@/app/tabs/superbloom/reposts";
+import { useSuperbloom } from "@/utils/SuperbloomContext";
+import { set } from "date-fns";
 
 export default function Import() {
   const [importVisable, setVisableImport] = useState(false);
   const router = useRouter();
   const { postIds } = useLocalSearchParams();
+  const { postBloom } = useSuperbloom();
 
   const handleImport = () => {
     setVisableImport(true);
@@ -30,6 +33,7 @@ export default function Import() {
   };
 
   const handleAdd = () => {
+    postBloom(true);
     router.push("add/chooseprompt");
   };
 
@@ -45,7 +49,9 @@ export default function Import() {
 
           <Text style={styles.title}>import a memory</Text>
           <Text style={styles.subtitle}>repost from your garden</Text>
-          <Reposts />
+          <View style={styles.reposts}>
+            <Reposts />
+          </View>
         </View>
       ) : (
         <View>
@@ -147,5 +153,9 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     height: 40,
     marginRight: 20,
+  },
+  reposts: {
+    height: 360,
+    paddingHorizontal: 20,
   },
 });

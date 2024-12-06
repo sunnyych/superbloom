@@ -10,7 +10,7 @@ export const database = [
     memory_person: "mr-whistler",
     host: "Myan Ngo",
     description:
-      "A celebration of Mr. Whistler's life, 1 year since his passing. He was the best kitty ever.",
+      "A celebration of Mr. Whistler's life, 1 year since his passing. He was the best kitty ever. Add memories and moments for friends and family.",
     month: "Dec",
     start: "06",
     end: "17",
@@ -22,7 +22,8 @@ export const database = [
     celebrated: "John White",
     memory_person: "john-white",
     host: "Sunny Yu",
-    description: "A celebration of John's life, 1 year since his passing.",
+    description:
+      "A celebration of John's life, 1 year since his passing. Add memories and moments closer to the start of superbloom date. In meantime, we invite you to populate your own garden.",
     month: "Jan",
     start: "13",
     end: "15",
