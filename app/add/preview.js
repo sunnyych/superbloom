@@ -33,7 +33,32 @@ const addMemory = async (
     return;
   }
 
+  let mediaUrl = null;
+
   try {
+    // If media exists, upload to Supabase
+    if (media) {
+      const mediaName = `memory-${Date.now()}`; // Unique name for the media
+      const { data: uploadData, error: uploadError } = await db.storage
+        .from("images")
+        .upload(mediaName, {
+          uri: media,
+          type: "image/jpeg", // Adjust the type based on your media
+          name: mediaName,
+        });
+
+      if (uploadError) {
+        console.error("Error uploading media:", uploadError);
+        Alert.alert("Error", "Failed to upload media.");
+        return;
+      }
+
+      // Get the public URL of the uploaded media
+      const { data: publicData } = db.storage.from("images").getPublicUrl(mediaName);
+      mediaUrl = publicData.publicUrl;
+    }
+
+    // Insert the memory into the database
     const { error } = await db.from("post").insert([
       {
         username: hardcodedUsername,
@@ -41,7 +66,7 @@ const addMemory = async (
         garden_id: hardcodedGardenId,
         memory_person: hardcodedMemoryPerson,
         text: text,
-        media: media || null,
+        media: mediaUrl, // Use the public URL here
         public: isPublic,
         time_stamp: new Date().toISOString(),
         flower_color: selectedColor,
@@ -61,6 +86,7 @@ const addMemory = async (
   }
 };
 
+
 const PostPreview = () => {
   const router = useRouter();
   const { text, media, isPublic } = usePost();
@@ -78,31 +104,7 @@ const PostPreview = () => {
       </View>
       <Text style={styles.title}>plant a memory</Text>
       <Text style={styles.subtitle}>preview your post</Text>
-
-      <View style={styles.popupContent}>
-        <View style={styles.paddedContent}>
-          <View style={styles.iconContainer}>
-            {renderFlower(
-              flowerTypes[selectedType].BloomComponent,
-              flowerTypes[selectedType].StemComponent,
-              selectedColor,
-              "#94CDA0",
-              60
-            )}
-          </View>
-
-          {/* Post Text */}
-          <Text style={styles.postText}>{text}</Text>
-
-          {/* Date */}
-          <Text style={styles.date}>
-            {new Date().toLocaleString("en-US", { hour12: true })}
-          </Text>
-        </View>
-        {/* Image */}
-        {media ? <Image source={{ uri: media }} style={styles.image} /> : null}
-      </View>
-      {/* <View style={styles.post}>
+      <View style={styles.post}>
         <View style={styles.previewContainer}>
           {renderFlower(
             flowerTypes[selectedType]?.BloomComponent,
@@ -121,8 +123,7 @@ const PostPreview = () => {
         ) : (
           <Text style={styles.placeholderText}>No image uploaded</Text>
         )}
-      </View> */}
-
+      </View>
       <View style={styles.navigationButtons}>
         <TouchableOpacity
           style={[styles.navButton, styles.backButton]}
@@ -202,11 +203,27 @@ const styles = StyleSheet.create({
     elevation: 2,
     padding: 16,
   },
+  previewContainer: {
+    alignItems: "center",
+    marginBottom: 12,
+  },
   postText: {
     fontSize: 16,
     color: "#7f7f7f",
     lineHeight: 22,
     marginBottom: 12,
+  },
+  date: {
+    fontSize: 14,
+    color: "#b0b0b0",
+    textAlign: "right",
+    marginBottom: 16,
+  },
+  postImage: {
+    width: 300,
+    height: 300,
+    borderRadius: 12,
+    marginTop: 10,
   },
   placeholderText: {
     textAlign: "center",
@@ -241,46 +258,5 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontFamily: "Rubik_500Medium",
-  },
-  popupContent: {
-    width: "90%",
-    backgroundColor: "#fff",
-    borderRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
-    alignSelf: "center",
-  },
-  paddedContent: {
-    padding: 20,
-  },
-  iconContainer: {
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  icon: {
-    fontSize: 28,
-  },
-  text: {
-    fontSize: 16,
-    color: "#4a4a4a",
-    lineHeight: 22,
-    marginBottom: 16,
-    fontFamily: "Rubik_400Regular",
-  },
-  date: {
-    fontSize: 14,
-    color: "#a0a0a0",
-    textAlign: "right",
-    marginBottom: 16,
-    fontFamily: "Rubik_500Medium",
-  },
-  image: {
-    width: "100%",
-    height: 250,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
   },
 });
