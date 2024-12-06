@@ -194,9 +194,7 @@ export default function Superbloom() {
         <Animated.View
           style={[styles.fadeTextContainer, { opacity: fadeAnim }]}
         >
-          <Text style={styles.fadingText}>
-            {description} Add memories and moments for friends and family.
-          </Text>
+          <Text style={styles.fadingText}>{description}</Text>
           {memory_person === "mr-whistler" && (
             <TouchableOpacity onPress={handleTap} style={styles.fadingButton}>
               <Text style={styles.fadingButtonText}>press to start</Text>
@@ -231,14 +229,17 @@ export default function Superbloom() {
           />
         )}
 
-        <TouchableOpacity
-          style={styles.postButtonContainer}
-          onPress={handleImport}
-        >
-          <View style={styles.postButton}>
-            <FontAwesome size={36} name="plus" color="white" />
-          </View>
-        </TouchableOpacity>
+        {memory_person === "mr-whistler" && (
+          <TouchableOpacity
+            style={styles.postButtonContainer}
+            onPress={handleImport}
+          >
+            <View style={styles.postButton}>
+              <FontAwesome size={36} name="plus" color="white" />
+            </View>
+          </TouchableOpacity>
+        )}
+
         {memory_person === "mr-whistler" && (
           <View style={styles.toggleContainer}>
             <Toggle onToggle={handleToggle} isEnabled={isToggled} />

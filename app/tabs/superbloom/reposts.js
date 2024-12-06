@@ -17,7 +17,7 @@ import { flowerTypes, colorPalette, renderFlower } from "@/utils/flowerUtils";
 import { format, formatDistanceToNow } from "date-fns";
 
 export default function Reposts() {
-  const memory_person = "mr_whistler";
+  const memory_person = "mr-whistler";
   const DateFormatter = (isoDate) => {
     const date = new Date(isoDate);
 
@@ -72,7 +72,7 @@ export default function Reposts() {
           .from("post")
           .select("*")
           .eq("memory_person", memory_person)
-          .eq("added_superbloom", true);
+          .eq("added_superbloom", false);
 
         if (error) {
           console.error("Error fetching posts:", error.message);
@@ -90,6 +90,28 @@ export default function Reposts() {
     fetchPosts();
   }, []);
 
+  // add to superbloom here
+  const [addToBloom, setAddedToBloom] = useState({});
+  const [showDone, setShowDone] = useState(false);
+
+  const handleAddToBloom = async (id) => {
+    try {
+      const { data, error } = await db
+        .from("post")
+        .update({ added_superbloom: true })
+        .eq("id", id);
+
+      if (error) {
+        console.error("Error adding to Bloom", error);
+        return;
+      }
+      setAddedToBloom((prev) => ({ ...prev, [id]: true }));
+      setShowDone(true);
+    } catch (err) {
+      console.error("Error adding to Bloom".err);
+    }
+  };
+
   // Loading state
   if (isLoading) {
     return (
@@ -101,7 +123,7 @@ export default function Reposts() {
   console.log(posts);
 
   return (
-    <View style={styles.container}>
+    <View>
       <View style={styles.header}>
         <View>
           <Image
@@ -128,19 +150,40 @@ export default function Reposts() {
                 )}
               </View>
 
+              {/* username text */}
+              <Text style={styles.username}>@{item.username}</Text>
+
               {/* Post Text */}
               <Text style={styles.text}>{item.text}</Text>
 
               {/* Date */}
               <Text style={styles.date}>{DateFormatter(item.time_stamp)}</Text>
             </View>
-            {/* Image */}
+            {/* Image
             {item.media ? (
               <Image source={postImages[item.media]} style={styles.image} />
-            ) : null}
+            ) : null} */}
+            <View style={styles.addButtonContainer}>
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => handleAddToBloom(item.id)}
+              >
+                <Text style={styles.addButtonText}>import</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         ))}
       </ScrollView>
+      {showDone && (
+        <View style={styles.doneButtonContainer}>
+          <TouchableOpacity
+            style={styles.doneButton}
+            onPress={() => router.back()}
+          >
+            <Text style={styles.doneButtonText}>Done</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }
@@ -157,7 +200,7 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: "center",
-    marginTop: 65,
+    marginTop: 10,
     marginBottom: 20,
     marginHorizontal: 20,
     flexDirection: "row",
@@ -219,7 +262,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#a0a0a0",
     textAlign: "right",
-    marginBottom: 16,
     fontFamily: "Rubik_500Medium",
   },
   image: {
@@ -247,5 +289,40 @@ const styles = StyleSheet.create({
   dropdown: {
     position: "absolute",
     right: 0,
+  },
+  addButtonContainer: {
+    width: "40%",
+    margin: 10,
+  },
+  addButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+    backgroundColor: "#8B7CEC",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  addButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  doneButtonContainer: {
+    width: "40%",
+    marginTop: 10,
+    alignSelf: "flex-end",
+  },
+  doneButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+    backgroundColor: "#8B7CEC",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  doneButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });

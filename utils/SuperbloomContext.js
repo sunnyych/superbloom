@@ -5,6 +5,12 @@ const SuperbloomContext = createContext();
 
 export const SuperbloomProvider = ({ children }) => {
   const [requestedDatabase, setRequestedDatabase] = useState(database);
+  // for add new memory
+  const [addedSuperbloom, setAddedSuperbloom] = useState(false);
+
+  const postBloom = (bool) => {
+    setAddedSuperbloom(bool);
+  };
 
   const addBloom = (newBloom) => {
     setRequestedDatabase((prevDatabase) => [...prevDatabase, newBloom]);
@@ -26,7 +32,14 @@ export const SuperbloomProvider = ({ children }) => {
 
   return (
     <SuperbloomContext.Provider
-      value={{ requestedDatabase, addBloom, updateRequestStatus, deleteBloom }}
+      value={{
+        requestedDatabase,
+        addBloom,
+        updateRequestStatus,
+        deleteBloom,
+        postBloom,
+        addedSuperbloom,
+      }}
     >
       {children}
     </SuperbloomContext.Provider>
