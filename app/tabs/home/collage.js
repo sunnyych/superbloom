@@ -138,9 +138,9 @@ const Collage = () => {
           <Text style={styles.title}>in memory of</Text>
           <Text style={styles.subtitle}>{PROFILE_NAMES[name]}</Text>
         </View>
-        <View style={styles.dropdown}>
+        {/* <View style={styles.dropdown}>
           <Dropdown />
-        </View>
+        </View> */}
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {posts.map((item) => (

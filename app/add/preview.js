@@ -134,26 +134,6 @@ const PostPreview = () => {
           <Text style={styles.placeholderText}>No image uploaded</Text>
         )}
       </View>
-      {/* <View style={styles.post}>
-        <View style={styles.previewContainer}>
-          {renderFlower(
-            flowerTypes[selectedType]?.BloomComponent,
-            flowerTypes[selectedType]?.StemComponent,
-            selectedColor,
-            "#94CDA0",
-            60
-          )}
-        </View>
-        <Text style={styles.postText}>{text}</Text>
-        <Text style={styles.date}>
-          {new Date().toLocaleString("en-US", { hour12: true })}
-        </Text>
-        {media ? (
-          <Image source={{ uri: media }} style={styles.postImage} />
-        ) : (
-          <Text style={styles.placeholderText}>No image uploaded</Text>
-        )}
-      </View> */}
       <View style={styles.toggleContainer}>
         <Text style={styles.toggleLabel}>set post {"\n"}visibility</Text>
         <View style={styles.radioGroup}>

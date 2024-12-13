@@ -17,9 +17,9 @@ import { useRouter } from "expo-router";
 const fallbackImage = require("@/assets/previews/preview-garden1.png"); // Use logo.png as the fallback image
 
 const gardenImages = {
-  1: require("@/assets/previews/preview-garden1.png"),
-  2: require("@/assets/previews/preview-garden2.png"),
-  3: require("@/assets/previews/preview-garden3.png"),
+  10: require("@/assets/previews/preview-garden1.png"),
+  11: require("@/assets/previews/preview-garden2.png"),
+  12: require("@/assets/previews/preview-garden3.png"),
 };
 
 const Profile = () => {
@@ -99,17 +99,16 @@ const Profile = () => {
                 ]}
                 onPress={() => handleSelectGarden(item.garden_id)} // Select garden
               >
-                <Image
-                  source={gardenImages[item.garden_id]}
-                  style={styles.gardenImage}
-                />
-                <View style={styles.textContainer}>
-                  <Text style={styles.gardenName}>in memory of</Text>
-                  <Text style={styles.memoryPerson}>{item.garden_name}</Text>
-                  <Text style={styles.gardenYear}>{item.year || "N/A"}</Text>
-                  {/* <Text style={styles.gardenId}>
-                    Garden ID: {item.garden_id}
-                  </Text> */}
+                <View style={styles.previewContainer}>
+                  <Image
+                    source={gardenImages[item.garden_id]}
+                    style={styles.gardenImage}
+                  />
+                  <View style={styles.textContainer}>
+                    <Text style={styles.gardenName}>in memory of</Text>
+                    <Text style={styles.memoryPerson}>{item.garden_name}</Text>
+                    <Text style={styles.gardenYear}>{item.year || "N/A"}</Text>
+                  </View>
                 </View>
               </TouchableOpacity>
             )}
@@ -129,7 +128,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: "#f8f4ff",
-    marginBottom: 80,
+    marginBottom: 55,
   },
   loaderContainer: {
     flex: 1,
@@ -177,11 +176,14 @@ const styles = StyleSheet.create({
     borderColor: "#8B7CEC", // Border color for selected garden
   },
   gardenImage: {
+    position: "absolutie",
     width: "100%",
-    height: 100,
+    height: 120,
     resizeMode: "cover",
-    borderRadius: 14,
-    marginBottom: 8,
+    borderTopLeftRadius: 14,
+    borderTopRightRadius: 14,
+    // marginBottom: 8,
+    opacity: 0.8,
   },
   gardenName: {
     fontSize: 18,
@@ -215,6 +217,11 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     padding: 10,
+  },
+  previewContainer: {
+    overflow: "hidden",
+    borderTopLeftRadius: 14,
+    borderTopRightRadius: 14,
   },
 });
 

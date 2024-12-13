@@ -1,7 +1,6 @@
 import { useBackground } from "./_layout";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import db from "@/databse/db";
-// import { useFocusEffect } from "@react-navigation/native";
 import Dropdown from "@/components/Dropdown";
 import Toggle from "@/components/Toggle";
 import Flower from "@/components/Flower";
@@ -96,7 +95,7 @@ export default function OuterGarden() {
         // Add random positions to each post
         const postsWithPositions = data.map((post) => ({
           ...post,
-          randomTop: getRandomPosition(height * 0.05, height * 0.15), // Random top position
+          randomTop: getRandomPosition(height * 0.1, height * 0.15), // Random top position
           randomLeft: getRandomPosition(width * 0.02, width * 0.2), // Random left position
         }));
         setPosts(postsWithPositions); // Set posts with positions
@@ -127,10 +126,6 @@ export default function OuterGarden() {
     flower_type,
     flower_color
   ) => {
-    // Navigate to the post page, passing post data
-    // router.push(
-    //   `/tabs/community/post?text=${text}&media=${media}&time_stamp=${time_stamp}`
-    // );
     setSelectedPost({ text, media, time_stamp, flower_type, flower_color });
     setModalVisible(true);
   };

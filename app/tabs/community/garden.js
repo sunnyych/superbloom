@@ -14,6 +14,26 @@ import { useRouter, useLocalSearchParams, useFocusEffect } from "expo-router";
 import db from "@/databse/db";
 import { flowerTypes, colorPalette, renderFlower } from "@/utils/flowerUtils";
 import Toggle from "@/components/Toggle";
+import PostModal from "@/components/PostModal";
+
+const flowerImages = {
+  0: require("../../../assets/flowers/flower0.jpg"),
+  1: require("../../../assets/flowers/flower1.jpg"),
+  2: require("../../../assets/flowers/flower2.jpg"),
+  3: require("../../../assets/flowers/flower3.jpg"),
+};
+
+const localImages = {
+  "john-white": require("../../../assets/profiles/john-white.jpg"),
+  "mike-smith": require("../../../assets/profiles/mike-smith.jpg"),
+  "susan-brown": require("../../../assets/profiles/susan-brown.jpg"),
+  "jack-fan": require("../../../assets/profiles/jack-fan.jpg"),
+  "mr-whistler": require("../../../assets/profiles/mr-whistler.jpg"),
+  "isa-bella": require("../../../assets/profiles/isa-bella.jpg"),
+  "jimmy-d": require("../../../assets/profiles/jimmy-d.jpg"),
+  "peter-snake": require("../../../assets/profiles/peter-snake.jpg"),
+  "caroline-meyer": require("../../../assets/profiles/caroline-meyer.jpg"),
+};
 
 const Garden = () => {
   const router = useRouter();
@@ -23,27 +43,11 @@ const Garden = () => {
   const [user, setUser] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { gardenName } = useLocalSearchParams();
+  // Post modal when a flower is clicked
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
 
   console.log("garden_name", gardenName);
-
-  const flowerImages = {
-    0: require("../../../assets/flowers/flower0.jpg"),
-    1: require("../../../assets/flowers/flower1.jpg"),
-    2: require("../../../assets/flowers/flower2.jpg"),
-    3: require("../../../assets/flowers/flower3.jpg"),
-  };
-
-  const localImages = {
-    "john-white": require("../../../assets/profiles/john-white.jpg"),
-    "mike-smith": require("../../../assets/profiles/mike-smith.jpg"),
-    "susan-brown": require("../../../assets/profiles/susan-brown.jpg"),
-    "jack-fan": require("../../../assets/profiles/jack-fan.jpg"),
-    "mr-whistler": require("../../../assets/profiles/mr-whistler.jpg"),
-    "isa-bella": require("../../../assets/profiles/isa-bella.jpg"),
-    "jimmy-d": require("../../../assets/profiles/jimmy-d.jpg"),
-    "peter-snake": require("../../../assets/profiles/peter-snake.jpg"),
-    "caroline-meyer": require("../../../assets/profiles/caroline-meyer.jpg"),
-  };
 
   // Function to get a random position
   const getRandomPosition = (max) => {
@@ -109,9 +113,16 @@ const Garden = () => {
     flower_color
   ) => {
     // Navigate to the post page, passing post data
-    router.push(
-      `/tabs/community/post?text=${text}&media=${media}&time_stamp=${time_stamp}&flower_type=${flower_type}&flower_color=${flower_color}`
-    );
+    // router.push(
+    //   `/tabs/community/post?text=${text}&media=${media}&time_stamp=${time_stamp}&flower_type=${flower_type}&flower_color=${flower_color}`
+    // );
+    setSelectedPost({ text, media, time_stamp, flower_type, flower_color });
+    setModalVisible(true);
+  };
+
+  const handleBack = () => {
+    setModalVisible(false); // Close the modal
+    setTimeout(() => setSelectedPost(null), 100);
   };
 
   if (isLoading) {
@@ -216,6 +227,17 @@ const Garden = () => {
           <Text style={styles.toggleIconText}>📰</Text>
         </TouchableOpacity>
       </View> */}
+      {modalVisible && selectedPost && (
+        <PostModal
+          visible={modalVisible}
+          onClose={handleBack} // Close the modal
+          text={selectedPost.text} // Pass the selected post's data
+          media={selectedPost.media}
+          timeStamp={selectedPost.time_stamp}
+          flower_color={selectedPost.flower_color}
+          flower_type={selectedPost.flower_type}
+        />
+      )}
     </SafeAreaView>
   );
 };

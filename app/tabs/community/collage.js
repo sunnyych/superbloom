@@ -32,6 +32,44 @@ const DateFormatter = (isoDate) => {
   return formattedDate;
 };
 
+const postImages = {
+  "star.jpg": require("../../../assets/posts/star.jpg"),
+  "game.jpg": require("../../../assets/posts/game.jpg"),
+  "cube.jpg": require("../../../assets/posts/cube.jpg"),
+  "walks.jpg": require("../../../assets/posts/walks.jpg"),
+  "cat2.jpg": require("../../../assets/posts/cat2.jpg"),
+  "pancake.jpg": require("../../../assets/posts/pancake.jpg"),
+  "jimmy2.jpg": require("../../../assets/posts/jimmy2.jpg"),
+  "tea.jpg": require("../../../assets/posts/tea.jpg"),
+  "stories.jpg": require("../../../assets/posts/stories.jpg"),
+  "jimmy1.jpg": require("../../../assets/posts/jimmy1.jpg"),
+  "baking.jpg": require("../../../assets/posts/baking.jpg"),
+  "cat1.jpg": require("../../../assets/posts/cat1.jpg"),
+  "santa_monica.jpg": require("../../../assets/posts/santa_monica.jpg"),
+  "whiteboard.jpg": require("../../../assets/posts/whiteboard.jpg"),
+  "book.jpg": require("../../../assets/posts/book.jpg"),
+  "knitting.jpg": require("../../../assets/posts/knitting.jpg"),
+  "coffee.jpg": require("../../../assets/posts/coffee.jpg"),
+  "burger.jpg": require("../../../assets/posts/burger.jpg"),
+  "soccer.jpg": require("../../../assets/posts/soccer.jpg"),
+  "sunset.jpg": require("../../../assets/posts/sunset.jpg"),
+  "matcha.jpg": require("../../../assets/posts/matcha.jpg"),
+  "hike.jpg": require("../../../assets/posts/hike.jpg"),
+  "song.jpg": require("../../../assets/posts/song.jpg"),
+};
+
+const localImages = {
+  "john-white": require("../../../assets/profiles/john-white.jpg"),
+  "mike-smith": require("../../../assets/profiles/mike-smith.jpg"),
+  "susan-brown": require("../../../assets/profiles/susan-brown.jpg"),
+  "jack-fan": require("../../../assets/profiles/jack-fan.jpg"),
+  "mr-whistler": require("../../../assets/profiles/mr-whistler.jpg"),
+  "isa-bella": require("../../../assets/profiles/isa-bella.jpg"),
+  "jimmy-d": require("../../../assets/profiles/jimmy-d.jpg"),
+  "peter-snake": require("../../../assets/profiles/peter-snake.jpg"),
+  "caroline-meyer": require("../../../assets/profiles/caroline-meyer.jpg"),
+};
+
 const Collage = () => {
   const router = useRouter();
   const { postIds } = useLocalSearchParams(); // Get post IDs from query params
@@ -39,43 +77,6 @@ const Collage = () => {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [name, setName] = useState(null);
-  const postImages = {
-    "star.jpg": require("../../../assets/posts/star.jpg"),
-    "game.jpg": require("../../../assets/posts/game.jpg"),
-    "cube.jpg": require("../../../assets/posts/cube.jpg"),
-    "walks.jpg": require("../../../assets/posts/walks.jpg"),
-    "cat2.jpg": require("../../../assets/posts/cat2.jpg"),
-    "pancake.jpg": require("../../../assets/posts/pancake.jpg"),
-    "jimmy2.jpg": require("../../../assets/posts/jimmy2.jpg"),
-    "tea.jpg": require("../../../assets/posts/tea.jpg"),
-    "stories.jpg": require("../../../assets/posts/stories.jpg"),
-    "jimmy1.jpg": require("../../../assets/posts/jimmy1.jpg"),
-    "baking.jpg": require("../../../assets/posts/baking.jpg"),
-    "cat1.jpg": require("../../../assets/posts/cat1.jpg"),
-    "santa_monica.jpg": require("../../../assets/posts/santa_monica.jpg"),
-    "whiteboard.jpg": require("../../../assets/posts/whiteboard.jpg"),
-    "book.jpg": require("../../../assets/posts/book.jpg"),
-    "knitting.jpg": require("../../../assets/posts/knitting.jpg"),
-    "coffee.jpg": require("../../../assets/posts/coffee.jpg"),
-    "burger.jpg": require("../../../assets/posts/burger.jpg"),
-    "soccer.jpg": require("../../../assets/posts/soccer.jpg"),
-    "sunset.jpg": require("../../../assets/posts/sunset.jpg"),
-    "matcha.jpg": require("../../../assets/posts/matcha.jpg"),
-    "hike.jpg": require("../../../assets/posts/hike.jpg"),
-    "song.jpg": require("../../../assets/posts/song.jpg"),
-  };
-
-  const localImages = {
-    "john-white": require("../../../assets/profiles/john-white.jpg"),
-    "mike-smith": require("../../../assets/profiles/mike-smith.jpg"),
-    "susan-brown": require("../../../assets/profiles/susan-brown.jpg"),
-    "jack-fan": require("../../../assets/profiles/jack-fan.jpg"),
-    "mr-whistler": require("../../../assets/profiles/mr-whistler.jpg"),
-    "isa-bella": require("../../../assets/profiles/isa-bella.jpg"),
-    "jimmy-d": require("../../../assets/profiles/jimmy-d.jpg"),
-    "peter-snake": require("../../../assets/profiles/peter-snake.jpg"),
-    "caroline-meyer": require("../../../assets/profiles/caroline-meyer.jpg"),
-  };
 
   // Toggle function to navigate back to the garden
   const handleToggle = () => {
@@ -116,18 +117,18 @@ const Collage = () => {
     fetchPosts();
   }, [postIds]);
 
-  const handleFlowerPress = (
-    text,
-    media,
-    time_stamp,
-    flower_type,
-    flower_color
-  ) => {
-    // Navigate to the post page, passing post data
-    router.push(
-      `/tabs/community/post?text=${text}&media=${media}&time_stamp=${time_stamp}&flower_type=${flower_type}&flower_color=${flower_color}`
-    );
-  };
+  // const handleFlowerPress = (
+  //   text,
+  //   media,
+  //   time_stamp,
+  //   flower_type,
+  //   flower_color
+  // ) => {
+  //   // Navigate to the post page, passing post data
+  //   router.push(
+  //     `/tabs/community/post?text=${text}&media=${media}&time_stamp=${time_stamp}&flower_type=${flower_type}&flower_color=${flower_color}`
+  //   );
+  // };
 
   // Loading state
   if (isLoading) {
