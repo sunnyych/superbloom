@@ -17,14 +17,11 @@ export const unstable_settings = {
 export default function AddPostLayout() {
   const router = useRouter();
 
-  // for prompt context
   const [selectedPrompt, setSelectedPrompt] = useState(-1);
 
-  // for flower context
   const [selectedType, setSelectedType] = useState(0);
   const [selectedColor, setSelectedColor] = useState(colorPalette[0]);
 
-  // for post context
   const [text, setText] = useState("");
   const [media, setMedia] = useState("");
   const [isPublic, setIsPublic] = useState(true);
@@ -61,7 +58,6 @@ export default function AddPostLayout() {
                       <Text style={styles.backText}>back</Text>
                     </Pressable>
                   ),
-                  // presentation: "modal",
                 }}
               />
               <Stack.Screen
@@ -73,7 +69,6 @@ export default function AddPostLayout() {
                       <Text style={styles.backText}>back</Text>
                     </Pressable>
                   ),
-                  // presentation: "modal",
                 }}
               />
               <Stack.Screen
@@ -85,7 +80,6 @@ export default function AddPostLayout() {
                       <Text style={styles.backText}>back</Text>
                     </Pressable>
                   ),
-                  // presentation: "modal",
                 }}
               />
             </Stack>

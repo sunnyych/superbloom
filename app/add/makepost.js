@@ -13,7 +13,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
-import db from "@/databse/db"; // Supabase client
+import db from "@/databse/db"; 
 import { useRouter } from "expo-router";
 import { usePrompt } from "@/utils/PromptContext";
 import { usePost } from "@/utils/PostContext";
@@ -26,8 +26,7 @@ export default function NewPost() {
   const { selectedPrompt, setSelectedPrompt } = usePrompt();
   const { text, setText, media, setMedia } = usePost();
 
-  // Hardcoded values
-  const hardcodedMemoryPerson = "Mary Chen"; // Hardcoded person
+  const hardcodedMemoryPerson = "Mary Chen"; 
 
   const prompts = [
     "What is your favorite memory of Mary?",
@@ -50,15 +49,15 @@ export default function NewPost() {
       }
 
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images, // Fallback to MediaTypeOptions.Images
+        mediaTypes: ImagePicker.MediaTypeOptions.Images, 
         allowsEditing: true,
         quality: 1,
       });
 
       if (!result.canceled && result.assets && result.assets.length > 0) {
-        const uploadedImageUri = result.assets[0].uri; // Access the image URI
-        setMedia(uploadedImageUri); // Save the image URI
-        console.log("Uploaded Image URI:", uploadedImageUri); // Debugging
+        const uploadedImageUri = result.assets[0].uri; 
+        setMedia(uploadedImageUri); 
+        console.log("Uploaded Image URI:", uploadedImageUri); 
       } else if (result.canceled) {
         console.log("Image selection canceled.");
       } else {

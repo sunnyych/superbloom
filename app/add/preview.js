@@ -13,9 +13,8 @@ import { useFlower } from "@/utils/FlowerContext";
 import { usePost } from "@/utils/PostContext";
 import { useSuperbloom } from "@/utils/SuperbloomContext";
 import { flowerTypes, renderFlower } from "@/utils/flowerUtils";
-import db from "@/databse/db"; // Supabase client
+import db from "@/databse/db"; 
 
-// Hardcoded values
 const hardcodedUsername = "helen-smith";
 const hardcodedUserId = 1;
 const hardcodedGardenId = 1;
@@ -37,14 +36,13 @@ const addMemory = async (
   let mediaUrl = null;
 
   try {
-    // If media exists, upload to Supabase
     if (media) {
-      const mediaName = `memory-${Date.now()}`; // Unique name for the media
+      const mediaName = `memory-${Date.now()}`; 
       const { data: uploadData, error: uploadError } = await db.storage
         .from("images")
         .upload(mediaName, {
           uri: media,
-          type: "image/jpeg", // Adjust the type based on your media
+          type: "image/jpeg", 
           name: mediaName,
         });
 
@@ -54,14 +52,12 @@ const addMemory = async (
         return;
       }
 
-      // Get the public URL of the uploaded media
       const { data: publicData } = db.storage
         .from("images")
         .getPublicUrl(mediaName);
       mediaUrl = publicData.publicUrl;
     }
 
-    // Insert the memory into the database
     const { error } = await db.from("post").insert([
       {
         username: hardcodedUsername,
@@ -69,7 +65,7 @@ const addMemory = async (
         garden_id: hardcodedGardenId,
         memory_person: hardcodedMemoryPerson,
         text: text,
-        media: mediaUrl, // Use the public URL here
+        media: mediaUrl, 
         public: isPublic,
         time_stamp: new Date().toISOString(),
         flower_color: selectedColor,

@@ -8,20 +8,18 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import db from "@/databse/db"; // Supabase client
+import db from "@/databse/db"; 
 import { useRouter } from "expo-router";
 import { usePrompt } from "@/utils/PromptContext";
 
 export default function ChoosePrompt() {
-  // States for user input
   const router = useRouter();
   const { selectedPrompt, setSelectedPrompt } = usePrompt();
 
-  // Hardcoded values
   const hardcodedUsername = "helen-smith";
   const hardcodedUserId = 1;
   const hardcodedGardenId = 1;
-  const hardcodedMemoryPerson = "John Doe"; // Hardcoded person
+  const hardcodedMemoryPerson = "John Doe"; 
 
   const prompts = [
     "What is your favorite memory of Mary?",
