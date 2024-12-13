@@ -24,7 +24,7 @@ export default function NewPost() {
   const router = useRouter();
 
   const { selectedPrompt, setSelectedPrompt } = usePrompt();
-  const { text, setText, media, setMedia, isPublic, setIsPublic } = usePost();
+  const { text, setText, media, setMedia } = usePost();
 
   // Hardcoded values
   const hardcodedMemoryPerson = "Mary Chen"; // Hardcoded person
@@ -108,7 +108,7 @@ export default function NewPost() {
 
         <View style={styles.mainContainer}>
           <View style={styles.memoryPersonContainer}>
-            <Text style={styles.memoryPersonLabel}>Memory Person:</Text>
+            <Text style={styles.memoryPersonLabel}>writing about</Text>
             <Text style={styles.memoryPersonValue}>
               {hardcodedMemoryPerson}
             </Text>
@@ -143,11 +143,14 @@ export default function NewPost() {
                   }
                 />
               ) : (
-                <Feather name="image" size={150} color="#ccc" />
+                <View style={styles.addImageContainer}>
+                  <Feather name="upload" size={50} color="#8B7CEC" />
+                  <Text style={styles.addImageText}>choose file to upload</Text>
+                </View>
               )}
             </TouchableOpacity>
           </View>
-
+          {/* 
           <View style={styles.toggleContainer}>
             <Text style={styles.toggleLabel}>Public:</Text>
             <Switch
@@ -156,7 +159,7 @@ export default function NewPost() {
               thumbColor={isPublic ? "#9d82ff" : "#ccc"}
               trackColor={{ false: "#ccc", true: "#e6e0ff" }}
             />
-          </View>
+          </View> */}
         </View>
 
         <View style={styles.navigationButtons}>
@@ -218,6 +221,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginRight: 8,
+    fontFamily: "SourceSerifPro_700Bold_Italic",
   },
   memoryPersonValue: {
     fontSize: 18,
@@ -226,7 +230,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 8,
+    borderRadius: 12,
     padding: 12,
     marginBottom: 12,
     backgroundColor: "white",
@@ -337,10 +341,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   uploadedImage: {
-    width: 150,
+    width: "100%",
     height: 150,
     marginTop: 0,
     borderRadius: 8,
+    resizeMode: "cover",
   },
   clearButton: {
     position: "absolute",
@@ -353,5 +358,20 @@ const styles = StyleSheet.create({
     justifyContent: "left",
     alignItems: "center",
     elevation: 2, // Shadow for better visibility
+    left: 10,
+    top: 10,
+  },
+  addImageContainer: {
+    backgroundColor: "#E8E2FE",
+    borderRadius: 12,
+    width: "100%",
+    alignItems: "center",
+    padding: 20,
+  },
+  addImageText: {
+    color: "#AEA5EC",
+    fontSize: 18,
+    fontFamily: "SourceSerifPro_700Bold_Italic",
+    paddingVertical: 10,
   },
 });

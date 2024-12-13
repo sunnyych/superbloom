@@ -55,7 +55,9 @@ const addMemory = async (
       }
 
       // Get the public URL of the uploaded media
-      const { data: publicData } = db.storage.from("images").getPublicUrl(mediaName);
+      const { data: publicData } = db.storage
+        .from("images")
+        .getPublicUrl(mediaName);
       mediaUrl = publicData.publicUrl;
     }
 
@@ -87,10 +89,9 @@ const addMemory = async (
   }
 };
 
-
 const PostPreview = () => {
   const router = useRouter();
-  const { text, media, isPublic } = usePost();
+  const { text, media, isPublic, setIsPublic } = usePost();
   const { selectedType, selectedColor } = useFlower();
   const { addedSuperbloom, postBloom } = useSuperbloom();
 
@@ -106,7 +107,34 @@ const PostPreview = () => {
       </View>
       <Text style={styles.title}>plant a memory</Text>
       <Text style={styles.subtitle}>preview your post</Text>
-      <View style={styles.post}>
+      <View style={styles.popupContent}>
+        <View style={styles.paddedContent}>
+          <View style={styles.iconContainer}>
+            {renderFlower(
+              flowerTypes[selectedType]?.BloomComponent,
+              flowerTypes[selectedType]?.StemComponent,
+              selectedColor,
+              "#94CDA0",
+              60
+            )}
+          </View>
+
+          {/* Post Text */}
+          <Text style={styles.text}>{text}</Text>
+
+          {/* Date */}
+          <Text style={styles.date}>
+            {new Date().toLocaleString("en-US", { hour12: true })}
+          </Text>
+        </View>
+        {/* Image */}
+        {media ? (
+          <Image source={{ uri: media }} style={styles.image} />
+        ) : (
+          <Text style={styles.placeholderText}>No image uploaded</Text>
+        )}
+      </View>
+      {/* <View style={styles.post}>
         <View style={styles.previewContainer}>
           {renderFlower(
             flowerTypes[selectedType]?.BloomComponent,
@@ -125,6 +153,41 @@ const PostPreview = () => {
         ) : (
           <Text style={styles.placeholderText}>No image uploaded</Text>
         )}
+      </View> */}
+      <View style={styles.toggleContainer}>
+        <Text style={styles.toggleLabel}>set post {"\n"}visibility</Text>
+        <View style={styles.radioGroup}>
+          <TouchableOpacity
+            style={styles.radioOption}
+            onPress={() => setIsPublic(false)}
+          >
+            <View
+              style={[
+                styles.radioCircle,
+                !isPublic && styles.radioCircleSelected,
+              ]}
+            />
+            <View>
+              <Text style={styles.radioLabel}>private</Text>
+              <Text style={styles.radioSublabel}>only for you</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.radioOption}
+            onPress={() => setIsPublic(true)}
+          >
+            <View
+              style={[
+                styles.radioCircle,
+                isPublic && styles.radioCircleSelected,
+              ]}
+            />
+            <View>
+              <Text style={styles.radioLabel}>public</Text>
+              <Text style={styles.radioSublabel}>shown to friends</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.navigationButtons}>
         <TouchableOpacity
@@ -260,5 +323,92 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontFamily: "Rubik_500Medium",
+  },
+  popupContent: {
+    alignSelf: "center",
+    width: "90%",
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  paddedContent: {
+    padding: 20,
+  },
+  iconContainer: {
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  icon: {
+    fontSize: 28,
+  },
+  text: {
+    fontSize: 16,
+    color: "#4a4a4a",
+    lineHeight: 22,
+    marginBottom: 16,
+    fontFamily: "Rubik_400Regular",
+  },
+  date: {
+    fontSize: 14,
+    color: "#a0a0a0",
+    textAlign: "right",
+    marginBottom: 16,
+    fontFamily: "Rubik_500Medium",
+  },
+  image: {
+    width: "100%",
+    height: 250,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  toggleContainer: {
+    flexDirection: "row",
+    marginTop: 16,
+    paddingHorizontal: 20,
+    alignItems: "center",
+    alignSelf: "center",
+    gap: 20,
+  },
+  toggleLabel: {
+    fontSize: 16,
+    fontFamily: "SourceSerifPro_700Bold_Italic",
+    color: "#6C6C6C",
+    textAlign: "center",
+  },
+  radioGroup: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 20,
+  },
+  radioOption: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  radioCircle: {
+    height: 25,
+    width: 25,
+    borderRadius: 5,
+    borderWidth: 3,
+    borderColor: "#8B7CEC",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 8,
+  },
+  radioCircleSelected: {
+    backgroundColor: "#9d82ff",
+  },
+  radioLabel: {
+    fontSize: 16,
+    fontFamily: "Rubik_500Medium",
+    color: "#333",
+  },
+  radioSublabel: {
+    fontSize: 12,
+    fontFamily: "Rubik_500Medium",
+    color: "#60617C",
   },
 });

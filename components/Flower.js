@@ -46,7 +46,11 @@ const Flower = ({ post, handleFlowerPress }) => {
   return (
     <TouchableOpacity
       key={post.id}
-      style={[styles.flower, { top: randomTop + "%", left: randomLeft + "%" }]}
+      style={[
+        styles.flower,
+        { top: randomTop + "%", left: randomLeft + "%" },
+        styles.glow,
+      ]}
       onPress={() =>
         handleFlowerPress(
           post.text,
@@ -70,6 +74,14 @@ const Flower = ({ post, handleFlowerPress }) => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  glow: {
+    shadowColor: "#8589ff",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    elevation: 10,
+  },
+});
 
 export default Flower;
