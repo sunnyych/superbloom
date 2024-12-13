@@ -8,11 +8,12 @@ import {
   StyleSheet,
   Easing,
 } from "react-native";
+import { globalState } from "@/components/Global";
 
 const GARDEN_DATA = [
   { id: "1", name: "Mary Chen" },
   { id: "2", name: "John White" },
-  { id: "3", name: "Mike Smith" },
+  { id: "3", name: "Mr. Whistler" },
 ];
 
 export default function Dropdown() {
@@ -38,6 +39,7 @@ export default function Dropdown() {
 
   const selectItem = (item) => {
     setSelectedItem(item);
+    globalState.selectedGardenId = parseInt(item.id) + 9; // Update the global state
     toggleDropdown();
   };
 

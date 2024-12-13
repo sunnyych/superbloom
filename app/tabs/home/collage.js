@@ -13,6 +13,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import db from "@/databse/db"; // Assuming you have your database module
 import Toggle from "@/components/Toggle";
 import Dropdown from "@/components/Dropdown";
+import { globalState } from "@/components/Global";
 
 import { flowerTypes, colorPalette, renderFlower } from "@/utils/flowerUtils";
 import { format, formatDistanceToNow } from "date-fns";
@@ -65,6 +66,17 @@ const Collage = () => {
     "matcha.jpg": require("../../../assets/posts/matcha.jpg"),
     "hike.jpg": require("../../../assets/posts/hike.jpg"),
     "song.jpg": require("../../../assets/posts/song.jpg"),
+  };
+
+  const PROFILE_PICS = {
+    "mary-chen": require("@/assets/pfps/mary.png"),
+    "john-white2": require("@/assets/profiles/john-white.jpg"),
+    "mr-whistler": require("@/assets/profiles/mr-whistler.jpg"),
+  };
+  const PROFILE_NAMES = {
+    "john-white2": "John White",
+    "mary-chen": "Mary Chen",
+    "mr-whistler": "Mr. Whistler",
   };
 
   // Toggle function to navigate back to the garden
@@ -120,14 +132,11 @@ const Collage = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <View>
-          <Image
-            style={styles.profilePic}
-            source={require("@/assets/pfps/mary.png")}
-          />
+          <Image style={styles.profilePic} source={PROFILE_PICS[name]} />
         </View>
         <View>
           <Text style={styles.title}>in memory of</Text>
-          <Text style={styles.subtitle}>{name}</Text>
+          <Text style={styles.subtitle}>{PROFILE_NAMES[name]}</Text>
         </View>
         <View style={styles.dropdown}>
           <Dropdown />
@@ -154,7 +163,7 @@ const Collage = () => {
               <Text style={styles.date}>{DateFormatter(item.time_stamp)}</Text>
             </View>
             {/* Image */}
-            {item.media ? (
+            {postImages[item.media] ? (
               <Image source={postImages[item.media]} style={styles.image} />
             ) : null}
           </View>

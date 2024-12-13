@@ -169,10 +169,12 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: "bold",
+    fontFamily: "Rubik_500Medium",
   },
   username: {
     fontSize: 14,
     color: "#7f7f7f",
+    fontFamily: "Rubik_500Medium",
   },
   viewProfileButton: {
     backgroundColor: "#9d82ff",
@@ -183,6 +185,7 @@ const styles = StyleSheet.create({
   viewProfileText: {
     color: "#fff",
     fontWeight: "bold",
+    fontFamily: "Rubik_500Medium",
   },
   addFriendButton: {
     position: "absolute",

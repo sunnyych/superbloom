@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -8,10 +8,12 @@ import {
   Switch,
   ActivityIndicator,
   ImageBackground,
+  SafeAreaView,
 } from "react-native";
-import { useRouter, useLocalSearchParams } from "expo-router";
+import { useRouter, useLocalSearchParams, useFocusEffect } from "expo-router";
 import db from "@/databse/db";
 import { flowerTypes, colorPalette, renderFlower } from "@/utils/flowerUtils";
+import Toggle from "@/components/Toggle";
 
 const Garden = () => {
   const router = useRouter();
@@ -21,6 +23,7 @@ const Garden = () => {
   const [user, setUser] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { gardenName } = useLocalSearchParams();
+
   console.log("garden_name", gardenName);
 
   const flowerImages = {
@@ -81,6 +84,14 @@ const Garden = () => {
   //     router.push(`/tabs/community/collage`);
   //   }
   // };
+
+  useFocusEffect(
+    useCallback(() => {
+      // Reset the toggle when the screen is focused
+      setIsToggled(false);
+    }, [])
+  );
+
   const handleToggle = () => {
     setIsToggled(!isToggled);
     if (!isToggled) {
@@ -114,23 +125,48 @@ const Garden = () => {
   }
 
   return (
-    <ImageBackground
-      source={require("../../../assets/backgrounds/background-garden.png")} // Set background image
-      style={styles.container} // Apply styles to make the background fill the screen
-      resizeMode="cover" // Ensure the background image covers the entire screen
-    >
+    <SafeAreaView style={styles.container}>
+      <View style={StyleSheet.absoluteFillObject}>
+        <Image
+          source={require("@/assets/backgrounds/background-garden.png")}
+          style={styles.background}
+        />
+      </View>
+
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Text style={styles.backButtonText}>back</Text>
       </TouchableOpacity>
 
-      <Text style={styles.title}>{name}</Text>
-
       <View style={styles.creatorBadge}>
-        <Text style={styles.creatorText}>made by @{user}</Text>
+        <Image
+          style={styles.signImage}
+          source={require("@/assets/icons/blank-sign.png")}
+        />
+        <Text style={styles.creatorText}>@{user}</Text>
       </View>
 
-      <View style={styles.avatarContainer}>
+      <View style={styles.content}>
+        <View style={styles.toggleContainer}>
+          <Toggle onToggle={handleToggle} isEnabled={isToggled} />
+        </View>
+      </View>
+
+      {/* <View style={styles.avatarContainer}>
         <Image source={localImages[gardenName]} style={styles.avatar} />
+      </View> */}
+      {/* Garden profile pic and switching between gardens in upper right */}
+      <View style={styles.switchGardensContainer}>
+        <Text style={styles.subtextRemembering}>remembering</Text>
+        <Text style={styles.subtextName}>
+          {/* {PROFILE_NAMES[selectedGardenId - 10]} */}
+          {name}
+        </Text>
+        <View style={styles.profileContainer}>
+          <Image
+            style={styles.profilePic}
+            source={localImages[gardenName]}
+          ></Image>
+        </View>
       </View>
 
       {/* Garden Area with random flower positions */}
@@ -159,7 +195,7 @@ const Garden = () => {
                   flowerTypes[post.flower_type].BloomComponent,
                   flowerTypes[post.flower_type].StemComponent,
                   post.flower_color,
-                  // "#94CDA0",
+                  "#94CDA0",
                   70
                 )}
               </View>
@@ -168,7 +204,7 @@ const Garden = () => {
         })}
       </View>
 
-      <View style={styles.toggleContainer}>
+      {/* <View style={styles.toggleContainer}>
         <Switch
           trackColor={{ false: "#dcd6ff", true: "#9d82ff" }}
           thumbColor={isToggled ? "#9d82ff" : "#ffffff"}
@@ -179,8 +215,8 @@ const Garden = () => {
         <TouchableOpacity style={styles.toggleIcon}>
           <Text style={styles.toggleIconText}>📰</Text>
         </TouchableOpacity>
-      </View>
-    </ImageBackground>
+      </View> */}
+    </SafeAreaView>
   );
 };
 
@@ -191,17 +227,17 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    top: 16,
+    top: 60,
     left: 16,
-    backgroundColor: "#dcd6ff",
-    borderRadius: 16,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    backgroundColor: "#EEE7FF",
+    borderRadius: 25,
+    paddingHorizontal: 30,
+    paddingVertical: 12,
   },
   backButtonText: {
+    color: "#8B7CEC",
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#7f7f7f",
+    fontFamily: "Rubik_500Medium",
   },
   title: {
     fontSize: 28,
@@ -209,6 +245,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 60,
     color: "#9d82ff",
+    fontFamily: "Rubik_500Medium",
   },
   gardenArea: {
     flex: 1,
@@ -221,36 +258,34 @@ const styles = StyleSheet.create({
   },
   flower: {
     position: "absolute", // Position flowers absolutely
-    width: 40, // Reduced flower size
-    height: 70, // Reduced flower size
     margin: 10,
     borderRadius: 12, // Optional: rounded corners for a smoother look
     overflow: "hidden", // Ensure the images don't overflow the container
   },
-  flowerImage: {
-    width: "100%",
-    height: "100%",
-  },
-  toggleContainer: {
-    position: "absolute",
-    bottom: 150,
-    right: 30,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  toggleIcon: {
-    marginLeft: 10,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#9d82ff",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  toggleIconText: {
-    fontSize: 18,
-    color: "#ffffff",
-  },
+  // flowerImage: {
+  //   width: "100%",
+  //   height: "100%",
+  // },
+  // toggleContainer: {
+  //   position: "absolute",
+  //   bottom: 150,
+  //   right: 30,
+  //   flexDirection: "row",
+  //   alignItems: "center",
+  // },
+  // toggleIcon: {
+  //   marginLeft: 10,
+  //   width: 40,
+  //   height: 40,
+  //   borderRadius: 20,
+  //   backgroundColor: "#9d82ff",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  // },
+  // toggleIconText: {
+  //   fontSize: 18,
+  //   color: "#ffffff",
+  // },
   avatarContainer: {
     alignItems: "center", // Center the avatar horizontally
     marginTop: 20, // Add some margin to position it nicely below the creator badge
@@ -262,13 +297,73 @@ const styles = StyleSheet.create({
     borderWidth: 2, // Optional: Add border to make the avatar more prominent
     borderColor: "#9d82ff", // Optional: Add a color to the border
   },
+  signImage: {
+    width: 100,
+    resizeMode: "contain",
+  },
   creatorBadge: {
-    backgroundColor: "#dcd6ff",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    marginTop: 60,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  creatorText: {
+    color: "white",
+    position: "absolute",
+    fontSize: 13,
+    fontFamily: "Rubik_500Medium",
+    paddingBottom: 10,
+  },
+  background: {
+    width: "200%",
+    left: -350,
+    top: -40,
+  },
+  switchGardensContainer: {
+    alignItems: "center",
+    padding: 16,
+    marginTop: 50,
+    position: "absolute",
+    alignSelf: "flex-end",
+  },
+  subtextRemembering: {
+    fontFamily: "SourceSerifPro_700Bold_Italic",
+    color: "#3C3661",
+    fontSize: 12,
+  },
+  subtextName: {
+    fontFamily: "Rubik_700Bold",
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 16,
+    color: "#8B7CEC",
+    marginBottom: 10,
+  },
+  profileContainer: {
+    shadowColor: "#202020",
+    shadowOffset: { width: 1, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 1,
+  },
+  profilePic: {
+    height: 80,
+    width: 80,
+    borderRadius: 1000,
+    borderColor: "#FFFFFF",
+    borderWidth: 4,
+    resizeMode: "cover",
+    backgroundColor: "#FFFFFF",
+  },
+  toggleContainer: {
+    width: 90,
+    height: 40,
     borderRadius: 16,
-    alignSelf: "center",
-    marginTop: 8,
+    padding: 2,
+    justifyContent: "center",
+  },
+  content: {
+    position: "absolute",
+    bottom: 135,
+    left: 15,
   },
 });
 

@@ -90,12 +90,6 @@ const Profile = () => {
   return (
     <SafeAreaView style={styles.safeContainer}>
       <View style={styles.container}>
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={() => router.back()}
-        >
-          <Text style={styles.closeButtonText}>×</Text>
-        </TouchableOpacity>
         <Text style={styles.title}>{user.realUsername}</Text>
         <Text style={styles.subtitle}>@{user.username}</Text>
 
@@ -142,6 +136,7 @@ const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
     padding: 50,
+    backgroundColor: "#f8f4ff",
   },
   loaderContainer: {
     flex: 1,
@@ -171,12 +166,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginTop: 40,
+    fontFamily: "SourceSerifPro_700Bold",
   },
   subtitle: {
     fontSize: 16,
     textAlign: "center",
     color: "#7f7f7f",
     marginBottom: 20,
+    fontFamily: "Rubik_500Medium",
   },
   gardenList: {
     marginTop: 16,
@@ -196,6 +193,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
+    fontFamily: "Rubik_500Medium",
   },
   gardenYears: {
     fontSize: 14,
@@ -204,17 +202,17 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    bottom: 16,
-    left: 16,
-    backgroundColor: "#dcd6ff",
-    borderRadius: 16,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    bottom: 110,
+    left: 20,
+    backgroundColor: "#EEE7FF",
+    borderRadius: 25,
+    paddingHorizontal: 30,
+    paddingVertical: 12,
   },
   backButtonText: {
+    color: "#8B7CEC",
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#7f7f7f",
+    fontFamily: "Rubik_500Medium",
   },
 });
 

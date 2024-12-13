@@ -98,7 +98,9 @@ const PostModal = ({
             <Text style={styles.date}>{DateFormatter(timeStamp)}</Text>
           </View>
           {/* Image */}
-          {media && <Image source={postImages[media]} style={styles.image} />}
+          {postImages[media] && (
+            <Image source={postImages[media]} style={styles.image} />
+          )}
         </View>
       </View>
     </Modal>

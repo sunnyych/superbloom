@@ -216,6 +216,7 @@ const styles = StyleSheet.create({
   addFriendText: {
     color: "#fff",
     fontWeight: "bold",
+    fontFamily: "Rubik_500Medium",
   },
   viewProfileButton: {
     backgroundColor: "#e6e0ff",
@@ -240,6 +241,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#8B7CEC",
+    fontFamily: "Rubik_500Medium",
   },
 });
 

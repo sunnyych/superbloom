@@ -16,6 +16,8 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
+import { FontAwesome6 } from "@expo/vector-icons";
+
 // font import source: https://www.npmjs.com/package/@expo-google-fonts/source-serif-pro
 // if it doesn't work, run dis in terminal "npx expo install @expo-google-fonts/source-serif-pro expo-font expo-app-loading"
 import { useSuperbloom } from "@/utils/SuperbloomContext";
@@ -90,7 +92,7 @@ export default function SuperbloomHome() {
             onChangeText={setSearchQuery}
           />
           <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-            <Text style={styles.searchButtonText}>🔍</Text>
+            <FontAwesome6 size={14} name="magnifying-glass" color="white" />
           </TouchableOpacity>
         </View>
 
@@ -251,6 +253,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#7f7f7f",
     paddingHorizontal: 8,
+    fontFamily: "Rubik_400Regular",
   },
   searchButton: {
     backgroundColor: "#9d82ff",
@@ -284,9 +287,11 @@ const styles = StyleSheet.create({
   defaultName: {
     fontSize: 18,
     fontWeight: "bold",
+    fontFamily: "Rubik_700Bold",
   },
   defaultUsername: {
     fontSize: 16,
+    fontFamily: "Rubik_400Regular",
   },
   requestButton: {
     backgroundColor: "#9d82ff",
@@ -302,6 +307,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 16,
+    fontFamily: "Rubik_500Medium",
   },
   date: {
     marginLeft: 10,
@@ -311,12 +317,14 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: "#3C3661",
     fontWeight: "bold",
+    fontFamily: "Rubik_500Medium",
   },
   days: {
     textAlign: "center",
     fontSize: 20,
     color: "#3C3661",
     fontWeight: "bold",
+    fontFamily: "Rubik_500Medium",
   },
   openSuperbloomButton: {
     backgroundColor: "#e6e0ff",
@@ -331,6 +339,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 15,
+    fontFamily: "Rubik_500Medium",
   },
   createSuperbloomButton: {
     position: "absolute",
@@ -362,6 +371,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#8B7CEC",
     flexShrink: 1,
+    fontFamily: "Rubik_500Medium",
   },
   deleteContainer: {
     backgroundColor: "red",

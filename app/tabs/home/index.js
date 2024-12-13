@@ -79,33 +79,6 @@ export default function OuterGarden() {
     }, [])
   );
 
-  // Fetch posts for this garden
-  // useEffect(() => {
-  //   const fetchPosts = async () => {
-  //     try {
-  //       // Fetch posts for a specific garden_id from Supabase
-  //       const { data, error } = await db
-  //         .from("post")
-  //         .select(
-  //           "id, username, memory_person, text, media, time_stamp, flower_type, flower_color"
-  //         ) // Fetch post info
-  //         .eq("garden_id", selectedGardenId); // Filter by garden_id
-
-  //       if (error) {
-  //         console.error("Supabase error:", error.message);
-  //         return;
-  //       }
-  //       setPosts(data || []); // Set posts to the state
-  //     } catch (err) {
-  //       console.error("Error fetching posts:", err);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchPosts();
-  // }, [selectedGardenId]);
-
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -114,7 +87,8 @@ export default function OuterGarden() {
           .select(
             "id, username, memory_person, text, media, time_stamp, flower_type, flower_color"
           )
-          .eq("garden_id", selectedGardenId);
+          .eq("garden_id", selectedGardenId)
+          .eq("public", true); // Filter where 'public' is false
         if (error) {
           console.error("Supabase error:", error.message);
           return;
@@ -122,7 +96,7 @@ export default function OuterGarden() {
         // Add random positions to each post
         const postsWithPositions = data.map((post) => ({
           ...post,
-          randomTop: getRandomPosition(height * 0.02, height * 0.03), // Random top position
+          randomTop: getRandomPosition(height * 0.05, height * 0.15), // Random top position
           randomLeft: getRandomPosition(width * 0.02, width * 0.2), // Random left position
         }));
         setPosts(postsWithPositions); // Set posts with positions
@@ -177,6 +151,13 @@ export default function OuterGarden() {
     }
   };
 
+  const PROFILE_PICS = [
+    require("@/assets/pfps/mary.png"),
+    require("@/assets/profiles/john-white.jpg"),
+    require("@/assets/profiles/mr-whistler.jpg"),
+  ];
+  const PROFILE_NAMES = ["Mary", "John", "Mr. Whistler"];
+
   return (
     <View style={styles.container}>
       {/* Render flowers for each post */}
@@ -210,11 +191,14 @@ export default function OuterGarden() {
       {/* Garden profile pic and switching between gardens in upper right */}
       <View style={styles.switchGardensContainer}>
         <Text style={styles.subtextRemembering}>remembering</Text>
-        <Text style={styles.subtextName}>Mary</Text>
+        <Text style={styles.subtextName}>
+          {PROFILE_NAMES[selectedGardenId - 10]}
+        </Text>
         <View style={styles.profileContainer}>
           <Image
             style={styles.profilePic}
-            source={require("@/assets/pfps/mary.png")}
+            // source={require("@/assets/pfps/mary.png")}
+            source={PROFILE_PICS[selectedGardenId - 10]}
           ></Image>
         </View>
         <Dropdown />
@@ -268,7 +252,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   buttonContainer: {
-    // backgroundColor: "#9d82ff",
     overflow: "hidden",
     alignItems: "center",
     gap: 10,
@@ -290,7 +273,7 @@ const styles = StyleSheet.create({
   },
   switchGardensContainer: {
     alignItems: "center",
-    padding: 5,
+    padding: 16,
     marginTop: 50,
     position: "absolute",
     alignSelf: "flex-end",

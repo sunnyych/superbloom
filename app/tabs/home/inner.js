@@ -91,7 +91,8 @@ export default function OuterGarden() {
           .select(
             "id, username, memory_person, text, media, time_stamp, flower_type, flower_color"
           ) // Fetch post info
-          .eq("garden_id", selectedGardenId); // Filter by garden_id
+          .eq("garden_id", selectedGardenId) // Filter by garden_id
+          .eq("public", false); // Filter where 'public' is true
 
         if (error) {
           console.error("Supabase error:", error.message);
@@ -101,7 +102,7 @@ export default function OuterGarden() {
         // setPosts(data || []); // Set posts to the state
         const postsWithPositions = data.map((post) => ({
           ...post,
-          randomTop: getRandomPosition(height * 0.02, height * 0.03), // Random top position
+          randomTop: getRandomPosition(height * 0.08, height * 0.15), // Random top position
           randomLeft: getRandomPosition(width * 0.02, width * 0.2), // Random left position
         }));
         setPosts(postsWithPositions); // Set posts to the state
@@ -151,45 +152,17 @@ export default function OuterGarden() {
     setTimeout(() => setSelectedPost(null), 100);
   };
 
+  const PROFILE_PICS = [
+    require("@/assets/pfps/mary.png"),
+    require("@/assets/profiles/john-white.jpg"),
+    require("@/assets/profiles/mr-whistler.jpg"),
+  ];
+  const PROFILE_NAMES = ["Mary", "John", "Mr. Whistler"];
+
   return (
     <View style={styles.container}>
       {/* Render flowers for each post */}
       <View style={styles.gardenArea}>
-        {/* {posts.map((post) => {
-          // Generate random positions for the flowers
-          const randomTop = getRandomPosition(20, 20); // Adjust the max to control range of vertical positions
-          const randomLeft = getRandomPosition(10, 80); // Adjust the max to control range of horizontal positions
-
-          return (
-            <TouchableOpacity
-              key={post.id}
-              style={[
-                styles.flower,
-                { top: randomTop + "%", left: randomLeft + "%" },
-              ]}
-              onPress={() =>
-                handleFlowerPress(
-                  post.text,
-                  post.media,
-                  post.time_stamp,
-                  post.flower_type,
-                  post.flower_color
-                )
-              }
-            >
-              <View>
-                {renderFlower(
-                  flowerTypes[post.flower_type].BloomComponent,
-                  flowerTypes[post.flower_type].StemComponent,
-                  post.flower_color,
-                  "#94CDA0",
-                  75
-                )}
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </View> */}
         {posts.map((post) => {
           return (
             <Flower
@@ -219,11 +192,13 @@ export default function OuterGarden() {
       {/* Garden profile pic and switching between gardens in upper right */}
       <View style={styles.switchGardensContainer}>
         <Text style={styles.subtextRemembering}>remembering</Text>
-        <Text style={styles.subtextName}>Mary</Text>
+        <Text style={styles.subtextName}>
+          {PROFILE_NAMES[selectedGardenId - 10]}
+        </Text>
         <View style={styles.profileContainer}>
           <Image
             style={styles.profilePic}
-            source={require("@/assets/pfps/mary.png")}
+            source={PROFILE_PICS[selectedGardenId - 10]}
           ></Image>
         </View>
         <Dropdown />
@@ -299,7 +274,7 @@ const styles = StyleSheet.create({
   },
   switchGardensContainer: {
     alignItems: "center",
-    padding: 5,
+    padding: 16,
     marginTop: 50,
     position: "absolute",
     alignSelf: "flex-end",

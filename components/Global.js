@@ -1,4 +1,4 @@
 export const globalState = {
   hardcodedUsername: "james-landay", // Static variable
-  selectedGardenId: 1, // Dynamic variable, default 1
+  selectedGardenId: 10, // Dynamic variable, default 1
 };
