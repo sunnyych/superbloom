@@ -62,8 +62,8 @@ export default function Superbloom() {
         }
         const postsWithPositions = data.map((post) => ({
           ...post,
-          randomTop: getRandomPosition(height * 0.02, height * 0.03), // Random top position
-          randomLeft: getRandomPosition(0, width), // Random left position
+          randomTop: getRandomPosition(height * 0.2, height * 0.6), // Random top position
+          randomLeft: getRandomPosition(width * 0.1, width * 0.8), // Random left position
         }));
         setFlowerPositions(postsWithPositions);
       } catch (err) {
