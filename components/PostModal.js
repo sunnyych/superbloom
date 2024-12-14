@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Modal,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
 import { flowerTypes, colorPalette, renderFlower } from "@/utils/flowerUtils";
 import { format, formatDistanceToNow } from "date-fns";
@@ -65,45 +66,46 @@ const PostModal = ({
 }) => {
   console.log("timeStamp:", timeStamp);
   return (
-    <Modal
-      visible={visible}
-      animationType="fade"
-      transparent={true}
-      onRequestClose={onClose}
-    >
-      <View style={styles.modalContainer}>
-        {/* Close Button */}
-        <TouchableOpacity style={styles.backButton} onPress={onClose}>
-          <Text style={styles.backButtonText}>back</Text>
-        </TouchableOpacity>
+    <SafeAreaView>
+      <Modal
+        visible={visible}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={onClose}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.popupContent}>
+            {/* Flower Icon */}
+            <View style={styles.paddedContent}>
+              <View style={styles.iconContainer}>
+                {renderFlower(
+                  flowerTypes[flower_type].BloomComponent,
+                  flowerTypes[flower_type].StemComponent,
+                  flower_color,
+                  "#94CDA0",
+                  60
+                )}
+              </View>
+              {/* username text (for superbloom view)*/}
+              <Text style={styles.username}>{username}</Text>
+              {/* Post Text */}
+              <Text style={styles.text}>{text}</Text>
 
-        <View style={styles.popupContent}>
-          {/* Flower Icon */}
-          <View style={styles.paddedContent}>
-            <View style={styles.iconContainer}>
-              {renderFlower(
-                flowerTypes[flower_type].BloomComponent,
-                flowerTypes[flower_type].StemComponent,
-                flower_color,
-                "#94CDA0",
-                60
-              )}
+              {/* Date */}
+              <Text style={styles.date}>{DateFormatter(timeStamp)}</Text>
             </View>
-            {/* username text (for superbloom view)*/}
-            <Text style={styles.username}>{username}</Text>
-            {/* Post Text */}
-            <Text style={styles.text}>{text}</Text>
-
-            {/* Date */}
-            <Text style={styles.date}>{DateFormatter(timeStamp)}</Text>
+            {/* Image */}
+            {postImages[media] && (
+              <Image source={postImages[media]} style={styles.image} />
+            )}
           </View>
-          {/* Image */}
-          {postImages[media] && (
-            <Image source={postImages[media]} style={styles.image} />
-          )}
+          {/* Close Button */}
+          <TouchableOpacity style={styles.backButton} onPress={onClose}>
+            <Text style={styles.backButtonText}>back</Text>
+          </TouchableOpacity>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+    </SafeAreaView>
   );
 };
 
@@ -123,6 +125,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 5,
+    zIndex: 10, // Ensure content is above the overlay
   },
   paddedContent: {
     padding: 20,
@@ -163,12 +166,14 @@ const styles = StyleSheet.create({
   backButton: {
     position: "absolute",
     left: 20,
-    top: 60,
+    top: 50,
     paddingVertical: 12,
     paddingHorizontal: 30,
     borderRadius: 25,
     backgroundColor: "#EEE7FF",
     width: 100,
+    zIndex: 10,
+    elevation: 100,
   },
   backButtonText: {
     color: "#8B7CEC",

@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     alignItems: "center",
-    marginTop: 40,
+    marginTop: 20,
     marginBottom: 30,
   },
   title: {
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     width: "60%",
     height: 150,
     backgroundColor: "white",
-    marginBottom: 20,
+    marginBottom: 15,
     borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: {

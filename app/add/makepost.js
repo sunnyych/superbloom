@@ -13,7 +13,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
-import db from "@/databse/db"; 
+import db from "@/databse/db";
 import { useRouter } from "expo-router";
 import { usePrompt } from "@/utils/PromptContext";
 import { usePost } from "@/utils/PostContext";
@@ -26,7 +26,7 @@ export default function NewPost() {
   const { selectedPrompt, setSelectedPrompt } = usePrompt();
   const { text, setText, media, setMedia } = usePost();
 
-  const hardcodedMemoryPerson = "Mary Chen"; 
+  const hardcodedMemoryPerson = "Mary Chen";
 
   const prompts = [
     "What is your favorite memory of Mary?",
@@ -49,15 +49,15 @@ export default function NewPost() {
       }
 
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images, 
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         quality: 1,
       });
 
       if (!result.canceled && result.assets && result.assets.length > 0) {
-        const uploadedImageUri = result.assets[0].uri; 
-        setMedia(uploadedImageUri); 
-        console.log("Uploaded Image URI:", uploadedImageUri); 
+        const uploadedImageUri = result.assets[0].uri;
+        setMedia(uploadedImageUri);
+        console.log("Uploaded Image URI:", uploadedImageUri);
       } else if (result.canceled) {
         console.log("Image selection canceled.");
       } else {
@@ -183,14 +183,13 @@ export default function NewPost() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     backgroundColor: "#FCF8FE",
   },
   title: {
     fontSize: 28,
     fontWeight: "bold",
     textAlign: "center",
-    marginTop: 40,
+    marginTop: 10,
     fontFamily: "SourceSerifPro_700Bold",
   },
   subtitle: {
@@ -223,16 +222,8 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 12,
     backgroundColor: "white",
+    textAlignVertical: "top",
     fontFamily: "Rubik_400Regular",
-  },
-  toggleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  toggleLabel: {
-    fontSize: 18,
-    marginRight: 8,
   },
   mainContainer: {
     padding: 30,
@@ -241,7 +232,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 15,
     padding: 20,
-    marginBottom: 15,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

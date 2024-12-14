@@ -205,7 +205,7 @@ export default function OuterGarden() {
 
       {modalVisible && selectedPost && (
         <PostModal
-          visible={modalVisible}
+          visible={true}
           onClose={handleBack} // Close the modal
           text={selectedPost.text} // Pass the selected post's data
           media={selectedPost.media}
