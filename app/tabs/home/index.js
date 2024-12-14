@@ -4,19 +4,18 @@ import db from "@/databse/db";
 import Dropdown from "@/components/Dropdown";
 import Toggle from "@/components/Toggle";
 import Flower from "@/components/Flower";
-import { Dimensions } from "react-native";
 
 import {
   View,
   Text,
-  Button,
   StyleSheet,
   Pressable,
   Image,
-  Switch,
   ActivityIndicator,
   TouchableOpacity,
   Modal,
+  Dimensions,
+  Animated,
 } from "react-native";
 import {
   useRouter,
@@ -32,13 +31,8 @@ import PostModal from "@/components/PostModal";
 export default function OuterGarden() {
   const router = useRouter();
   const { translateX, translateY } = useBackground();
-  const { postIds } = useLocalSearchParams(); // Get post IDs from query params
+
   const { width, height } = Dimensions.get("window");
-
-  const getRandomPosition = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
   const [isToggled, setIsToggled] = useState(false);
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +40,6 @@ export default function OuterGarden() {
   const [selectedGardenId, setSelectedGardenId] = useState(
     globalState.selectedGardenId
   );
-  const [isGarden, setIsGarden] = useState(true); // Toggle for garden/collage view
 
   // Post modal when a flower is clicked
   const [modalVisible, setModalVisible] = useState(false);
@@ -95,8 +88,8 @@ export default function OuterGarden() {
         // Add random positions to each post
         const postsWithPositions = data.map((post) => ({
           ...post,
-          randomTop: getRandomPosition(height * 0.1, height * 0.15), // Random top position
-          randomLeft: getRandomPosition(width * 0.02, width * 0.2), // Random left position
+          randomTop: getRandomPosition(height * 0.15, height * 0.7), // Random top position
+          randomLeft: getRandomPosition(width * 0.1, width * 0.8), // Random left position
         }));
         setPosts(postsWithPositions); // Set posts with positions
       } catch (err) {
@@ -146,6 +139,10 @@ export default function OuterGarden() {
     }
   };
 
+  const getRandomPosition = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
   const PROFILE_PICS = [
     require("@/assets/pfps/mary.png"),
     require("@/assets/profiles/john-white.jpg"),
@@ -156,7 +153,7 @@ export default function OuterGarden() {
   return (
     <View style={styles.container}>
       {/* Render flowers for each post */}
-      <View style={[styles.gardenArea, { position: "relative" }]}>
+      <View style={[styles.gardenArea]}>
         {posts.map((post) => {
           return (
             <Flower
@@ -225,6 +222,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "transparent",
+    marginBottom: 120,
+    position: "relative", // Ensure relative positioning for the parent
+    width: "100%",
+    height: "100%",
+  },
+  gardenArea: {
+    width: "100%",
+    height: "100%",
     marginBottom: 120,
   },
   gardenIdText: {

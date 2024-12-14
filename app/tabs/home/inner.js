@@ -102,8 +102,8 @@ export default function OuterGarden() {
         // setPosts(data || []); // Set posts to the state
         const postsWithPositions = data.map((post) => ({
           ...post,
-          randomTop: getRandomPosition(height * 0.08, height * 0.15), // Random top position
-          randomLeft: getRandomPosition(width * 0.02, width * 0.2), // Random left position
+          randomTop: getRandomPosition(height * 0.2, height * 0.25), // Random top position
+          randomLeft: getRandomPosition(width * 0.02, width * 0.8), // Random left position
         }));
         setPosts(postsWithPositions); // Set posts to the state
       } catch (err) {

@@ -114,7 +114,7 @@ export default function NewPost() {
           </View>
           <TextInput
             style={[styles.input, { height: 100 }]}
-            placeholder="Describe the memory"
+            placeholder="Describe the memory..."
             value={text}
             onChangeText={setText}
             multiline={true}
@@ -149,16 +149,6 @@ export default function NewPost() {
               )}
             </TouchableOpacity>
           </View>
-          {/* 
-          <View style={styles.toggleContainer}>
-            <Text style={styles.toggleLabel}>Public:</Text>
-            <Switch
-              value={isPublic}
-              onValueChange={setIsPublic}
-              thumbColor={isPublic ? "#9d82ff" : "#ccc"}
-              trackColor={{ false: "#ccc", true: "#e6e0ff" }}
-            />
-          </View> */}
         </View>
 
         <View style={styles.navigationButtons}>
@@ -372,5 +362,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: "SourceSerifPro_700Bold_Italic",
     paddingVertical: 10,
+    textAlign: "center",
   },
 });

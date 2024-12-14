@@ -32,6 +32,9 @@ export default function FeedStackLayout() {
       <Stack.Screen
         // index.js is the outer garden
         name="collage"
+        options={{
+          animation: "slide_from_bottom",
+        }}
       />
       <Stack.Screen
         // index.js is the outer garden

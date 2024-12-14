@@ -13,12 +13,12 @@ import { useFlower } from "@/utils/FlowerContext";
 import { usePost } from "@/utils/PostContext";
 import { useSuperbloom } from "@/utils/SuperbloomContext";
 import { flowerTypes, renderFlower } from "@/utils/flowerUtils";
-import db from "@/databse/db"; 
+import db from "@/databse/db";
 
-const hardcodedUsername = "helen-smith";
-const hardcodedUserId = 1;
-const hardcodedGardenId = 1;
-let hardcodedMemoryPerson = "Mary Chen";
+const hardcodedUsername = "james-landay";
+const hardcodedUserId = 6;
+const hardcodedGardenId = 10;
+let hardcodedMemoryPerson = "mary-chen";
 
 const addMemory = async (
   router,
@@ -37,12 +37,12 @@ const addMemory = async (
 
   try {
     if (media) {
-      const mediaName = `memory-${Date.now()}`; 
+      const mediaName = `memory-${Date.now()}`;
       const { data: uploadData, error: uploadError } = await db.storage
         .from("images")
         .upload(mediaName, {
           uri: media,
-          type: "image/jpeg", 
+          type: "image/jpeg",
           name: mediaName,
         });
 
@@ -58,26 +58,29 @@ const addMemory = async (
       mediaUrl = publicData.publicUrl;
     }
 
-    const { error } = await db.from("post").insert([
-      {
-        username: hardcodedUsername,
-        user_id: hardcodedUserId,
-        garden_id: hardcodedGardenId,
-        memory_person: hardcodedMemoryPerson,
-        text: text,
-        media: mediaUrl, 
-        public: isPublic,
-        time_stamp: new Date().toISOString(),
-        flower_color: selectedColor,
-        flower_type: selectedType,
-      },
-    ]);
+    const { data, error } = await db
+      .from("post")
+      .insert([
+        {
+          username: hardcodedUsername,
+          user_id: hardcodedUserId,
+          garden_id: hardcodedGardenId,
+          memory_person: hardcodedMemoryPerson,
+          text: text,
+          media: mediaUrl ? mediaUrl : "no-image",
+          public: isPublic,
+          time_stamp: new Date().toISOString(),
+          flower_color: selectedColor,
+          flower_type: selectedType,
+        },
+      ])
+      .select("*");
 
     if (error) {
       console.error("Error adding memory:", error);
       Alert.alert("Error", "Failed to add memory.");
     } else {
-      router.push("tabs/home/");
+      router.push("/tabs/home/");
     }
   } catch (err) {
     console.error("Unexpected error:", err);
@@ -271,7 +274,7 @@ const styles = StyleSheet.create({
     color: "#aaa",
     fontSize: 16,
     fontStyle: "italic",
-    marginTop: 10,
+    marginVertical: 20,
   },
   navigationButtons: {
     flexDirection: "row",

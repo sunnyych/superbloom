@@ -10,11 +10,6 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 
-// Function to get a random position
-const getRandomPosition = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
 const Flower = ({ post, handleFlowerPress }) => {
   // Generate random positions for the flowers
   // const randomTop = getRandomPosition(20, 20); // Adjust the max to control range of vertical positions
@@ -47,8 +42,7 @@ const Flower = ({ post, handleFlowerPress }) => {
     <TouchableOpacity
       key={post.id}
       style={[
-        styles.flower,
-        { top: randomTop + "%", left: randomLeft + "%" },
+        { position: "absolute", top: randomTop, left: randomLeft },
         styles.glow,
       ]}
       onPress={() =>

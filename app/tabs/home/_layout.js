@@ -47,7 +47,7 @@ export default function FeedStackLayout() {
           name="collage"
           options={{
             title: "Collage",
-            animation: "default",
+            animation: "slide_from_bottom",
           }}
         />
       </Stack>
